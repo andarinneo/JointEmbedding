@@ -1,6 +1,0 @@
-src/global_variables.m
-src/shape_embedding/piotr_toolbox/
-3rd_party
-src/__pycache__/
-src/global_variables.pyc
-src/shape_embedding_training/visualization
