@@ -1,7 +1,6 @@
 # IMPORT OBJECT LOADER
 from objloader import *
 import numpy as np
-import time
 from shutil import copyfile
 
 def paint_mesh_faces(root_path, class_id, model_id, n_parts, part_labels):
@@ -61,7 +60,6 @@ def paint_mesh_faces(root_path, class_id, model_id, n_parts, part_labels):
 
 
     # 4. Loop the faces
-    start_time = time.time()
 
     counter = 0
     n_faces = len(obj.faces)
@@ -96,8 +94,6 @@ def paint_mesh_faces(root_path, class_id, model_id, n_parts, part_labels):
 
         # if (counter%100 == 0):
         #     print 'Iteration {} out of {}...'.format(counter, n_faces)
-
-    print("--- %s seconds ---" % (time.time() - start_time))
 
 
     # 6. Save modified 3D model

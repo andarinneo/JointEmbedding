@@ -52,23 +52,37 @@ fi
 #  python3 ./reduce_geometry_shape_list.py;
 #  cd ..;
 #fi
+#
+## Step 03
+## Color the meshes based on the labelling
+#if [ "$first" -le 1 ] && [ "$last" -ge 1 ]; then
+#  cd part_shape_embedding_training;
+#  python3 ./paint_mesh_faces_shape_list.py;
+#  cd ..;
+#fi
 
-# Step 03
-# Color the meshes based on the labelling
+# Step 04
+# Generate LFD images
 if [ "$first" -le 1 ] && [ "$last" -ge 1 ]; then
   cd part_shape_embedding_training;
-  python3 ./paint_mesh_faces_shape_list.py;
+  python3 ./render_lfd_part_shape_list.py;
   cd ..;
 fi
 
-## Step 01
-## Generate LFD images
-#if [ "$first" -le 1 ] && [ "$last" -ge 1 ]; then
-#  cd shape_embedding_training;
-#  python3 ./render_lfd_shape_list.py;
-#  cd ..;
-#fi
-#
+# Step 05
+# Crop LFD images
+if [ "$first" -le 2 ] && [ "$last" -ge 2 ]; then
+  python ./convert_global_variables.py;
+  cd shape_embedding_training;
+  /usr/local/MATLAB/R2016a/bin/glnxa64/MATLAB -nodisplay -r batch_crop_lfd_images;
+  cd ..;
+fi
+
+
+
+
+
+
 ## Step 02
 ## Crop LFD images
 #if [ "$first" -le 2 ] && [ "$last" -ge 2 ]; then
