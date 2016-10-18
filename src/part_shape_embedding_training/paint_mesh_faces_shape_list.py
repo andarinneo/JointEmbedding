@@ -45,17 +45,20 @@ if __name__ == '__main__':
     print(len(shape_list), ' shapes are going to be colored!')
     start_time = time.time()
 
-    # non_available_segmentations = []
-    # for shape_property in shape_list:
-    #     shape_synset = shape_property[0]
-    #     shape_md5 = shape_property[1]
-    #     non_available_segmentations.append(paint_mesh_faces(g_shapenet_root_folder, shape_synset, shape_md5, n_parts, part_labels))
+    # SINGLE THREAD LOOP
+    non_available_segmentations = []
+    for shape_property in shape_list:
+        shape_synset = shape_property[0]
+        shape_md5 = shape_property[1]
+        non_available_segmentations.append(paint_mesh_faces(g_shapenet_root_folder, shape_synset, shape_md5, n_parts, part_labels))
 
-    num_cores = multiprocessing.cpu_count()
-    non_available_segmentations = Parallel(n_jobs=num_cores)(delayed(loop_operation)(g_shapenet_root_folder, shape_property, n_parts, part_labels) for shape_property in shape_list)
+        # break # BORRAR, solo para debugar
 
+    # PARALLEL LOOP
+    # num_cores = multiprocessing.cpu_count()
+    # non_available_segmentations = Parallel(n_jobs=num_cores)(delayed(loop_operation)(g_shapenet_root_folder, shape_property, n_parts, part_labels) for shape_property in shape_list)
+    # sio.savemat(g_shapenet_root_folder + '/' + shape_list[0][0] + '_non_available_segmentations.mat', {'non_available_segmentations':non_available_segmentations})
+
+    # END MESSAGES
     print("--- %s seconds ---" % (time.time() - start_time))
-
-    sio.savemat(g_shapenet_root_folder + '/' + shape_list[0][0] + '_non_available_segmentations.mat', {'non_available_segmentations':non_available_segmentations})
-
     print('done(%d models)'%(len(shape_list)))

@@ -49,7 +49,7 @@ bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Remesh")
 # Decimate mesh
 bpy.ops.object.modifier_add(type='DECIMATE')
 bpy.context.object.modifiers["Decimate"].decimate_type = 'COLLAPSE'
-bpy.context.object.modifiers["Decimate"].ratio = 0.01
+bpy.context.object.modifiers["Decimate"].ratio = 0.05
 bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Decimate")
 
 # Triangulate mesh

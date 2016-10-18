@@ -1,4 +1,4 @@
-function batch_crop(src_folder, dst_folder, jitter, src_image_list, cropRatios)
+function batch_crop_parts(src_folder, dst_folder, jitter, src_image_list, cropRatios)
 
 if nargin < 5
     cropRatios = zeros(1,4);
@@ -13,8 +13,8 @@ report_step = floor((image_num+report_num-1)/report_num);
 t_begin = clock;
 
 cropBox_mat = zeros(image_num, 4);
-%for i = 1:image_num
-parfor i = 1:image_num
+for i = 1:image_num
+%parfor i = 1:image_num
     src_image_file = src_image_list{i};
     try
         [I, ~, alpha] = imread(src_image_file);       

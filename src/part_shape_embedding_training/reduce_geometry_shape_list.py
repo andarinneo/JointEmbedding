@@ -37,8 +37,8 @@ if __name__ == '__main__':
             command += ' > /dev/null 2>&1'
         commands.append(command)
 
-        #print(command)
-        #break # BORRAR, solo para debugar
+        # print(command)
+        # break # BORRAR, solo para debugar
     print('done(%d commands)'%(len(commands)))
 
 
