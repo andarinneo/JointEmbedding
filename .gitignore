@@ -4,3 +4,4 @@ src/shape_embedding/piotr_toolbox/
 src/__pycache__/
 src/global_variables.pyc
 src/shape_embedding_training/visualization
+*.m~

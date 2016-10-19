@@ -49,10 +49,10 @@ if __name__ == '__main__':
     non_available_segmentations = []
     for shape_property in shape_list:
         shape_synset = shape_property[0]
-        shape_md5 = shape_property[1]
+        shape_md5 = '1230d31e3a6cbf309cd431573238602d'  # shape_property[1]
         non_available_segmentations.append(paint_mesh_faces(g_shapenet_root_folder, shape_synset, shape_md5, n_parts, part_labels))
 
-        # break # BORRAR, solo para debugar
+        break # BORRAR, solo para debugar
 
     # PARALLEL LOOP
     # num_cores = multiprocessing.cpu_count()

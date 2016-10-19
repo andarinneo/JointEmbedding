@@ -28,11 +28,15 @@ def paint_mesh_faces(root_path, class_id, model_id, n_parts, part_labels):
         partPointFile = root_path + '/../PartAnnotation/' + class_id + '/' + 'points_label' + '/' + part_labels[part_id] + '/' + model_id + '.seg'
 
         pointLabels = []
-        for line in open(partPointFile, "r"):
-            value = int(line[0])
-            pointLabels.append(value)
+        try:
+            for line in open(partPointFile, "r"):
+                value = int(line[0])
+                pointLabels.append(value)
+        except:
+            pointLabels = [0] * n_points3D
 
         partPointLabels.append(pointLabels)
+
 
     # Also create the label for each point to simplify accessing the data
     points3Dlabels = []

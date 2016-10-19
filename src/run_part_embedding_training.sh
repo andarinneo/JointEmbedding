@@ -52,22 +52,22 @@ fi
 #  python3 ./reduce_geometry_shape_list.py;
 #  cd ..;
 #fi
-#
-## Step 03
-## Color the meshes based on the labelling
-#if [ "$first" -le 1 ] && [ "$last" -ge 1 ]; then
-#  cd part_shape_embedding_training;
-#  python ./paint_mesh_faces_shape_list.py;
-#  cd ..;
-#fi
-#
-## Step 04
-## Generate LFD images
-#if [ "$first" -le 1 ] && [ "$last" -ge 1 ]; then
-#  cd part_shape_embedding_training;
-#  python3 ./render_lfd_part_shape_list.py;
-#  cd ..;
-#fi
+
+# Step 03
+# Color the meshes based on the labelling
+if [ "$first" -le 1 ] && [ "$last" -ge 1 ]; then
+  cd part_shape_embedding_training;
+  python ./paint_mesh_faces_shape_list.py;
+  cd ..;
+fi
+
+# Step 04
+# Generate LFD images
+if [ "$first" -le 1 ] && [ "$last" -ge 1 ]; then
+  cd part_shape_embedding_training;
+  python3 ./render_lfd_part_shape_list.py;
+  cd ..;
+fi
 
 # Step 05
 # Crop LFD images
@@ -78,19 +78,14 @@ if [ "$first" -le 2 ] && [ "$last" -ge 2 ]; then
   cd ..;
 fi
 
-
-
-
-
-
-## Step 06
-## Compute LFD HoG Features
-#if [ "$first" -le 3 ] && [ "$last" -ge 3 ]; then
-#  python ./convert_global_variables.py;
-#  cd part_shape_embedding_training;
-#  /usr/local/MATLAB/R2016a/bin/glnxa64/MATLAB -nodisplay -r extract_lfd_hog_features;
-#  cd ..;
-#fi
+# Step 06
+# Compute LFD HoG Features
+if [ "$first" -le 3 ] && [ "$last" -ge 3 ]; then
+  python ./convert_global_variables.py;
+  cd part_shape_embedding_training;
+  /usr/local/MATLAB/R2016a/bin/glnxa64/MATLAB -nodisplay -r extract_lfd_hog_part_features;
+  cd ..;
+fi
 
 
 
