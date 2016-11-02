@@ -1,4 +1,4 @@
-function [ image_list ] = collect_image_part_list( folder, shape_list_file, class_id )
+function [ image_list ] = collect_image_part_list(folder, shape_list_file)
 %COLLECT_IMAGE_LIST Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -9,8 +9,9 @@ line = fgetl(shape_list_fid);
 image_count = 0;
 while ischar(line)
     shape_property = strsplit(line, ' ');
+    class_id = shape_property{1};
     shape_images_folder = fullfile(folder, shape_property{1}, shape_property{2});
-    image_count = image_count + length(dir(fullfile(shape_images_folder, '*.png')));
+    image_count = image_count + length(dir(fullfile(shape_images_folder, [class_id '*.png'])));
     line = fgetl(shape_list_fid);
 end
 fclose(shape_list_fid);
@@ -21,6 +22,7 @@ line = fgetl(shape_list_fid);
 image_count = 0;
 while ischar(line)
     shape_property = strsplit(line, ' ');
+    class_id = shape_property{1};
     shape_images_folder = fullfile(folder, shape_property{1}, shape_property{2});
     shape_images = extractfield(dir(fullfile(shape_images_folder, [class_id '*.png'])), 'name');
     shape_image_count = length(shape_images);

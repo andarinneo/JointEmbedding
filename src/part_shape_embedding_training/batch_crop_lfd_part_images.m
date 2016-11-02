@@ -4,11 +4,10 @@ global_variables;
 
 %% Collect LFD images according to shape list
 
-n_classes = size(shape_property, 1);
+n_classes = max(size(g_shapenet_synset_set));
 
 for iterator = 1:n_classes
-    class_id = shape_property{iterator, 1};
-    image_list = collect_image_part_list(g_lfd_images_folder, g_shape_list_file, class_id);
+    image_list = collect_image_part_list(g_lfd_images_folder, g_shape_list_file);
 
     local_cluster = parcluster('local');
     poolobj = parpool('local', min(g_lfd_cropping_thread_num, local_cluster.NumWorkers));

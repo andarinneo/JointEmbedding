@@ -30,7 +30,7 @@ if __name__ == '__main__':
     commands = []
     for shape_property in shape_list:
         shape_synset = shape_property[0]
-        shape_md5 = '1230d31e3a6cbf309cd431573238602d'  # shape_property[1]
+        shape_md5 = shape_property[1]
         shape_file = os.path.join(g_shapenet_root_folder, shape_synset, shape_md5, 'colored_parts.obj')
 
         command = '%s ../color_rendering.blend --background --python render_lfd_part_single_shape.py -- %s %s %s ' % (g_blender_executable_path, shape_file, shape_synset, shape_md5)
@@ -38,7 +38,7 @@ if __name__ == '__main__':
             command = command + ' > /dev/null 2>&1'
         commands.append(command)
 
-        break
+        # break
 
     print('done(%d commands)'%(len(commands)))
 

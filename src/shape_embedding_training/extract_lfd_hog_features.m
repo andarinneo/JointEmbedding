@@ -1,3 +1,4 @@
+clearvars;
 addpath('../');
 global_variables;
 addpath(genpath(g_piotr_toolbox_path));

@@ -1,6 +1,6 @@
+clearvars;
 addpath('../');
 global_variables;
-
 
 %% Load HoG features
 

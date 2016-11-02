@@ -1,10 +1,9 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
+import os
 import sys
 import scipy.io as sio
-from paint_mesh_faces_single_shape import *
-from global_variables import *
 # Parallel FOR library
 from joblib import Parallel, delayed
 import multiprocessing
@@ -26,10 +25,13 @@ def loop_operation(root_folder, shape_property_v, n, labels):
     return result
 
 
-# --- MAIN ---
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(BASE_DIR))
+from paint_mesh_faces_single_shape import *
+from global_variables import *
+
+
+# --- MAIN ---
 
 report_step = 100
 
@@ -45,19 +47,19 @@ if __name__ == '__main__':
     print(len(shape_list), ' shapes are going to be colored!')
     start_time = time.time()
 
-    # SINGLE THREAD LOOP
-    non_available_segmentations = []
-    for shape_property in shape_list:
-        shape_synset = shape_property[0]
-        shape_md5 = '1230d31e3a6cbf309cd431573238602d'  # shape_property[1]
-        non_available_segmentations.append(paint_mesh_faces(g_shapenet_root_folder, shape_synset, shape_md5, n_parts, part_labels))
-
-        break # BORRAR, solo para debugar
+    # # SINGLE THREAD LOOP
+    # non_available_segmentations = []
+    # for shape_property in shape_list:
+    #     shape_synset = shape_property[0]
+    #     shape_md5 = shape_property[1]
+    #     non_available_segmentations.append(paint_mesh_faces(g_shapenet_root_folder, shape_synset, shape_md5, n_parts, part_labels))
+    #
+    #     #break # BORRAR, solo para debugar
 
     # PARALLEL LOOP
-    # num_cores = multiprocessing.cpu_count()
-    # non_available_segmentations = Parallel(n_jobs=num_cores)(delayed(loop_operation)(g_shapenet_root_folder, shape_property, n_parts, part_labels) for shape_property in shape_list)
-    # sio.savemat(g_shapenet_root_folder + '/' + shape_list[0][0] + '_non_available_segmentations.mat', {'non_available_segmentations':non_available_segmentations})
+    num_cores = multiprocessing.cpu_count()
+    non_available_segmentations = Parallel(n_jobs=num_cores)(delayed(loop_operation)(g_shapenet_root_folder, shape_property, n_parts, part_labels) for shape_property in shape_list)
+    sio.savemat(g_shapenet_root_folder + '/' + shape_list[0][0] + '_non_available_segmentations.mat', {'non_available_segmentations':non_available_segmentations})
 
     # END MESSAGES
     print("--- %s seconds ---" % (time.time() - start_time))

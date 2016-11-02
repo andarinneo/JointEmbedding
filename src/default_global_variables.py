@@ -139,6 +139,25 @@ g_shape_embedding_space_file_txt = os.path.join(g_data_folder, 'shape_embedding/
 
 
 ##############################################################################
+# Part Shape embedding
+##############################################################################
+
+g_n_parts = 4
+
+g_lfd_hog_part_features_file = os.path.join(g_data_folder, 'shape_embedding/lfd_hog_part_features'+g_shapenet_synset_set_handle+'.mat')
+
+# Pairwise distance
+g_part_shape_distance_matrix_file_mat = os.path.join(g_data_folder, 'shape_embedding/part_shape_distance_matrix'+g_shapenet_synset_set_handle+'.mat')
+g_part_shape_distance_matrix_file_txt = os.path.join(g_data_folder, 'shape_embedding/part_shape_distance_matrix'+g_shapenet_synset_set_handle+'.txt')
+
+# Embedding space
+g_part_shape_embedding_space_dimension = 128
+g_part_shape_embedding_space_file_mat = os.path.join(g_data_folder, 'shape_embedding/part_shape_embedding_space'+g_shapenet_synset_set_handle+'.mat')
+g_part_shape_embedding_space_file_txt = os.path.join(g_data_folder, 'shape_embedding/part_shape_embedding_space'+g_shapenet_synset_set_handle+'.txt')
+
+
+
+##############################################################################
 # Image embedding
 ##############################################################################
 # Rendering
