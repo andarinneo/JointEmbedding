@@ -20,7 +20,8 @@ while ischar(line)
     shape_count = shape_count + 1;
     shape_property = strsplit(line, ' ');
     
-    image_file = [shape_property{1} '_' shape_property{2} '_a054_e020_t000_d003.png'];
+%     image_file = [shape_property{1} '_' shape_property{2} '_a054_e020_t000_d003.png'];
+    image_file = ['parts_' shape_property{1} '_' shape_property{2} '_a054_e020_t000_d003.png'];
     shape_png_list{shape_count} = fullfile(g_data_folder, 'shape_embedding', 'lfd_images_cropped', shape_property{1}, shape_property{2}, image_file);
     
     line = fgetl(shape_list_fid);
@@ -44,17 +45,12 @@ for part_id=1:g_n_parts
     % Run t-SNE
     mappedX = tsne(part_shape_embedding_space{part_id}, [], no_dims, initial_dims, perplexity);
     
-    % Plot results
-    gscatter(mappedX(:,1), mappedX(:,2));
-    
     % Scale to a 1.0x1.0 square
     scaleX = max(mappedX(:,1)) - min(mappedX(:,1));
     scaleY = max(mappedX(:,2)) - min(mappedX(:,2));
     
     auxX(:,1) = ((mappedX(:,1)) - min(mappedX(:,1))) / scaleX;
     auxX(:,2) = ((mappedX(:,2)) - min(mappedX(:,2))) / scaleY;
-    
-    % gscatter(auxX(:,1), auxX(:,2)); figure;
     
     
     %% Create an embedding image
@@ -86,8 +82,6 @@ for part_id=1:g_n_parts
         G(a:a+s-1, b:b+s-1, :) = I;
         
     end
-    
-%     imshow(G);
     
     
     %% Save image

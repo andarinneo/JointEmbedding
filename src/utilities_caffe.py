@@ -37,7 +37,7 @@ def extract_cnn_features(img_filelist, img_root, prototxt, caffemodel, feat_name
             input_shape = net_parameter.input_dim
         else:
             input_shape = net_parameter.input_shape
-        imagenet_mean = caffe.io.resize_image(imagenet_mean.transpose((1, 2, 0)), (3,227,227))
+        imagenet_mean = caffe.io.resize_image(imagenet_mean.transpose((1, 2, 0)), (3, 227, 227))
     
     # INIT NETWORK
     caffe.set_mode_gpu()

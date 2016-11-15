@@ -21,7 +21,7 @@ n_shapes = size(lfd_hog_part_features,1);
 
 whole_shape_lfd = lfd_hog_part_features(:, (1:hog_dimension)); % in this case offset=0, we take the HoG for the whole shape
 
-for part=1:g_n_parts
+for part = 1:g_n_parts
     offset = hog_dimension * ((part+1) - 1); % part + 1 because part 1 starts after the whole shape, the -1 goes just to note that accessing matrix positions in a vector requires a minus 1
     part_lfd = lfd_hog_part_features(:, (1:hog_dimension)+offset);
     
@@ -41,7 +41,7 @@ t_begin = clock;
 fprintf('Save part shape distance matrix to \"%s\"...\n', g_part_shape_distance_matrix_file_mat);
 save(g_part_shape_distance_matrix_file_mat, 'part_shape_distance_matrix', '-v7.3');
 
-for part=1:g_n_parts
+for part = 1:g_n_parts
     part_shape_distance_matrix_NxN{part} = squareform(part_shape_distance_matrix{part});
 end
 dlmwrite(g_part_shape_distance_matrix_file_txt, part_shape_distance_matrix_NxN, 'delimiter', ' ');

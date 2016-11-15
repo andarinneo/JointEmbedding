@@ -13,6 +13,7 @@ from global_variables import *
 
 train_val_split = [int(line.strip()) for line in open(g_syn_images_train_val_split, 'r')]
 
+# It loads the pool5 feature descriptors for each train/val image and creates a DB using that
 env = lmdb.open(g_pool5_lmdb, readonly=True)
 if os.path.exists(g_pool5_lmdb_train):
     shutil.rmtree(g_pool5_lmdb_train)

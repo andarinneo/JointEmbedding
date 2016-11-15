@@ -41,12 +41,20 @@ parfor i = 1:image_num
     if mod(i, report_step) == 0
         fprintf('\b|\n');
     end
-end   
+end
 
-% Save the bounding boxes to reproduce 3D reprojections
-aux_path = strrep(src_image_list{1}, src_folder, '');
-split_path = strsplit(aux_path,'/');
-save([dst_folder '/' split_path{2} '/' 'crop_bbox.mat'], 'top', 'bottom', 'left', 'right');
+if (image_num > 0)
+    top = cropBox_mat(1,1);
+    bottom = cropBox_mat(1,2);
+    left = cropBox_mat(1,3);
+    right = cropBox_mat(1,4);
+
+    % Save the bounding boxes to reproduce 3D reprojections
+    aux_path = strrep(src_image_list{1}, src_folder, '');
+    split_path = strsplit(aux_path,'/');
+    save([dst_folder '/' split_path{2} '/' 'crop_bbox.mat'], 'top', 'bottom', 'left', 'right');
+end
+
 
 t_end = clock;
 fprintf('%f seconds spent on cropping!\n', etime(t_end, t_begin));

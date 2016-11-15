@@ -22,13 +22,13 @@ options = statset('Display', 'iter', 'MaxIter', 128);
 
 % We fix the issue for all classes by adding a small epsilon to those values
 epsilon = 0.01; % 0.0001
-for part= 4 %1:g_n_parts
+for part = 1:g_n_parts
     indexes = (part_shape_distance_matrix{part} == 0);
     n_empty_val = sum(indexes);
     part_shape_distance_matrix{part}(indexes) = rand(1, n_empty_val) * epsilon;
 end
 
-for part=1:g_n_parts
+for part = 1:g_n_parts
     [aux_part_shape_embedding_space, stress, disparities] = mdscale(part_shape_distance_matrix{part}, g_part_shape_embedding_space_dimension, 'criterion', 'sammon', 'options', options);
     
     part_shape_embedding_space{part} = aux_part_shape_embedding_space;

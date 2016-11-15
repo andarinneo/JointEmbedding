@@ -19,3 +19,4 @@ extract_cnn_features(img_filelist=g_syn_images_filelist,
                      mean_file=g_mean_file,
                      gpu_index=g_extract_feat_gpu_index,
                      pool_size=g_extract_feat_thread_num)
+

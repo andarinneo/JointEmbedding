@@ -39,7 +39,7 @@ command_in = os.path.join(BASE_DIR, 'run_training.sh.in')
 print 'Preparing %s...'%(g_image_embedding_command_sh)
 shutil.copy(command_in, g_image_embedding_command_sh)
 for line in fileinput.input(g_image_embedding_command_sh, inplace=True):
-    line = line.replace('/path/to/caffe_executable', os.path.join(g_caffe_install_path, 'bin/caffe'))
+    line = line.replace('/path/to/caffe_executable', os.path.join(g_caffe_install_path, 'build/tools/caffe'))
     line = line.replace('/path/to/caffemodel', g_fine_tune_caffemodel)
     sys.stdout.write(line)
 st = os.stat(g_image_embedding_command_sh)

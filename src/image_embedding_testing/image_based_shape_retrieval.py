@@ -16,10 +16,14 @@ from global_variables import *
 from utilities_caffe import *
 
 parser = argparse.ArgumentParser(description="Extract image embedding features for IMAGE input.")
-parser.add_argument('--image', help='Path to input image (cropped)', required=False, default='/home/adrian/JointEmbedding/src/image_embedding_testing/testing_images/chair_00.jpg')
+parser.add_argument('--image', help='Path to input image (cropped)', required=False, default='/home/adrian/Desktop/testCases/tests/chair35.JPEG')
 parser.add_argument('--iter_num', '-n', help='Use caffemodel trained after iter_num iterations', type=int, default=20000)
-parser.add_argument('--caffemodel', '-c', help='Path to caffemodel (will ignore -n option if provided)', required=False, default='/home/adrian/Desktop/03001627/image_embedding_03001627.caffemodel')
-parser.add_argument('--prototxt', '-p', help='Path to prototxt (if not at the default place)', required=False, default='/home/adrian/Desktop/03001627/image_embedding_03001627.prototxt')
+# /home/adrian/Desktop/03001627/image_embedding_03001627.caffemodel
+# /media/adrian/Datasets/datasets/image_embedding/image_embedding_testing_03001627_rcnn/snapshots_03001627_iter_40000.caffemodel
+parser.add_argument('--caffemodel', '-c', help='Path to caffemodel (will ignore -n option if provided)', required=False, default='/media/adrian/Datasets/datasets/image_embedding/image_embedding_testing_03001627_rcnn/snapshots_03001627_iter_40000.caffemodel')
+# /home/adrian/Desktop/03001627/image_embedding_03001627.prototxt
+# /media/adrian/Datasets/datasets/image_embedding/image_embedding_testing_03001627_rcnn/image_embedding_rcnn.prototxt
+parser.add_argument('--prototxt', '-p', help='Path to prototxt (if not at the default place)', required=False, default='/media/adrian/Datasets/datasets/image_embedding/image_embedding_testing_03001627_rcnn/image_embedding_rcnn.prototxt')
 parser.add_argument('--gpu_index', help='GPU index (default=0).', type=int, default=0)
 parser.add_argument('--top_k', help='Retrieve top K shapes.', type=int, default=32)
 args = parser.parse_args()
@@ -33,14 +37,18 @@ if args.prototxt:
     image_embedding_prototxt = args.prototxt
 
 print 'Computing image embedding for %s...'%(args.image)
+
 image_embedding_array = extract_cnn_features( img_filelist=args.image,
                                               img_root='/',
-                                              prototxt=image_embedding_prototxt, 
+                                              prototxt=image_embedding_prototxt,
                                               caffemodel=image_embedding_caffemodel,
                                               feat_name='image_embedding',
                                               caffe_path=g_caffe_install_path,
                                               mean_file=g_mean_file )
+
 image_embedding = image_embedding_array[0]
+
+# g_shape_embedding_space_file_txt = '/home/adrian/Desktop/03001627/shape_embedding_space_03001627.txt'
 
 print 'Loading shape embedding space from %s...'%(g_shape_embedding_space_file_txt)
 shape_embedding_space = [np.array([float(value) for value in line.strip().split(' ')]) for line in open(g_shape_embedding_space_file_txt, 'r')]

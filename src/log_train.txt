@@ -1,13 +1,13 @@
-F0927 19:46:38.220600 21538 io.cpp:36] Check failed: fd != -1 (-1 vs. -1) File not found: solver.prototxt
+F1114 13:10:00.253512 27620 io.cpp:36] Check failed: fd != -1 (-1 vs. -1) File not found: solver.prototxt
 *** Check failure stack trace: ***
-    @     0x7f950c61bdaa  (unknown)
-    @     0x7f950c61bce4  (unknown)
-    @     0x7f950c61b6e6  (unknown)
-    @     0x7f950c61e687  (unknown)
-    @     0x7f950cd7559d  caffe::ReadProtoFromTextFile()
-    @     0x7f950cd623f4  caffe::ReadSolverParamsFromTextFileOrDie()
-    @           0x407ccb  train()
-    @           0x405bbc  main
-    @     0x7f950b178f45  (unknown)
-    @           0x40638d  (unknown)
+    @     0x7f35aaee3daa  (unknown)
+    @     0x7f35aaee3ce4  (unknown)
+    @     0x7f35aaee36e6  (unknown)
+    @     0x7f35aaee6687  (unknown)
+    @     0x7f35ab59b36d  caffe::ReadProtoFromTextFile()
+    @     0x7f35ab583544  caffe::ReadSolverParamsFromTextFileOrDie()
+    @           0x40a68b  train()
+    @           0x40856c  main
+    @     0x7f35a99e6f45  (unknown)
+    @           0x408d3d  (unknown)
     @              (nil)  (unknown)
