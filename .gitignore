@@ -6,3 +6,4 @@ src/global_variables.pyc
 src/shape_embedding_training/visualization/
 src/tSNE_embedding/results/
 *.m~
+*~
