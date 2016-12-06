@@ -1,0 +1,505 @@
+#------------------------------------------------#
+# Pre-calculated inputs
+#------------------------------------------------#
+
+name: "AlexNet"
+layer {
+  name: "data"
+  type: "Data"
+  top: "pool5"
+  include {
+    phase: TRAIN
+  }
+  data_param {
+    source: "/path/to/syn_images_pool5_lmdb_train"
+    batch_size: 1024 
+    backend: LMDB
+  }
+}
+layer {
+  name: "data"
+  type: "Data"
+  top: "pool5"
+  include {
+    phase: TEST
+  }
+  data_param {
+    source: "/path/to/syn_images_pool5_lmdb_val"
+    batch_size: 512
+    backend: LMDB
+  }
+}
+
+
+#------------------------------------------------#
+# Shape embedding for the different parts
+#------------------------------------------------#
+
+# Part 1 euclidean loss
+layer {
+  name: "shape_embedding_part1"
+  type: "Data"
+  top: "shape_embedding_part1"
+  include {
+    phase: TRAIN
+  }
+  data_param {
+    source: "/path/to/shape_embedding_lmdb_train_part1"
+    batch_size: 1024 
+    backend: LMDB
+  }
+}
+layer {
+  name: "shape_embedding_part1"
+  type: "Data"
+  top: "shape_embedding_part1"
+  include {
+    phase: TEST
+  }
+  data_param {
+    source: "/path/to/shape_embedding_lmdb_val_part1"
+    batch_size: 512
+    backend: LMDB
+  }
+}
+# Part 2 euclidean loss
+layer {
+  name: "shape_embedding_part2"
+  type: "Data"
+  top: "shape_embedding_part2"
+  include {
+    phase: TRAIN
+  }
+  data_param {
+    source: "/path/to/shape_embedding_lmdb_train_part2"
+    batch_size: 1024
+    backend: LMDB
+  }
+}
+layer {
+  name: "shape_embedding_part2"
+  type: "Data"
+  top: "shape_embedding_part2"
+  include {
+    phase: TEST
+  }
+  data_param {
+    source: "/path/to/shape_embedding_lmdb_val_part2"
+    batch_size: 512
+    backend: LMDB
+  }
+}
+# Part 3 euclidean loss
+layer {
+  name: "shape_embedding_part3"
+  type: "Data"
+  top: "shape_embedding_part3"
+  include {
+    phase: TRAIN
+  }
+  data_param {
+    source: "/path/to/shape_embedding_lmdb_train_part3"
+    batch_size: 1024
+    backend: LMDB
+  }
+}
+layer {
+  name: "shape_embedding_part3"
+  type: "Data"
+  top: "shape_embedding_part3"
+  include {
+    phase: TEST
+  }
+  data_param {
+    source: "/path/to/shape_embedding_lmdb_val_part3"
+    batch_size: 512
+    backend: LMDB
+  }
+}
+# Part 4 euclidean loss
+layer {
+  name: "shape_embedding_part4"
+  type: "Data"
+  top: "shape_embedding_part4"
+  include {
+    phase: TRAIN
+  }
+  data_param {
+    source: "/path/to/shape_embedding_lmdb_train_part4"
+    batch_size: 1024
+    backend: LMDB
+  }
+}
+layer {
+  name: "shape_embedding_part4"
+  type: "Data"
+  top: "shape_embedding_part4"
+  include {
+    phase: TEST
+  }
+  data_param {
+    source: "/path/to/shape_embedding_lmdb_val_part4"
+    batch_size: 512
+    backend: LMDB
+  }
+}
+
+
+
+#------------------------------------------------#
+# Common fully connected layers
+#------------------------------------------------#
+
+layer {
+  name: "fc6"
+  type: "InnerProduct"
+  bottom: "pool5"
+  top: "fc6"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+  }
+}
+layer {
+  name: "relu6"
+  type: "ReLU"
+  bottom: "fc6"
+  top: "fc6"
+}
+layer {
+  name: "drop6"
+  type: "Dropout"
+  bottom: "fc6"
+  top: "fc6"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  name: "fc7"
+  type: "InnerProduct"
+  bottom: "fc6"
+  top: "fc7"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+  }
+}
+layer {
+  name: "relu7"
+  type: "ReLU"
+  bottom: "fc7"
+  top: "fc7"
+}
+layer {
+  name: "drop7"
+  type: "Dropout"
+  bottom: "fc7"
+  top: "fc7"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+
+#------------------------------------------------#
+# Individual fully connected layers
+#------------------------------------------------#
+
+# FC for part 1
+layer {
+  name: "fc8_part1"
+  type: "InnerProduct"
+  bottom: "fc7"
+  top: "fc8_part1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+  }
+}
+layer {
+  name: "relu8_part1"
+  type: "ReLU"
+  bottom: "fc8_part1"
+  top: "fc8_part1"
+}
+layer {
+  name: "drop8_part1"
+  type: "Dropout"
+  bottom: "fc8_part1"
+  top: "fc8_part1"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+# FC for part 2
+layer {
+  name: "fc8_part2"
+  type: "InnerProduct"
+  bottom: "fc7"
+  top: "fc8_part2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+  }
+}
+layer {
+  name: "relu8_part2"
+  type: "ReLU"
+  bottom: "fc8_part2"
+  top: "fc8_part2"
+}
+layer {
+  name: "drop8_part2"
+  type: "Dropout"
+  bottom: "fc8_part2"
+  top: "fc8_part2"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+# FC for part 3
+layer {
+  name: "fc8_part3"
+  type: "InnerProduct"
+  bottom: "fc7"
+  top: "fc8_part3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+  }
+}
+layer {
+  name: "relu8_part3"
+  type: "ReLU"
+  bottom: "fc8_part3"
+  top: "fc8_part3"
+}
+layer {
+  name: "drop8_part3"
+  type: "Dropout"
+  bottom: "fc8_part3"
+  top: "fc8_part3"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+# FC for part 4
+layer {
+  name: "fc8_part4"
+  type: "InnerProduct"
+  bottom: "fc7"
+  top: "fc8_part4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+  }
+}
+layer {
+  name: "relu8_part4"
+  type: "ReLU"
+  bottom: "fc8_part4"
+  top: "fc8_part4"
+}
+layer {
+  name: "drop8_part4"
+  type: "Dropout"
+  bottom: "fc8_part4"
+  top: "fc8_part4"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+
+#------------------------------------------------#
+# Manifold embedding layers for each part
+#------------------------------------------------#
+
+# Part 1
+layer {
+  name: "image_embedding_part1"
+  type: "InnerProduct"
+  bottom: "fc8_part1"
+  top: "image_embedding_part1"
+  param {
+    lr_mult: 10
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 20
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: embedding_space_dim
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+
+layer {
+  name: "embedding_loss_part1"
+  type: "EuclideanLoss"
+  bottom: "image_embedding_part1"
+  bottom: "shape_embedding_part1"
+  top: "embedding_loss_part1"
+}
+
+
+# Part 2
+layer {
+  name: "image_embedding_part2"
+  type: "InnerProduct"
+  bottom: "fc8_part2"
+  top: "image_embedding_part2"
+  param {
+    lr_mult: 10
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 20
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: embedding_space_dim
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+
+layer {
+  name: "embedding_loss_part2"
+  type: "EuclideanLoss"
+  bottom: "image_embedding_part2"
+  bottom: "shape_embedding_part2"
+  top: "embedding_loss_part2"
+}
+
+
+# Part 3
+layer {
+  name: "image_embedding_part3"
+  type: "InnerProduct"
+  bottom: "fc8_part3"
+  top: "image_embedding_part3"
+  param {
+    lr_mult: 10
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 20
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: embedding_space_dim
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+
+layer {
+  name: "embedding_loss_part3"
+  type: "EuclideanLoss"
+  bottom: "image_embedding_part3"
+  bottom: "shape_embedding_part3"
+  top: "embedding_loss_part3"
+}
+
+
+# Part 4
+layer {
+  name: "image_embedding_part4"
+  type: "InnerProduct"
+  bottom: "fc8_part4"
+  top: "image_embedding_part4"
+  param {
+    lr_mult: 10
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 20
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: embedding_space_dim
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+
+layer {
+  name: "embedding_loss_part4"
+  type: "EuclideanLoss"
+  bottom: "image_embedding_part4"
+  bottom: "shape_embedding_part4"
+  top: "embedding_loss_part4"
+}
