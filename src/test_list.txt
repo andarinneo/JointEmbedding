@@ -1,0 +1,4 @@
+/home/adrian/Desktop/testCases/tests/chair01.JPEG
+/home/adrian/Desktop/testCases/tests/chair02.JPEG
+/home/adrian/Desktop/testCases/tests/chair03.JPEG
+/home/adrian/Desktop/testCases/tests/chair04.JPEG
