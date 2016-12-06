@@ -5,7 +5,11 @@ global_variables;
 
 %% Load data
 
-load '/home/adrian/JointEmbedding/datasets/shape_embedding/shape_embedding_space_03001627.mat'
+% load '/home/adrian/JointEmbedding/datasets/shape_embedding/shape_embedding_space_03001627(gt).mat'
+
+g_shape_embedding_space_file_mat_gt = '/home/adrian/JointEmbedding/datasets/shape_embedding/shape_embedding_space_03001627(gt).txt';
+shape_embedding_space = dlmread(g_shape_embedding_space_file_mat_gt);
+
 
 n_shapes = size(shape_embedding_space, 1);
 
@@ -88,6 +92,6 @@ imshow(G);
 
 %% Save image
 
-imwrite(G, ['original_manifold_view.jpg'], 'jpg');
+imwrite(G, ['results/original_manifold_view(gt).jpg'], 'jpg');
 
 

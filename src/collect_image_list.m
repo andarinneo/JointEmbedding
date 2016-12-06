@@ -3,7 +3,7 @@ function [ image_list ] = collect_image_list( folder, shape_list_file )
 %   Detailed explanation goes here
 
 t_begin = clock;
-fprintf('Collecting synthetic images of shapes listed in \"%s\"...', shape_list_file);
+fprintf('Collecting synthetic images of shapes listed in \"%s\"...\n', shape_list_file);
 shape_list_fid = fopen(shape_list_file);
 line = fgetl(shape_list_fid);
 image_count = 0;

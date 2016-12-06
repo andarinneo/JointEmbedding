@@ -19,6 +19,10 @@ from global_variables import *
 sys.path.append(os.path.join(g_caffe_install_path, 'python'))
 import caffe
 
+
+g_shape_embedding_space_file_txt = '/home/adrian/Desktop/03001627/shape_embedding_space_03001627.txt'  # BORRAR, this uses the GT manifold
+
+
 train_val_split = [int(line.strip()) for line in open(g_syn_images_train_val_split, 'r')]
 imageid2shapeid = [int(line.strip()) for line in open(g_syn_images_imageid2shapeid, 'r')]
 embedding_space = [[float(value) for value in line.strip().split(' ')] for line in open(g_shape_embedding_space_file_txt, 'r')]

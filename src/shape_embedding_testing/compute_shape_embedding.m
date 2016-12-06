@@ -3,20 +3,33 @@ global_variables;
 addpath(genpath(g_minfunc_2012_path));
 
 
+g_shape_embedding_space_file_mat_gt = '/home/adrian/JointEmbedding/datasets/shape_embedding/shape_embedding_space_03001627(gt).mat';
+g_shape_embedding_space_file_mat_myTraining = '/home/adrian/JointEmbedding/datasets/shape_embedding/shape_embedding_space_03001627(meTrained).mat';
+
+
 %% Load shape distance matrix
 
 t_begin = clock;
-fprintf('Loading shape distance matrix from \"%s\"...', g_shape_distance_matrix_file_mat);
+fprintf('Loading shape distance matrix from \"%s\"...\n', g_shape_distance_matrix_file_mat);
 load(g_shape_distance_matrix_file_mat);
 shape_distance_matrix_squared = squareform(shape_distance_matrix);
 t_end = clock;
 fprintf('done (%f seconds)!\n', etime(t_end, t_begin));
 
 
-%% Load shape embedding space
+%% Load GT shape embedding space
 
 t_begin = clock;
-fprintf('Loading shape embedding space from \"%s\"...', g_shape_embedding_space_file_mat);
+fprintf('Loading shape embedding space from \"%s\"...\n', g_shape_embedding_space_file_mat_myTraining);
+load(g_shape_embedding_space_file_mat);
+t_end = clock;
+fprintf('done (%f seconds)!\n', etime(t_end, t_begin));
+
+
+%% Load MY shape embedding space
+
+t_begin = clock;
+fprintf('Loading shape embedding space from \"%s\"...\n', g_shape_embedding_space_file_mat_gt);
 load(g_shape_embedding_space_file_mat);
 t_end = clock;
 fprintf('done (%f seconds)!\n', etime(t_end, t_begin));

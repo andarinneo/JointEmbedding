@@ -128,5 +128,5 @@ def stack_caffe_models(prototxt, base_model, top_model, stacked_model, caffe_pat
     print 'Copying trained layers from %s...'%(top_model)
     net.copy_from(top_model)
     
-    print 'Saving stacked model to %s...'%(top_model)
+    print 'Saving stacked model to %s...'%(stacked_model)
     net.save(stacked_model)

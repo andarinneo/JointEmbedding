@@ -43,7 +43,12 @@ fprintf('done (%f seconds)!\n', etime(t_end, t_begin));
 t_begin = clock;
 fprintf('Save part shape embedding space to \"%s\"...\n', g_part_shape_embedding_space_file_mat);
 save(g_part_shape_embedding_space_file_mat, 'part_shape_embedding_space', '-v7.3');
-dlmwrite(g_part_shape_embedding_space_file_txt, part_shape_embedding_space, 'delimiter', ' ');
+
+for part = 1:g_n_parts
+    [pathstr, name, ext] = fileparts(g_part_shape_embedding_space_file_txt);
+    dlmwrite(fullfile(pathstr, [name '_part' int2str(part) ext]), part_shape_embedding_space{part}, 'delimiter', ' ');
+end
+
 t_end = clock;
 fprintf('done (%f seconds)!\n', etime(t_end, t_begin));
 

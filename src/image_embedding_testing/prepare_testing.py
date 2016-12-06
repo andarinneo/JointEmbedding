@@ -27,7 +27,7 @@ for line in fileinput.input(g_image_embedding_testing_prototxt, inplace=True):
     line = line.replace('embedding_space_dim', str(g_shape_embedding_space_dimension))
     sys.stdout.write(line) 
 
-image_embedding_caffemodel = os.path.join(g_image_embedding_training_folder, 'snapshots%s_iter_%d.caffemodel'%(g_shapenet_synset_set_handle, args.iter_num))
+image_embedding_caffemodel = os.path.join(g_image_embedding_training_folder, 'snapshots', 'snapshots%s_iter_%d.caffemodel'%(g_shapenet_synset_set_handle, args.iter_num))
 image_embedding_caffemodel_stacked = os.path.join(g_image_embedding_testing_folder, 'snapshots%s_iter_%d.caffemodel'%(g_shapenet_synset_set_handle, args.iter_num))
 
 stack_caffe_models(prototxt=g_image_embedding_testing_prototxt,
