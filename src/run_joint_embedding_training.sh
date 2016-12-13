@@ -37,29 +37,29 @@ then
 fi
 
 
-## Step 01
-## Split train/val
-#if [ "$first" -le 1 ] && [ "$last" -ge 1 ]; then
-#  cd image_embedding_training;
-#  python ./split_train_val.py
-#  cd ..;
-#fi
+# Step 01
+# Split train/val
+if [ "$first" -le 1 ] && [ "$last" -ge 1 ]; then
+  cd image_embedding_training;
+  python ./split_train_val.py
+  cd ..;
+fi
 
-## Step 02
-## Generate train/val lmdbs of synthetic images
-#if [ "$first" -le 2 ] && [ "$last" -ge 2 ]; then
-#  cd image_embedding_training;
-#  python ./gen_syn_images_lmdbs.py
-#  cd ..;
-#fi
+# Step 02
+# Generate train/val lmdbs of synthetic images
+if [ "$first" -le 2 ] && [ "$last" -ge 2 ]; then
+  cd image_embedding_training;
+  python ./gen_syn_images_lmdbs.py
+  cd ..;
+fi
 
-## Step 03
-## Generate train/val lmdbs of shape embedding
-#if [ "$first" -le 3 ] && [ "$last" -ge 3 ]; then
-#  cd shape_embedding_training;
-#  python ./gen_shape_embedding_lmdbs.py
-#  cd ..;
-#fi
+# Step 03
+# Generate train/val lmdbs of shape embedding
+if [ "$first" -le 3 ] && [ "$last" -ge 3 ]; then
+  cd shape_embedding_training;
+  python ./gen_shape_embedding_lmdbs.py
+  cd ..;
+fi
 
 # Step 04
 # Generate caffe training scripts

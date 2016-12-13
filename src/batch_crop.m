@@ -17,38 +17,39 @@ cropBox_mat = zeros(image_num, 4);
 parfor i = 1:image_num
     src_image_file = src_image_list{i};
     try
-        [I, ~, alpha] = imread(src_image_file);       
-    catch
-        fprintf('Failed to read %s\n', src_image_file);
-    end
-    
-    [alpha, top, bottom, left, right] = crop_gray(alpha, 0, jitter, cropRatios);      
-    I = I(top:bottom, left:right, :);
-    
-    cropBox_mat(i,:) = [top bottom left right];
-
-    if numel(I) == 0
-        fprintf('Failed to crop %s (empty image after crop)\n', src_image_file);
-    else
-        dst_image_file = strrep(src_image_file, src_folder, dst_folder);
-        [dst_image_file_folder, ~, ~] = fileparts(dst_image_file);
-        if ~exist(dst_image_file_folder, 'dir')
-            mkdir(dst_image_file_folder);
+        [I, ~, alpha] = imread(src_image_file);
+        
+        [alpha, top, bottom, left, right] = crop_gray(alpha, 0, jitter, cropRatios);
+        I = I(top:bottom, left:right, :);
+        
+        cropBox_mat(i,:) = [top bottom left right];
+        
+        if numel(I) == 0
+            fprintf('Failed to crop %s (empty image after crop)\n', src_image_file);
+        else
+            dst_image_file = strrep(src_image_file, src_folder, dst_folder);
+            [dst_image_file_folder, ~, ~] = fileparts(dst_image_file);
+            if ~exist(dst_image_file_folder, 'dir')
+                mkdir(dst_image_file_folder);
+            end
+            imwrite(I, dst_image_file, 'png', 'Alpha', alpha);
         end
-        imwrite(I, dst_image_file, 'png', 'Alpha', alpha);
+    catch
+        fprintf('\nFailed to read %s', src_image_file);
     end
     
     if mod(i, report_step) == 0
-        fprintf('\b|\n');
+        fprintf('\b|');
     end
 end
+fprintf('\n');
 
 if (image_num > 0)
     top = cropBox_mat(1,1);
     bottom = cropBox_mat(1,2);
     left = cropBox_mat(1,3);
     right = cropBox_mat(1,4);
-
+    
     % Save the bounding boxes to reproduce 3D reprojections
     aux_path = strrep(src_image_list{1}, src_folder, '');
     split_path = strsplit(aux_path,'/');
