@@ -17,7 +17,7 @@ from utilities_caffe import *
 
 parser = argparse.ArgumentParser(description="Extract image embedding features for IMAGE input.")
 parser.add_argument('--image', help='Path to input image (cropped)', required=False, default='/home/adrian/Desktop/testCases/tests/chair35.JPEG')
-parser.add_argument('--iter_num', '-n', help='Use caffemodel trained after iter_num iterations', type=int, default=20000)
+parser.add_argument('--iter_num', '-n', help='Use caffemodel trained after iter_num iterations', type=int, default=40000)
 # '/home/adrian/Desktop/03001627/image_embedding_03001627.caffemodel'
 # '/media/adrian/Datasets/datasets/image_embedding/image_embedding_testing_03001627_rcnn/snapshots_03001627_iter_40000.caffemodel'
 parser.add_argument('--caffemodel', '-c', help='Path to caffemodel (will ignore -n option if provided)', required=False, default='/home/adrian/Desktop/03001627/image_embedding_03001627.caffemodel')
@@ -51,7 +51,7 @@ else:
 
 # g_shape_embedding_space_file_txt = '/home/adrian/Desktop/03001627/shape_embedding_space_03001627.txt'
 # image_embedding_prototxt = '/media/adrian/Datasets/datasets/image_embedding/image_embedding_testing_03001627_rcnn/image_embedding_rcnn.prototxt'  # Is correct
-image_embedding_caffemodel = '/media/adrian/Datasets/datasets/image_embedding/image_embedding_testing_03001627_rcnn/snapshots_03001627_iter_20000.caffemodel'
+image_embedding_caffemodel = '/media/adrian/Datasets/datasets/image_embedding/image_embedding_testing_03001627_rcnn/snapshots_03001627_iter_40000.caffemodel'
 
 
 

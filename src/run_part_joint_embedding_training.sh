@@ -61,10 +61,10 @@ fi
 #  cd ..;
 #fi
 
-# Step 04
-# Generate caffe training scripts
-if [ "$first" -le 4 ] && [ "$last" -ge 4 ]; then
-  cd part_image_embedding_training;
-  python ./prepare_part_training.py
-  cd ..;
-fi
+## Step 04
+## Generate caffe training scripts
+#if [ "$first" -le 4 ] && [ "$last" -ge 4 ]; then
+#  cd part_image_embedding_training;
+#  python ./prepare_part_training.py
+#  cd ..;
+#fi

@@ -17,7 +17,7 @@ from global_variables import *
 from utilities_caffe import stack_caffe_models
 
 parser = argparse.ArgumentParser(description="Stitch pool5 extraction and image embedding caffemodels together.")
-parser.add_argument('--iter_num', '-n', help='Use image embedding model trained after iter_num iterations', type=int, default=20000)
+parser.add_argument('--iter_num', '-n', help='Use image embedding model trained after iter_num iterations', type=int, default=40000)
 args = parser.parse_args()
 
 image_embedding_testing_in = os.path.join(BASE_DIR, 'image_embedding_'+g_network_architecture_name+'.prototxt.in')

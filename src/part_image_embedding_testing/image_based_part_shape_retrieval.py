@@ -34,7 +34,7 @@ if args.prototxt:
     image_embedding_prototxt = args.prototxt
 
 
-part_id = 4
+part_id = 1
 print 'My training'
 # My training
 g_shape_embedding_space_file_txt = '/media/adrian/Datasets/datasets/shape_embedding/part_shape_embedding_space_03001627_part' + str(part_id) + '.txt'  # Is correct

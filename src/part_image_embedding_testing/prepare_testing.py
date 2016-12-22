@@ -28,7 +28,7 @@ for line in fileinput.input(g_part_image_embedding_testing_prototxt, inplace=Tru
     sys.stdout.write(line) 
 
 
-solver = 2
+solver = 3
 part_image_embedding_caffemodel = os.path.join(g_part_image_embedding_training_folder, 'snapshots', 'solver%s_snapshots%s_iter_%d.caffemodel'%(solver, g_shapenet_synset_set_handle, args.iter_num))
 part_image_embedding_caffemodel_stacked = os.path.join(g_part_image_embedding_testing_folder, 'snapshots%s_iter_%d.caffemodel'%(g_shapenet_synset_set_handle, args.iter_num))
 

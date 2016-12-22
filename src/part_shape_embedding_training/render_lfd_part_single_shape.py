@@ -22,8 +22,7 @@ render_task_finished = True
 for azimuth_deg in g_lfd_camera_azimuth_dict[shape_synset]:
     for elevation_deg in g_lfd_camera_elevation_dict[shape_synset]:
         theta_deg = 0
-        lfd_image_file = 'parts_%s_%s_a%03d_e%03d_t%03d_d%03d.png' % (
-        shape_synset, shape_md5, round(azimuth_deg), round(elevation_deg), round(theta_deg), round(g_lfd_camera_dist))
+        lfd_image_file = 'parts_%s_%s_a%03d_e%03d_t%03d_d%03d.png' % (shape_synset, shape_md5, round(azimuth_deg), round(elevation_deg), round(theta_deg), round(g_lfd_camera_dist))
         if not os.path.isfile(os.path.join(lfd_images_folder, lfd_image_file)):
             render_task_finished = False
             break
