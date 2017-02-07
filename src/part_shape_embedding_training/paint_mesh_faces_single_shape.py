@@ -7,8 +7,13 @@ def paint_mesh_faces(root_path, class_id, model_id, n_parts, part_labels):
 
     path = root_path + '/' + class_id + '/' + model_id + '/'
 
+    use_remeshed = False
+
     # LOAD OBJECT
-    obj = OBJ(path, 'reduced_model_remeshed.obj')
+    if use_remeshed:
+        obj = OBJ(path, 'reduced_model_remeshed.obj')  # original
+    else:
+        obj = OBJ(path, 'model.obj')
 
 
     # 1. Load dense point file for this 3D model
@@ -60,7 +65,10 @@ def paint_mesh_faces(root_path, class_id, model_id, n_parts, part_labels):
     obj.mtlName = class_id + '.mtl'
     obj.mtl = MTL(mtl_path, class_id + '.mtl')
 
-    obj.saveOBJ(path, 'colored_parts.obj')
+    if use_remeshed:
+        obj.saveOBJ(path, 'colored_parts.obj')  # original
+    else:
+        obj.saveOBJ(path, 'colored_parts_noRemesh.obj')
 
 
     # 4. Loop the faces
@@ -101,6 +109,10 @@ def paint_mesh_faces(root_path, class_id, model_id, n_parts, part_labels):
 
 
     # 6. Save modified 3D model
-    obj.saveOBJ(path, 'colored_parts.obj')
+
+    if use_remeshed:
+        obj.saveOBJ(path, 'colored_parts.obj')  # original
+    else:
+        obj.saveOBJ(path, 'colored_parts_noRemesh.obj')
 
     print(path)

@@ -52,7 +52,7 @@ fi
 #  python3 ./reduce_geometry_shape_list.py;
 #  cd ..;
 #fi
-#
+
 ## Step 03
 ## Color the meshes based on the labelling
 #if [ "$first" -le 3 ] && [ "$last" -ge 3 ]; then

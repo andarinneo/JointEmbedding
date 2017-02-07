@@ -14,6 +14,9 @@ def MTL(path, file):
         elif values[0] == 'map_Kd':
             # load the texture referred to by this declaration
             mtl[values[0]] = values[1]
+        elif values[0] == 'map_d':
+            # load the texture referred to by this declaration
+            mtl[values[0]] = values[1]
         else:
             mtl[values[0]] = map(float, values[1:])
     return contents

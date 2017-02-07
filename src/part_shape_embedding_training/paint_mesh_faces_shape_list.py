@@ -16,7 +16,12 @@ def loop_operation(root_folder, shape_property_v, n, labels):
 
     result = [model_id]
     try:
-        paint_mesh_faces(root_folder, class_id, model_id, n, labels)
+        fname = root_folder + '/' + class_id + '/' + model_id + '/' + 'colored_parts_noRemesh.obj'
+
+        if not os.path.isfile(fname):
+            print('Colored model for' + model_id + ' does not exist, creating it...')
+            paint_mesh_faces(root_folder, class_id, model_id, n, labels)
+
         result.append('true')
     except:
         print('Not able to produce labels for: ' + model_id)
@@ -52,7 +57,12 @@ if __name__ == '__main__':
     # for shape_property in shape_list:
     #     shape_synset = shape_property[0]
     #     shape_md5 = shape_property[1]
-    #     non_available_segmentations.append(paint_mesh_faces(g_shapenet_root_folder, shape_synset, shape_md5, n_parts, part_labels))
+    #
+    #     fname = g_shapenet_root_folder + '/' + shape_synset + '/' + shape_md5 + '/' + 'colored_parts_noRemesh.obj'
+    #
+    #     if not os.path.isfile(fname):
+    #         print('Colored model for ' + shape_md5 + ' does not exist, creating it...')
+    #         non_available_segmentations.append(paint_mesh_faces(g_shapenet_root_folder, shape_synset, shape_md5, n_parts, part_labels))
     #
     #     #break # BORRAR, solo para debugar
 

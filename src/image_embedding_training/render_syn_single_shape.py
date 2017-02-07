@@ -56,7 +56,7 @@ for param in view_params:
     bpy.context.scene.world.light_settings.environment_color = 'PLAIN'
 
     # set point lights
-    for i in range(random.randint(g_syn_light_num_lowbound,g_syn_light_num_highbound)):
+    for i in range(random.randint(g_syn_light_num_lowbound, g_syn_light_num_highbound)):
         light_azimuth_deg = np.random.uniform(0, 360)
         light_elevation_deg  = np.random.uniform(-90, 90)
         light_dist = np.random.uniform(g_syn_light_dist_lowbound, g_syn_light_dist_highbound)

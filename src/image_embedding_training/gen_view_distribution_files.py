@@ -12,7 +12,7 @@ from utilities_common import query_yes_no
 
 
 # input: weights array
-# output: index of weight/item choosed
+# output: index of weight/item chosen
 def weighted_choice(weights):
     total = sum(w for w in weights)
     r = random.uniform(0, total)

@@ -8,7 +8,7 @@ fprintf([repmat('.',1,report_num) '\n\n']);
 image_num = length(src_image_list);
 report_step = floor((image_num+report_num-1)/report_num);
 t_begin = clock;
-%for i = 1:length(src_image_list)
+% for i = 1:length(src_image_list)
 parfor i = 1:image_num
     src_image_file = src_image_list{i};
     try

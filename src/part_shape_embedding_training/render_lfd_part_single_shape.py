@@ -67,7 +67,7 @@ for material_idx in range(len(bpy.data.materials)):
     bpy.data.materials[material_idx].specular_intensity = 0.6
     bpy.data.materials[material_idx].specular_hardness = 32
     bpy.data.materials[material_idx].specular_shader = 'PHONG'
-    bpy.data.materials[material_idx].emit = 0.0
+    bpy.data.materials[material_idx].emt = 0.0
     bpy.data.materials[material_idx].ambient = 1.0
     bpy.data.materials[material_idx].translucency = 0.0
 

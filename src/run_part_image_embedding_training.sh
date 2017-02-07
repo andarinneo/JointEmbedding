@@ -1,4 +1,4 @@
-#!/usr/bin/env bash#!/bin/bash
+#!/bin/bash
 
 first=
 last=
@@ -61,13 +61,13 @@ fi
 #  cd ..;
 #fi
 
-## Step 04
-## Generate synthetic images
-#if [ "$first" -le 4 ] && [ "$last" -ge 4 ]; then
-#  cd image_embedding_training;
-#  python3 ./render_syn_shape_list.py;
-#  cd ..;
-#fi
+# Step 04
+# Generate synthetic images
+if [ "$first" -le 4 ] && [ "$last" -ge 4 ]; then
+  cd part_image_embedding_training;
+  python3 ./render_part_syn_shape_list.py;
+  cd ..;
+fi
 
 ## Step 05
 ## Crop synthetic images
