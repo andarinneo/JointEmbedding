@@ -6,7 +6,7 @@ layer {
   python_param {
     module: "shapenet_layers"
     layer: "SHAPENETSegDataLayer"
-    param_str: "{\'shapenet_dir\': \'../../datasets/image_embedding\', \'label_list\': \'seg_file_list\', \'img_list\': \'image_list\', \'seed\': 1337, \'split\': \'train\', \'mean\': (104.00699, 116.66877, 122.67892)}"
+    param_str: "{\'shapenet_dir\': \'../../datasets/image_embedding\', \'label_list\': \'seg_file_list\', \'img_list\': \'image_list\', \'batch_size\': 10, \'seed\': 1337, \'split\': \'train\', \'rescale_image\': 1, \'rescale_size\': (225, 350), \'mean\': (104.00699, 116.66877, 122.67892)}"
   }
 }
 layer {

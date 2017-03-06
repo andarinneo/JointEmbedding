@@ -1,12 +1,13 @@
 import caffe
 
 import numpy as np
+import random
 from PIL import Image
 import os.path
 from sklearn.cross_validation import train_test_split
 import json
 
-import random
+import matplotlib.pyplot as plt
 
 class SHAPENETSegDataLayer(caffe.Layer):
     """
@@ -37,15 +38,18 @@ class SHAPENETSegDataLayer(caffe.Layer):
             split="valid")
         """
 
-        # param_str: "{\'shapenet_dir\': \'../../datasets/image_embedding\', \'label_list\': \'seg_file_list\', \'img_list\': \'image_list\', \'seed\': 1337, \'split\': \'train\', \'mean\': (104.00699, 116.66877, 122.67892)}"
+        # param_str: "{\'shapenet_dir\': \'../../datasets/image_embedding\', \'label_list\': \'seg_file_list\', \'img_list\': \'image_list\', \'batch_size\': 20, \'seed\': 1337, \'split\': \'train\', \'mean\': (104.00699, 116.66877, 122.67892)}"
 
         # config
         params = eval(self.param_str)
         self.shapenet_dir = params['shapenet_dir']
         self.img_list = params['img_list']
         self.label_list = params['label_list']
+        self.batch_size = params['batch_size']
         self.split = params['split']
         self.mean = np.array(params['mean'])
+        self.rescale_image = bool(params['rescale_image'])
+        self.rescale_size = np.array(params['rescale_size'])
         self.random = params.get('randomize', True)
         self.seed = params.get('seed', None)
 
@@ -63,12 +67,17 @@ class SHAPENETSegDataLayer(caffe.Layer):
         train_val_test = '{}/train_val_test.txt'.format(self.shapenet_dir, self.img_list)
 
         # Split the list in training/test/validation
+        n_begin = 100000
+        n_end = n_begin+10
         if not os.path.isfile(train_val_test):
             split_f = '{}/{}.txt'.format(self.shapenet_dir, self.img_list)
             self.img_indices = open(split_f, 'r').read().splitlines()
 
             split_f = '{}/{}.txt'.format(self.shapenet_dir, self.label_list)
             self.label_indices = open(split_f, 'r').read().splitlines()
+
+            self.img_indices = self.img_indices[n_begin:n_end]
+            self.label_indices = self.label_indices[n_begin:n_end]
 
             img_idxs_train, img_idxs_test, label_idxs_train, label_idxs_test = train_test_split(self.img_indices, self.label_indices, test_size=0.2)
             img_idxs_test, img_idxs_val, label_idxs_test, label_idxs_val = train_test_split(img_idxs_test, label_idxs_test, test_size=0.5)
@@ -105,18 +114,36 @@ class SHAPENETSegDataLayer(caffe.Layer):
 
 
     def reshape(self, bottom, top):
-        # load image + label image pair
-        self.data = self.load_image(self.idx)
-        self.label = self.load_label(self.idx)
-        # reshape tops to fit (leading 1 is for batch dimension)
-        top[0].reshape(1, *self.data.shape)
-        top[1].reshape(1, *self.label.shape)
+        if self.batch_size <= 1:
+            # load image + label image pair
+            self.data = self.load_image(self.idx)
+            self.label = self.load_label(self.idx)
+            # reshape tops to fit (leading 1 is for batch dimension)
+            top[0].reshape(1, *self.data.shape)
+            top[1].reshape(1, *self.label.shape)
+        else:
+            self.data = []
+            self.label = []
+            for i in range(0, self.batch_size, 1):
+                self.idx = random.randint(0, len(self.img_indices) - 1)
+                # load image + label image pair
+                self.data.append(self.load_image(self.idx))
+                self.label.append(self.load_label(self.idx))
+
+            # reshape tops to fit (leading 1 is for batch dimension)
+            top[0].reshape(self.batch_size, *self.data[0].shape)
+            top[1].reshape(self.batch_size, *self.label[0].shape)
 
 
     def forward(self, bottom, top):
-        # assign output
-        top[0].data[...] = self.data
-        top[1].data[...] = self.label
+        if self.batch_size <= 1:
+            # assign output
+            top[0].data[...] = self.data
+            top[1].data[...] = self.label
+        else:
+            for i in range(0, self.batch_size, 1):
+                top[0].data[i, ...] = self.data[i]
+                top[1].data[i, ...] = self.label[i]
 
         # pick next input
         if self.random:
@@ -140,6 +167,10 @@ class SHAPENETSegDataLayer(caffe.Layer):
         - transpose to channel x height x width order
         """
         im = Image.open(self.img_indices[idx])
+
+        if self.rescale_image:
+            im = im.resize(self.rescale_size, Image.BICUBIC)
+
         in_ = np.array(im, dtype=np.float32)
         in_ = in_[:,:,::-1]
         in_ -= self.mean
@@ -153,6 +184,10 @@ class SHAPENETSegDataLayer(caffe.Layer):
         The leading singleton dimension is required by the loss.
         """
         im = Image.open(self.label_indices[idx])
+
+        if self.rescale_image:
+            im = im.resize(self.rescale_size, Image.NEAREST)
+
         width, height = im.size
         label = np.zeros([height, width], dtype=np.uint8)
 
