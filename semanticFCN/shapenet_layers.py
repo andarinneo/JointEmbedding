@@ -67,8 +67,6 @@ class SHAPENETSegDataLayer(caffe.Layer):
         train_val_test = '{}/train_val_test.txt'.format(self.shapenet_dir, self.img_list)
 
         # Split the list in training/test/validation
-        n_begin = 100000
-        n_end = n_begin+10
         if not os.path.isfile(train_val_test):
             split_f = '{}/{}.txt'.format(self.shapenet_dir, self.img_list)
             self.img_indices = open(split_f, 'r').read().splitlines()
@@ -76,13 +74,10 @@ class SHAPENETSegDataLayer(caffe.Layer):
             split_f = '{}/{}.txt'.format(self.shapenet_dir, self.label_list)
             self.label_indices = open(split_f, 'r').read().splitlines()
 
-            self.img_indices = self.img_indices[n_begin:n_end]
-            self.label_indices = self.label_indices[n_begin:n_end]
-
             img_idxs_train, img_idxs_test, label_idxs_train, label_idxs_test = train_test_split(self.img_indices, self.label_indices, test_size=0.2)
             img_idxs_test, img_idxs_val, label_idxs_test, label_idxs_val = train_test_split(img_idxs_test, label_idxs_test, test_size=0.5)
 
-            with open(train_val_test, 'w') as f:
+            with open(train_val_test, 'w+') as f:
                 json.dump([img_idxs_train, label_idxs_train, img_idxs_test, label_idxs_test, img_idxs_val, label_idxs_val], f)
         else:
             with open(train_val_test, 'r') as f:
@@ -172,9 +167,30 @@ class SHAPENETSegDataLayer(caffe.Layer):
             im = im.resize(self.rescale_size, Image.BICUBIC)
 
         in_ = np.array(im, dtype=np.float32)
-        in_ = in_[:,:,::-1]
+
+        # # BORRAR
+        # im = Image.open(self.label_indices[idx])
+        # if self.rescale_image:
+        #     im = im.resize(self.rescale_size, Image.BICUBIC)
+        # r, g, b, a = im.split()
+        # r = np.array(r)
+        # g = np.array(g)
+        # b = np.array(b)
+        # a = np.array(a)
+        # count = 0
+        # for i in range(0, a.shape[0]):
+        #     for j in range(0, a.shape[1]):
+        #         if a[i, j] < 190:
+        #             r[i, j] = 255
+        #             g[i, j] = 255
+        #             b[i, j] = 255
+        #             count += 1
+        # in_ = np.dstack((r, g, b)).astype(np.float32)
+        # # END BORRAR
+
+        in_ = in_[:, :, ::-1]
         in_ -= self.mean
-        in_ = in_.transpose((2,0,1))
+        in_ = in_.transpose((2, 0, 1))
         return in_
 
 
@@ -184,7 +200,6 @@ class SHAPENETSegDataLayer(caffe.Layer):
         The leading singleton dimension is required by the loss.
         """
         im = Image.open(self.label_indices[idx])
-
         if self.rescale_image:
             im = im.resize(self.rescale_size, Image.NEAREST)
 
@@ -201,24 +216,31 @@ class SHAPENETSegDataLayer(caffe.Layer):
         # Parts: (1, armrests, green), (2, back, red), (3, legs, blue), (4, seat, black)
 
         # Green
-        aux = np.logical_and(np.logical_and(np.logical_and([red_<25], [green_>240]), [blue_<25]), [alpha_>240])
+        aux = np.logical_and(np.logical_and(np.logical_and([red_ < 25], [green_ > 240]), [blue_ < 25]), [alpha_ > 240])
         mask1 = np.asarray(aux[0])
         label[mask1] = 1
 
         # Red
-        aux = np.logical_and(np.logical_and(np.logical_and([red_>240], [green_<25]), [blue_<25]), [alpha_>240])
+        aux = np.logical_and(np.logical_and(np.logical_and([red_ > 240], [green_ < 25]), [blue_ < 25]), [alpha_ > 240])
         mask2 = np.asarray(aux[0])
         label[mask2] = 2
 
         # Blue
-        aux = np.logical_and(np.logical_and(np.logical_and([red_<25], [green_<25]), [blue_>240]), [alpha_>240])
+        aux = np.logical_and(np.logical_and(np.logical_and([red_ < 25], [green_ < 25]), [blue_ > 240]), [alpha_ > 240])
         mask3 = np.asarray(aux[0])
         label[mask3] = 3
 
         # Black
-        aux = np.logical_and(np.logical_and(np.logical_and([red_<25], [green_<25]), [blue_<25]), [alpha_>240])
+        aux = np.logical_and(np.logical_and(np.logical_and([red_ < 25], [green_ < 25]), [blue_ < 25]), [alpha_ > 240])
         mask4 = np.asarray(aux[0])
         label[mask4] = 4
+
+        # # BORRAR
+        # label[mask1] = 1
+        # label[mask2] = 1
+        # label[mask3] = 1
+        # label[mask4] = 1
+        # # END BORRAR
 
         # plt.imshow(mask4, aspect="auto")
         # plt.show()
