@@ -90,8 +90,8 @@ fi
 ## Step 07
 ## Generate synthetic images filelist
 #if [ "$first" -le 7 ] && [ "$last" -ge 7 ]; then
-#  cd image_embedding_training;
-#  python ./gen_syn_filelist.py
+#  cd part_image_embedding_training;
+#  python ./gen_syn_part_filelist.py
 #  cd ..;
 #fi
 

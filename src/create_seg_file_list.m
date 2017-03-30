@@ -22,3 +22,8 @@ if abs(n_segmentations-n_images) > 0
 end
 
 disp('Training indexes have been generated...');
+
+
+%% Collect manifold coordinates for the synthetic images
+
+

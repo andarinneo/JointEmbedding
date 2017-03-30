@@ -40,8 +40,8 @@ fi
 ## Step 01
 ## Split train/val
 #if [ "$first" -le 1 ] && [ "$last" -ge 1 ]; then
-#  cd image_embedding_training;
-#  python ./split_train_val.py
+#  cd part_image_embedding_training;
+#  python ./split_part_train_val.py
 #  cd ..;
 #fi
 

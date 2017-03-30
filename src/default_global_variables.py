@@ -23,9 +23,9 @@ g_piotr_toolbox_path = os.path.abspath(os.path.join(g_3rd_party_folder, 'piotr_t
 g_minfunc_2012_url = 'https://www.cs.ubc.ca/~schmidtm/Software/minFunc_2012.zip'
 g_minfunc_2012_path = os.path.abspath(os.path.join(g_3rd_party_folder, 'minFunc_2012'))
 # Follow Caffe homepage for the installation instructions of Caffe.
-g_caffe_install_path = os.path.abspath('/opt/caffe') # [take care!!!]
-g_matlab_executable_path = os.path.abspath('/usr/local/bin/matlab') # [take care!!!]
-g_shapenet_root_folder = os.path.join(g_data_folder, 'ShapeNetCore2015Summer') # [take care!!!], where you put ShapeNet data
+g_caffe_install_path = os.path.abspath('/opt/caffe')  # [take care!!!]
+g_matlab_executable_path = os.path.abspath('/usr/local/bin/matlab')  # [take care!!!]
+g_shapenet_root_folder = os.path.join(g_data_folder, 'ShapeNetCore2015Summer')  # [take care!!!], where you put ShapeNet data
 g_sun2012_data_url = 'http://groups.csail.mit.edu/vision/SUN/releases/SUN2012pascalformat.tar.gz'
 
 # We fine tune our model from RCNN model
@@ -37,18 +37,17 @@ g_fine_tune_caffemodel_url = 'http://dl.caffe.berkeleyvision.org/'+caffemodel_ur
 g_fine_tune_caffemodel = os.path.join(g_data_folder, 'image_embedding/'+caffemodel_url_handle_dict[g_network_architecture_name]+'.caffemodel')
 g_mean_file = os.path.join(SRC_ROOT, 'ilsvrc_2012_mean.npy')
 
-g_thread_num = 32 # [take care!!!], try to match with #CPU core
+g_thread_num = 32  # [take care!!!], try to match with #CPU core
 
 
 ##############################################################################
 # Specify which categories will be used for generating the embedding space
 ##############################################################################
-all_shapenet_synset_set = ['03001627' # chair
-                          ,'04379243' # table
-                          ,'03636649' # lamp
-                          ,'02958343' # car
-                          ,'02691156' # airplane
-                           ]
+all_shapenet_synset_set = ['03001627',  # chair
+                           '04379243',  # table
+                           '03636649',  # lamp
+                           '02958343',  # car
+                           '02691156']  # airplane
 
 #-----------------------------------------------------------------------------
 # Multiple categories can be put into a single embedding space. However, it
@@ -89,8 +88,8 @@ g_shape_list_file = os.path.join(g_data_folder, 'shape_list'+g_shapenet_synset_s
 g_lfd_light_num = 4
 g_lfd_light_dist = 14.14
 g_lfd_camera_dist = 3
-g_lfd_view_num = 20 #[take care!] g_lfd_view_num = elevation_num*azimuth_num
-g_lfd_rendering_thread_num = g_thread_num #[take care!], try to match with #CPU core
+g_lfd_view_num = 20  # [take care!] g_lfd_view_num = elevation_num*azimuth_num
+g_lfd_rendering_thread_num = g_thread_num  # [take care!], try to match with #CPU core
 #-----------------------------------------------------------------------------
 # The elevations and azimuths are category specific
 # We simply manually pick k (k=20) LFD views for each category, A potentially
@@ -107,24 +106,24 @@ g_lfd_camera_elevation_dict = {
 }
 # [take care!], if you cadd new categories.
 g_lfd_camera_azimuth_dict = {
-'03001627': [x*18 for x in range(0,20)],
-'02958343': [x*18 for x in range(0,20)],
-'02691156': [x*36 for x in range(0,10)],
-'04379243': [x*18 for x in range(0,20)],
-'03636649': [x*36 for x in range(0,10)]
+'03001627': [x*18 for x in range(0, 20)],
+'02958343': [x*18 for x in range(0, 20)],
+'02691156': [x*36 for x in range(0, 10)],
+'04379243': [x*18 for x in range(0, 20)],
+'03636649': [x*36 for x in range(0, 10)]
 }
 g_lfd_images_folder = os.path.join(g_data_folder, 'shape_embedding/lfd_images')
 
 # Cropping
 # Consider change the default parfor worker number in matlab by following the instructions here:
 # http://www.mathworks.com/help/distcomp/saveprofile.html
-g_lfd_cropping_thread_num = g_thread_num # [take care!], try to match with #CPU core
+g_lfd_cropping_thread_num = g_thread_num  # [take care!], try to match with #CPU core
 g_lfd_images_cropped_folder = os.path.join(g_data_folder, 'shape_embedding/lfd_images_cropped')
 
 # HoG feature extraction
 # Consider change the default parfor worker number in matlab by following the instructions here:
 # http://www.mathworks.com/help/distcomp/saveprofile.html
-g_lfd_hog_extraction_thread_num = g_thread_num # [take care!], try to match with #CPU core
+g_lfd_hog_extraction_thread_num = g_thread_num  # [take care!], try to match with #CPU core
 g_lfd_hog_image_size = 120
 g_lfd_hog_features_file = os.path.join(g_data_folder, 'shape_embedding/lfd_hog_features'+g_shapenet_synset_set_handle+'.mat')
 
@@ -162,7 +161,7 @@ g_part_shape_embedding_space_file_txt = os.path.join(g_data_folder, 'shape_embed
 ##############################################################################
 # Rendering
 g_blank_blend_file_path = os.path.join(SRC_ROOT, 'blank.blend')
-g_syn_rendering_thread_num = g_thread_num #[take care!], try to match with #CPU core
+g_syn_rendering_thread_num = g_thread_num  # [take care!], try to match with #CPU core
 g_syn_images_per_shape = 125
 g_view_distribution_folder = os.path.join(g_data_folder, 'image_embedding/view_distribution')
 g_view_distribution_files = dict(zip(all_shapenet_synset_set, [os.path.join(g_view_distribution_folder, synset+'.txt') for synset in all_shapenet_synset_set]))
@@ -191,13 +190,13 @@ g_syn_images_folder = os.path.join(g_data_folder, 'image_embedding/syn_images')
 # Cropping
 # Consider change the default parfor worker number in matlab by following the instructions here:
 # http://www.mathworks.com/help/distcomp/saveprofile.html
-g_syn_cropping_thread_num = g_thread_num # [take care!], try to match with #CPU core
+g_syn_cropping_thread_num = g_thread_num  # [take care!], try to match with #CPU core
 g_syn_images_cropped_folder = os.path.join(g_data_folder, 'image_embedding/syn_images_cropped')
 
 # Background overlay
 # Consider change the default parfor worker number in matlab by following the instructions here:
 # http://www.mathworks.com/help/distcomp/saveprofile.html
-g_syn_bkg_overlay_thread_num = g_thread_num #[take care!], try to match with #CPU core
+g_syn_bkg_overlay_thread_num = g_thread_num  # [take care!], try to match with #CPU core
 g_syn_cluttered_bkg_ratio = 0.9
 g_sun2012_data_folder = os.path.join(g_data_folder, 'image_embedding/sun2012_data')
 g_syn_bkg_filelist = os.path.join(g_sun2012_data_folder, 'filelist.txt');
@@ -221,8 +220,8 @@ g_pool5_lmdb_val = os.path.join(g_data_folder, 'image_embedding/syn_images_pool5
 g_extract_feat_prototxt = os.path.join(SRC_ROOT, 'image_embedding_training/pool5_feature_extraction_'+g_network_architecture_name+'.prototxt')
 # Consider change the default parfor worker number in matlab by following the instructions here:
 # http://www.mathworks.com/help/distcomp/saveprofile.html
-g_extract_feat_thread_num = g_thread_num #[take care!], try to match with #CPU core
-g_extract_feat_gpu_index = 0 #[take care!], which GPU to use for pool5 extraction
+g_extract_feat_thread_num = g_thread_num  # [take care!], try to match with #CPU core
+g_extract_feat_gpu_index = 0  # [take care!], which GPU to use for pool5 extraction
 
 # Shape embedding LMDBs
 g_shape_embedding_lmdb_train = os.path.join(g_data_folder, 'shape_embedding/shape_embedding_lmdb'+g_shapenet_synset_set_handle+'_train')
@@ -254,7 +253,7 @@ g_syn_images_pairs_train_val_split = os.path.join(g_data_folder, 'siamese_embedd
 g_syn_images_pairs_filelist_train = os.path.join(g_data_folder, 'siamese_embedding/syn_images_pairs_filelist'+g_shapenet_synset_set_handle+top_k_handle+'_train.txt')
 g_syn_images_pairs_filelist_val = os.path.join(g_data_folder, 'siamese_embedding/syn_images_pairs_filelist'+g_shapenet_synset_set_handle+top_k_handle+'_val.txt')
 
-g_gen_siamese_lmdb_thread_num = g_thread_num #[take care!], try to match with #CPU core
+g_gen_siamese_lmdb_thread_num = g_thread_num  # [take care!], try to match with #CPU core
 g_pairs_pool5_lmdb_train = os.path.join(g_data_folder, 'siamese_embedding/syn_images_pairs_pool5_lmdb'+g_shapenet_synset_set_handle+top_k_handle+'_'+g_network_architecture_name+'_train')
 g_pairs_pool5_lmdb_val = os.path.join(g_data_folder, 'siamese_embedding/syn_images_pairs_pool5_lmdb'+g_shapenet_synset_set_handle+top_k_handle+'_'+g_network_architecture_name+'_val')
 
@@ -276,8 +275,8 @@ g_siamese_embedding_testing_prototxt = os.path.join(g_siamese_embedding_testing_
 # parmas for rendering pure (fixedview) images
 g_fixedview_image_per_model = 100
 g_fixedview_image_folder = os.path.join(g_data_folder, 'image_embedding/pure_fixedview_images')
-g_fixedview_elevation_degs = [0,10,20,30,40]
+g_fixedview_elevation_degs = [0, 10, 20, 30, 40]
 g_fixedview_elevation_sample_deg = 20
-g_fixedview_azimuth_degs = range(0,360,18)
+g_fixedview_azimuth_degs = range(0, 360, 18)
 g_fixedview_light_num = 4
 

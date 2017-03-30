@@ -6,8 +6,12 @@ from PIL import Image
 import os.path
 from sklearn.cross_validation import train_test_split
 import json
-
 import matplotlib.pyplot as plt
+
+import sys
+sys.path.append(os.path.abspath('/home/adrian/JointEmbedding/src'))
+from global_variables import *
+
 
 class SHAPENETSegDataLayer(caffe.Layer):
     """
@@ -38,8 +42,6 @@ class SHAPENETSegDataLayer(caffe.Layer):
             split="valid")
         """
 
-        # param_str: "{\'shapenet_dir\': \'../../datasets/image_embedding\', \'label_list\': \'seg_file_list\', \'img_list\': \'image_list\', \'batch_size\': 20, \'seed\': 1337, \'split\': \'train\', \'mean\': (104.00699, 116.66877, 122.67892)}"
-
         # config
         params = eval(self.param_str)
         self.shapenet_dir = params['shapenet_dir']
@@ -53,48 +55,44 @@ class SHAPENETSegDataLayer(caffe.Layer):
         self.random = params.get('randomize', True)
         self.seed = params.get('seed', None)
 
+        self.manifold_net = False
         # two tops: data and label
-        if len(top) != 2:
-            raise Exception("Need to define two tops: data and label.")
+        if len(top) == 3:
+            self.manifold_net = True
+        # two tops: data and label
+        elif len(top) != 2:
+            raise Exception("Need to define at least two tops: data and label")
         # data layers have no bottoms
         if len(bottom) != 0:
             raise Exception("Do not define a bottom.")
 
-        # load indices for images and labels
-        # run matlab script "create_seg_file_list.m", it will generate 2 files under "dataset/": "seg_file_list.mat" and "image_list.mat"
 
-        # If train/test/val separation has not been done, split the data
-        train_val_test = '{}/train_val_test.txt'.format(self.shapenet_dir, self.img_list)
-
-        # Split the list in training/test/validation
-        if not os.path.isfile(train_val_test):
-            split_f = '{}/{}.txt'.format(self.shapenet_dir, self.img_list)
-            self.img_indices = open(split_f, 'r').read().splitlines()
-
-            split_f = '{}/{}.txt'.format(self.shapenet_dir, self.label_list)
-            self.label_indices = open(split_f, 'r').read().splitlines()
-
-            img_idxs_train, img_idxs_test, label_idxs_train, label_idxs_test = train_test_split(self.img_indices, self.label_indices, test_size=0.2)
-            img_idxs_test, img_idxs_val, label_idxs_test, label_idxs_val = train_test_split(img_idxs_test, label_idxs_test, test_size=0.5)
-
-            with open(train_val_test, 'w+') as f:
-                json.dump([img_idxs_train, label_idxs_train, img_idxs_test, label_idxs_test, img_idxs_val, label_idxs_val], f)
-        else:
-            with open(train_val_test, 'r') as f:
-                img_idxs_train, label_idxs_train, img_idxs_test, label_idxs_test, img_idxs_val, label_idxs_val = json.load(f)
-
+        if self.manifold_net:
+            self.manifold = []
+            for part_id in range(1, g_n_parts+1):
+                manifold_name = g_part_shape_embedding_space_file_txt[:-4] + '_part' + str(part_id) + '.txt'
+                self.manifold.append(np.loadtxt(manifold_name))
 
         if 'train' in self.split:
-            self.img_indices = img_idxs_train
-            self.label_indices = label_idxs_train
-            self.idx = 0
-        elif 'test' in self.split:
-            self.img_indices = img_idxs_test
-            self.label_indices = label_idxs_test
+            with open(g_syn_images_filelist_train, 'r') as f: self.img_indices = f.read().splitlines()
+            with open(g_syn_labels_filelist_train, 'r') as f: self.label_indices = f.read().splitlines()
+            if self.manifold_net:
+                with open(g_syn_images_imageid2shapeid_train, 'r') as f: self.imageid2shapeid = f.read().splitlines()
+                self.imageid2shapeid = map(int, self.imageid2shapeid)
             self.idx = 0
         elif 'val' in self.split:
-            self.img_indices = img_idxs_val
-            self.label_indices = label_idxs_val
+            with open(g_syn_images_filelist_val, 'r') as f: self.img_indices = f.read().splitlines()
+            with open(g_syn_labels_filelist_val, 'r') as f: self.label_indices = f.read().splitlines()
+            if self.manifold_net:
+                with open(g_syn_images_imageid2shapeid_val, 'r') as f: self.imageid2shapeid = f.read().splitlines()
+                self.imageid2shapeid = map(int, self.imageid2shapeid)
+            self.idx = 0
+        elif 'test' in self.split:  # At this point (val=test), need to modify this ater debugging
+            with open(g_syn_images_filelist_val, 'r') as f: self.img_indices = f.read().splitlines()
+            with open(g_syn_labels_filelist_val, 'r') as f: self.label_indices = f.read().splitlines()
+            if self.manifold_net:
+                with open(g_syn_images_imageid2shapeid_val, 'r') as f: self.imageid2shapeid = f.read().splitlines()
+                self.imageid2shapeid = map(int, self.imageid2shapeid)
             self.idx = 0
 
 
@@ -113,21 +111,32 @@ class SHAPENETSegDataLayer(caffe.Layer):
             # load image + label image pair
             self.data = self.load_image(self.idx)
             self.label = self.load_label(self.idx)
+            if self.manifold_net:
+                self.manifold_coord = self.load_manifold_coord(self.idx)
             # reshape tops to fit (leading 1 is for batch dimension)
             top[0].reshape(1, *self.data.shape)
             top[1].reshape(1, *self.label.shape)
+            if self.manifold_net:
+                top[2].reshape(1, *self.manifold_coord.shape)
         else:
             self.data = []
             self.label = []
+            if self.manifold_net:
+                self.manifold_coord = []
+
             for i in range(0, self.batch_size, 1):
                 self.idx = random.randint(0, len(self.img_indices) - 1)
                 # load image + label image pair
                 self.data.append(self.load_image(self.idx))
                 self.label.append(self.load_label(self.idx))
+                if self.manifold_net:
+                    self.manifold_coord.append(self.load_manifold_coord(self.idx))
 
             # reshape tops to fit (leading 1 is for batch dimension)
             top[0].reshape(self.batch_size, *self.data[0].shape)
             top[1].reshape(self.batch_size, *self.label[0].shape)
+            if self.manifold_net:
+                top[2].reshape(self.batch_size, *self.manifold_coord[0].shape)
 
 
     def forward(self, bottom, top):
@@ -135,10 +144,14 @@ class SHAPENETSegDataLayer(caffe.Layer):
             # assign output
             top[0].data[...] = self.data
             top[1].data[...] = self.label
+            if self.manifold_net:
+                top[2].data[...] = self.manifold_coord
         else:
             for i in range(0, self.batch_size, 1):
                 top[0].data[i, ...] = self.data[i]
                 top[1].data[i, ...] = self.label[i]
+                if self.manifold_net:
+                    top[2].data[i, ...] = self.manifold_coord[i]
 
         # pick next input
         if self.random:
@@ -247,3 +260,18 @@ class SHAPENETSegDataLayer(caffe.Layer):
 
         label = label[np.newaxis, ...]
         return label
+
+
+    def load_manifold_coord(self, idx):
+        """
+        Load coordinates for each of the part 3D shape manifolds
+        """
+        md5_id = self.imageid2shapeid[idx]
+
+        coordinates = []
+        for part_id in range(0, g_n_parts):
+            coordinates.append(self.manifold[part_id][md5_id-1])
+
+        coordinates = np.array(coordinates, dtype=np.float32)
+
+        return coordinates
