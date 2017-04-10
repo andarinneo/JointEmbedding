@@ -56,8 +56,8 @@ class SHAPENETSegDataLayer(caffe.Layer):
         self.seed = params.get('seed', None)
 
         self.manifold_net = False
-        # two tops: data and label
-        if len(top) == 3:
+        # more than two tops: data and at least 2 manifold coordinates
+        if len(top) >= 3:
             self.manifold_net = True
         # two tops: data and label
         elif len(top) != 2:
@@ -110,48 +110,75 @@ class SHAPENETSegDataLayer(caffe.Layer):
         if self.batch_size <= 1:
             # load image + label image pair
             self.data = self.load_image(self.idx)
-            self.label = self.load_label(self.idx)
-            if self.manifold_net:
-                self.manifold_coord = self.load_manifold_coord(self.idx)
+            if not self.manifold_net:
+                self.label = self.load_label(self.idx)
+            else:
+                self.manifold_coord1 = self.load_manifold_coord(self.idx, 1)
+                self.manifold_coord2 = self.load_manifold_coord(self.idx, 2)
+                self.manifold_coord3 = self.load_manifold_coord(self.idx, 3)
+                self.manifold_coord4 = self.load_manifold_coord(self.idx, 4)
             # reshape tops to fit (leading 1 is for batch dimension)
             top[0].reshape(1, *self.data.shape)
-            top[1].reshape(1, *self.label.shape)
-            if self.manifold_net:
-                top[2].reshape(1, *self.manifold_coord.shape)
+            if not self.manifold_net:
+                top[1].reshape(1, *self.label.shape)
+            else:
+                top[1].reshape(1, *self.manifold_coord1.shape)
+                top[2].reshape(1, *self.manifold_coord2.shape)
+                top[3].reshape(1, *self.manifold_coord3.shape)
+                top[4].reshape(1, *self.manifold_coord4.shape)
         else:
             self.data = []
             self.label = []
             if self.manifold_net:
-                self.manifold_coord = []
+                self.manifold_coord1 = []
+                self.manifold_coord2 = []
+                self.manifold_coord3 = []
+                self.manifold_coord4 = []
 
             for i in range(0, self.batch_size, 1):
                 self.idx = random.randint(0, len(self.img_indices) - 1)
                 # load image + label image pair
                 self.data.append(self.load_image(self.idx))
-                self.label.append(self.load_label(self.idx))
-                if self.manifold_net:
-                    self.manifold_coord.append(self.load_manifold_coord(self.idx))
+                if not self.manifold_net:
+                    self.label.append(self.load_label(self.idx))
+                else:
+                    self.manifold_coord1.append(self.load_manifold_coord(self.idx, 1))
+                    self.manifold_coord2.append(self.load_manifold_coord(self.idx, 2))
+                    self.manifold_coord3.append(self.load_manifold_coord(self.idx, 3))
+                    self.manifold_coord4.append(self.load_manifold_coord(self.idx, 4))
 
             # reshape tops to fit (leading 1 is for batch dimension)
             top[0].reshape(self.batch_size, *self.data[0].shape)
-            top[1].reshape(self.batch_size, *self.label[0].shape)
-            if self.manifold_net:
-                top[2].reshape(self.batch_size, *self.manifold_coord[0].shape)
+            if not self.manifold_net:
+                top[1].reshape(self.batch_size, *self.label[0].shape)
+            else:
+                top[1].reshape(self.batch_size, *self.manifold_coord1[0].shape)
+                top[2].reshape(self.batch_size, *self.manifold_coord2[0].shape)
+                top[3].reshape(self.batch_size, *self.manifold_coord3[0].shape)
+                top[4].reshape(self.batch_size, *self.manifold_coord4[0].shape)
 
 
     def forward(self, bottom, top):
         if self.batch_size <= 1:
             # assign output
             top[0].data[...] = self.data
-            top[1].data[...] = self.label
-            if self.manifold_net:
-                top[2].data[...] = self.manifold_coord
+            if not self.manifold_net:
+                top[1].data[...] = self.label
+            else:
+                top[1].data[...] = self.manifold_coord1
+                top[2].data[...] = self.manifold_coord2
+                top[3].data[...] = self.manifold_coord3
+                top[4].data[...] = self.manifold_coord4
         else:
             for i in range(0, self.batch_size, 1):
                 top[0].data[i, ...] = self.data[i]
-                top[1].data[i, ...] = self.label[i]
-                if self.manifold_net:
-                    top[2].data[i, ...] = self.manifold_coord[i]
+                if not self.manifold_net:
+                    top[1].data[i, ...] = self.label[i]
+                else:
+                    top[1].data[i, ...] = self.manifold_coord1[i]
+                    top[2].data[i, ...] = self.manifold_coord2[i]
+                    top[3].data[i, ...] = self.manifold_coord3[i]
+                    top[4].data[i, ...] = self.manifold_coord4[i]
 
         # pick next input
         if self.random:
@@ -262,15 +289,14 @@ class SHAPENETSegDataLayer(caffe.Layer):
         return label
 
 
-    def load_manifold_coord(self, idx):
+    def load_manifold_coord(self, idx, part_id):
         """
         Load coordinates for each of the part 3D shape manifolds
         """
         md5_id = self.imageid2shapeid[idx]
 
         coordinates = []
-        for part_id in range(0, g_n_parts):
-            coordinates.append(self.manifold[part_id][md5_id-1])
+        coordinates.append(self.manifold[part_id-1][md5_id-1])
 
         coordinates = np.array(coordinates, dtype=np.float32)
 

@@ -15,8 +15,10 @@ except:
 base_prototxt = 'train-fcn8-atonce.prototxt'
 # base_model = '../voc-fcn8s-atonce/fcn8s-atonce-pascal.caffemodel'
 base_model = '/home/adrian/JointEmbedding/semanticFCN/shapenet-fcn/snapshot/train_iter_160000.caffemodel'
+
 adapted_prototxt = 'train-fcn8-atonce-5channels.prototxt'
-adapted_model = 'snapshot/base_5channels.caffemodel'
+# adapted_model = 'snapshot/base_5channels.caffemodel'
+adapted_model = 'snapshot/train_iter_40000.caffemodel'
 
 # init
 caffe.set_device(0)

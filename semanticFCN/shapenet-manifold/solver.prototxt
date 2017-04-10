@@ -7,6 +7,6 @@ display: 10
 max_iter: 450000
 momentum: 0.9
 weight_decay: 0.0005
-snapshot: 10000
+snapshot: 1
 snapshot_prefix: "snapshot/train-manifold"
 solver_mode: CPU

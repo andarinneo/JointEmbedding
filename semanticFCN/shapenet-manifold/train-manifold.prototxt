@@ -6,12 +6,15 @@ layer {
   name: "data"
   type: "Python"
   top: "data"
-  top: "label"
-  top: "manifold_coord"
+  #top: "label"
+  top: "manifold_coord1"
+  top: "manifold_coord2"
+  top: "manifold_coord3"
+  top: "manifold_coord4"
   python_param {
     module: "shapenet_layers"
     layer: "SHAPENETSegDataLayer"
-    param_str: "{\'shapenet_dir\': \'../../datasets/image_embedding\', \'label_list\': \'seg_file_list\', \'img_list\': \'image_list\', \'batch_size\': 10, \'seed\': 1337, \'split\': \'train\', \'rescale_image\': 1, \'rescale_size\': (225, 350), \'mean\': (104.00699, 116.66877, 122.67892)}"
+    param_str: "{\'shapenet_dir\': \'../../datasets/image_embedding\', \'label_list\': \'seg_file_list\', \'img_list\': \'image_list\', \'batch_size\': 1, \'seed\': 1337, \'split\': \'train\', \'rescale_image\': 1, \'rescale_size\': (225, 350), \'mean\': (104.00699, 116.66877, 122.67892)}"
   }
 }
 
@@ -693,7 +696,7 @@ layer {
   }
 }
 layer {
-  name: "concat_batch"
+  name: "concat_rgb_heat_maps"
   type: "Concat"
   bottom: "data"
   bottom: "channel_background"
@@ -701,50 +704,10 @@ layer {
   bottom: "channel_part2"
   bottom: "channel_part3"
   bottom: "channel_part4"
-  top: "concat_data"
+  top: "concat_rgb_heat_maps"
   concat_param {
     axis: 1
   }
-}
-
-layer {
-  name: "slice_coord_manifold"
-  type: "Slice"
-  bottom: "manifold_coord"
-  top: "slice_coord_manifold1"
-  top: "slice_coord_manifold2"
-  top: "slice_coord_manifold3"
-  top: "slice_coord_manifold4"
-  slice_param {
-    axis: 1
-    slice_point: 1
-    slice_point: 2
-    slice_point: 3
-  }
-}
-layer {
-  name: "flatten_coord_manifold1"
-  type: "Flatten"
-  bottom: "slice_coord_manifold1"
-  top: "flatten_coord_manifold1"
-}
-layer {
-  name: "flatten_coord_manifold2"
-  type: "Flatten"
-  bottom: "slice_coord_manifold2"
-  top: "flatten_coord_manifold2"
-}
-layer {
-  name: "flatten_coord_manifold3"
-  type: "Flatten"
-  bottom: "slice_coord_manifold3"
-  top: "flatten_coord_manifold3"
-}
-layer {
-  name: "flatten_coord_manifold4"
-  type: "Flatten"
-  bottom: "slice_coord_manifold4"
-  top: "flatten_coord_manifold4"
 }
 
 
@@ -753,7 +716,7 @@ layer {
 #----------------------------------------------------------------------------------------------------------------------#
 
 layer {
-  bottom: "concat_data"
+  bottom: "concat_rgb_heat_maps"
   top: "feat_conv1_1"
   name: "feat_conv1_1"
   type: "Convolution"
@@ -1311,7 +1274,7 @@ layer {
   name: "embedding_loss_part1"
   type: "EuclideanLoss"
   bottom: "feat_fc8_part1"
-  bottom: "flatten_coord_manifold1"
+  bottom: "manifold_coord1"
   top: "embedding_loss_part1"
 }
 
@@ -1320,7 +1283,7 @@ layer {
   name: "embedding_loss_part2"
   type: "EuclideanLoss"
   bottom: "feat_fc8_part2"
-  bottom: "flatten_coord_manifold2"
+  bottom: "manifold_coord2"
   top: "embedding_loss_part2"
 }
 
@@ -1329,7 +1292,7 @@ layer {
   name: "embedding_loss_part3"
   type: "EuclideanLoss"
   bottom: "feat_fc8_part3"
-  bottom: "flatten_coord_manifold3"
+  bottom: "manifold_coord3"
   top: "embedding_loss_part3"
 }
 
@@ -1338,7 +1301,7 @@ layer {
   name: "embedding_loss_part4"
   type: "EuclideanLoss"
   bottom: "feat_fc8_part4"
-  bottom: "flatten_coord_manifold4"
+  bottom: "manifold_coord4"
   top: "embedding_loss_part4"
 }
 

@@ -11,11 +11,11 @@ train_val_test = '/home/adrian/JointEmbedding/datasets/image_embedding/train_val
 
 
 # LOAD NETWORK
-net = caffe.Net('/home/adrian/JointEmbedding/semanticFCN/shapenet-fcn/deploy-fcn8-atonce-5channels.prototxt', '/home/adrian/JointEmbedding/semanticFCN/shapenet-fcn/snapshot/train_iter_20000.caffemodel', caffe.TEST)
+net = caffe.Net('/home/adrian/JointEmbedding/semanticFCN/shapenet-fcn/deploy-fcn8-atonce-5channels.prototxt', '/home/adrian/JointEmbedding/semanticFCN/shapenet-fcn/snapshot/train_iter_60000.caffemodel', caffe.TEST)
 
 
 # MAIN LOOP
-for im_it in range(97, 210):  # 1-209
+for im_it in range(1, 210):  # 1-209
     # LOAD IMAGE, switch to BGR, subtract mean, and make dims C x H x W for Caffe
     # im_path = '/home/adrian/JointEmbedding/datasets/image_embedding/syn_images_bkg_overlaid/03001627/22b40d884de52ca3387379bbd607d69e/03001627_22b40d884de52ca3387379bbd607d69e_a110_e018_t-07_d003.jpg'
     im_path = '/home/adrian/Desktop/testCases/real/chair' + str(im_it) + '.JPEG'
@@ -57,7 +57,7 @@ for im_it in range(97, 210):  # 1-209
     plt.show()
     plt.pause(1)
     # plt.savefig('/home/adrian/Desktop/testCases/real/chair' + str(im_it) + '.png')
-    plt.savefig('/home/adrian/Desktop/testCases/real/fcn_results/5_channels_fcn/chair' + str(im_it) + '.png')
+    plt.savefig('/home/adrian/Desktop/testCases/real/fcn_results/5_channels_fcn_moreTrain/chair' + str(im_it) + '.png')
 
 
 lolo = 1
