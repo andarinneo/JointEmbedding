@@ -28,9 +28,17 @@ for line in fileinput.input(g_part_image_embedding_testing_prototxt, inplace=Tru
     sys.stdout.write(line) 
 
 
-solver = 3
-part_image_embedding_caffemodel = os.path.join(g_part_image_embedding_training_folder, 'snapshots', 'solver%s_snapshots%s_iter_%d.caffemodel'%(solver, g_shapenet_synset_set_handle, args.iter_num))
+args.iter_num = 300000
+
+# If no batch training
+part_image_embedding_caffemodel = os.path.join(g_part_image_embedding_training_folder, 'single_manifold_snapshots', 'snapshots%s_iter_%d.caffemodel'%(g_shapenet_synset_set_handle, args.iter_num))
+
+# If batch training
+# solver = 3
+# part_image_embedding_caffemodel = os.path.join(g_part_image_embedding_training_folder, 'snapshots', 'solver%s_snapshots%s_iter_%d.caffemodel'%(solver, g_shapenet_synset_set_handle, args.iter_num))
+
 part_image_embedding_caffemodel_stacked = os.path.join(g_part_image_embedding_testing_folder, 'snapshots%s_iter_%d.caffemodel'%(g_shapenet_synset_set_handle, args.iter_num))
+
 
 stack_caffe_models(prototxt=g_part_image_embedding_testing_prototxt,
                    base_model=g_fine_tune_caffemodel,

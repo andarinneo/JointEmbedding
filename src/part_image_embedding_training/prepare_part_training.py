@@ -26,8 +26,6 @@ for line in fileinput.input(g_part_image_embedding_train_val_prototxt, inplace=T
         line = line.replace('/path/to/shape_embedding_lmdb_train', g_shape_embedding_lmdb_train)
         line = line.replace('/path/to/shape_embedding_lmdb_val', g_shape_embedding_lmdb_val)
 
-
-
     line = line.replace('embedding_space_dim', str(g_shape_embedding_space_dimension))
     sys.stdout.write(line)
     

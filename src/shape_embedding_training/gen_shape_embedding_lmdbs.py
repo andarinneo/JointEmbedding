@@ -41,7 +41,7 @@ cache_train = dict()
 cache_val = dict()
 txn_commit_count = 512
 
-report_step = 10000;
+report_step = 10000
 for idx, train_val in enumerate(train_val_split):
     key = '{:0>10d}'.format(idx)
     value = embedding_space_strings[imageid2shapeid[idx]]

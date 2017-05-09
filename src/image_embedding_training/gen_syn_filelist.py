@@ -30,7 +30,7 @@ for synset_dir in g_shapenet_synset_set:
 print len(img_shape_id_pairs), 'syn images!'
 
 # shuffle
-random.seed(9527) # seed random with a fixed number
+random.seed(9527)  # seed random with a fixed number
 img_shape_id_pairs = random.sample(img_shape_id_pairs, len(img_shape_id_pairs))
 
 fout_filelist = open(g_syn_images_filelist, 'w')

@@ -1,0 +1,596 @@
+#----------------------------------------------------------------------------------------------------------------------#
+#                                                Data layers
+#----------------------------------------------------------------------------------------------------------------------#
+
+layer {
+  name: "data"
+  type: "Python"
+  top: "data"
+  top: "manifold_coord3"
+  python_param {
+    module: "shapenet_layers"
+    layer: "SHAPENETManifoldOnlyLayer"
+    param_str: "{\'shapenet_dir\': \'../../datasets/image_embedding\', \'label_list\': \'seg_file_list\', \'img_list\': \'image_list\', \'batch_size\': 50, \'seed\': 1337, \'split\': \'train\', \'rescale_image\': 1, \'rescale_size\': (225, 350), \'mean\': (104.00699, 116.66877, 122.67892)}"
+  }
+}
+
+
+#----------------------------------------------------------------------------------------------------------------------#
+#                                  FCN-8s Semantic segmentation layers for each part
+#----------------------------------------------------------------------------------------------------------------------#
+
+
+#----------------------------------------------------------------------------------------------------------------------#
+#                                             VGG Feature extraction
+#----------------------------------------------------------------------------------------------------------------------#
+
+layer {
+  bottom: "data"
+  #bottom: "concat_rgb_heat_maps"
+  top: "feat_conv1_1"
+  name: "test_feat_conv1_1"
+  type: "Convolution"
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "xavier"
+    }
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  bottom: "feat_conv1_1"
+  top: "feat_conv1_1"
+  name: "feat_relu1_1"
+  type: "ReLU"
+}
+layer {
+  bottom: "feat_conv1_1"
+  top: "feat_conv1_2"
+  name: "test_feat_conv1_2"
+  type: "Convolution"
+  convolution_param {
+    num_output: 64
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "xavier"
+    }
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  bottom: "feat_conv1_2"
+  top: "feat_conv1_2"
+  name: "feat_relu1_2"
+  type: "ReLU"
+}
+layer {
+  bottom: "feat_conv1_2"
+  top: "feat_pool1"
+  name: "feat_pool1"
+  type: "Pooling"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  bottom: "feat_pool1"
+  top: "feat_conv2_1"
+  name: "test_feat_conv2_1"
+  type: "Convolution"
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "xavier"
+    }
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  bottom: "feat_conv2_1"
+  top: "feat_conv2_1"
+  name: "feat_relu2_1"
+  type: "ReLU"
+}
+layer {
+  bottom: "feat_conv2_1"
+  top: "feat_conv2_2"
+  name: "test_feat_conv2_2"
+  type: "Convolution"
+  convolution_param {
+    num_output: 128
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "xavier"
+    }
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  bottom: "feat_conv2_2"
+  top: "feat_conv2_2"
+  name: "feat_relu2_2"
+  type: "ReLU"
+}
+layer {
+  bottom: "feat_conv2_2"
+  top: "feat_pool2"
+  name: "feat_pool2"
+  type: "Pooling"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  bottom: "feat_pool2"
+  top: "feat_conv3_1"
+  name: "test_feat_conv3_1"
+  type: "Convolution"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "xavier"
+    }
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  bottom: "feat_conv3_1"
+  top: "feat_conv3_1"
+  name: "feat_relu3_1"
+  type: "ReLU"
+}
+layer {
+  bottom: "feat_conv3_1"
+  top: "feat_conv3_2"
+  name: "test_feat_conv3_2"
+  type: "Convolution"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "xavier"
+    }
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  bottom: "feat_conv3_2"
+  top: "feat_conv3_2"
+  name: "feat_relu3_2"
+  type: "ReLU"
+}
+layer {
+  bottom: "feat_conv3_2"
+  top: "feat_conv3_3"
+  name: "test_feat_conv3_3"
+  type: "Convolution"
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "xavier"
+    }
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  bottom: "feat_conv3_3"
+  top: "feat_conv3_3"
+  name: "feat_relu3_3"
+  type: "ReLU"
+}
+layer {
+  bottom: "feat_conv3_3"
+  top: "feat_pool3"
+  name: "feat_pool3"
+  type: "Pooling"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  bottom: "feat_pool3"
+  top: "feat_conv4_1"
+  name: "test_feat_conv4_1"
+  type: "Convolution"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "xavier"
+    }
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  bottom: "feat_conv4_1"
+  top: "feat_conv4_1"
+  name: "feat_relu4_1"
+  type: "ReLU"
+}
+layer {
+  bottom: "feat_conv4_1"
+  top: "feat_conv4_2"
+  name: "test_feat_conv4_2"
+  type: "Convolution"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "xavier"
+    }
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  bottom: "feat_conv4_2"
+  top: "feat_conv4_2"
+  name: "feat_relu4_2"
+  type: "ReLU"
+}
+layer {
+  bottom: "feat_conv4_2"
+  top: "feat_conv4_3"
+  name: "test_feat_conv4_3"
+  type: "Convolution"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "xavier"
+    }
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  bottom: "feat_conv4_3"
+  top: "feat_conv4_3"
+  name: "feat_relu4_3"
+  type: "ReLU"
+}
+layer {
+  bottom: "feat_conv4_3"
+  top: "feat_pool4"
+  name: "feat_pool4"
+  type: "Pooling"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  bottom: "feat_pool4"
+  top: "feat_conv5_1"
+  name: "test_feat_conv5_1"
+  type: "Convolution"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "xavier"
+    }
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  bottom: "feat_conv5_1"
+  top: "feat_conv5_1"
+  name: "feat_relu5_1"
+  type: "ReLU"
+}
+layer {
+  bottom: "feat_conv5_1"
+  top: "feat_conv5_2"
+  name: "test_feat_conv5_2"
+  type: "Convolution"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "xavier"
+    }
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  bottom: "feat_conv5_2"
+  top: "feat_conv5_2"
+  name: "feat_relu5_2"
+  type: "ReLU"
+}
+layer {
+  bottom: "feat_conv5_2"
+  top: "feat_conv5_3"
+  name: "test_feat_conv5_3"
+  type: "Convolution"
+  convolution_param {
+    num_output: 512
+    pad: 1
+    kernel_size: 3
+    weight_filler {
+      type: "xavier"
+    }
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  bottom: "feat_conv5_3"
+  top: "feat_conv5_3"
+  name: "feat_relu5_3"
+  type: "ReLU"
+}
+layer {
+  bottom: "feat_conv5_3"
+  top: "feat_pool5"
+  name: "feat_pool5"
+  type: "Pooling"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  bottom: "feat_pool5"
+  top: "feat_fc6"
+  name: "feat_fc6"
+  type: "InnerProduct"
+  inner_product_param {
+    num_output: 4096
+    weight_filler {
+      type: "xavier"
+    }
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  bottom: "feat_fc6"
+  top: "feat_fc6"
+  name: "feat_relu6"
+  type: "ReLU"
+}
+layer {
+  bottom: "feat_fc6"
+  top: "feat_fc6"
+  name: "feat_drop6"
+  type: "Dropout"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+layer {
+  bottom: "feat_fc6"
+  top: "feat_fc7"
+  name: "feat_fc7"
+  type: "InnerProduct"
+  inner_product_param {
+    num_output: 4096
+    weight_filler {
+      type: "xavier"
+    }
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 0
+    decay_mult: 0
+  }
+}
+layer {
+  bottom: "feat_fc7"
+  top: "feat_fc7"
+  name: "feat_relu7"
+  type: "ReLU"
+}
+layer {
+  bottom: "feat_fc7"
+  top: "feat_fc7"
+  name: "feat_drop7"
+  type: "Dropout"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+
+#----------------------------------------------------------------------------------------------------------------------#
+#                                    Fully connected layers for each part
+#----------------------------------------------------------------------------------------------------------------------#
+
+# ------------------- FC for part 3 -------------------
+layer {
+  name: "X_feat_fc8_part3"
+  type: "InnerProduct"
+  bottom: "feat_fc7"
+  top: "feat_fc8_part3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 4096
+  }
+}
+layer {
+  name: "feat_relu8_part3"
+  type: "ReLU"
+  bottom: "feat_fc8_part3"
+  top: "feat_fc8_part3"
+}
+layer {
+  name: "feat_drop8_part3"
+  type: "Dropout"
+  bottom: "feat_fc8_part3"
+  top: "feat_fc8_part3"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+
+#----------------------------------------------------------------------------------------------------------------------#
+#                                    Manifold embedding layers for each part
+#----------------------------------------------------------------------------------------------------------------------#
+
+# ------------------- Part 3 -------------------
+layer {
+  name: "image_embedding_part3"
+  type: "InnerProduct"
+  bottom: "feat_fc8_part3"
+  top: "image_embedding_part3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  inner_product_param {
+    num_output: 128
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+
+layer {
+  name: "embedding_loss_part3"
+  type: "EuclideanLoss"
+  bottom: "image_embedding_part3"
+  bottom: "manifold_coord3"
+  top: "embedding_loss_part3"
+}
+

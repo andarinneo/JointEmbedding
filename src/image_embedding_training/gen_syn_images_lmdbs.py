@@ -27,7 +27,7 @@ cache_train = dict()
 cache_val = dict()
 txn_commit_count = 512
 
-report_step = 10000;
+report_step = 10000
 with env.begin() as txn:
     cursor = txn.cursor()
     for key, value in cursor:
@@ -49,7 +49,7 @@ with env.begin() as txn:
                     txn_val.put(k, v)
             cache_val.clear()
                 
-        if(idx%report_step == 0):
+        if (idx%report_step == 0):
             print datetime.datetime.now().time(), '-', idx, 'of', len(train_val_split), 'processed!'
         idx = idx + 1
         

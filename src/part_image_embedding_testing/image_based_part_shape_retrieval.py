@@ -16,7 +16,7 @@ from global_variables import *
 from utilities_caffe import *
 
 parser = argparse.ArgumentParser(description="Extract image embedding features for IMAGE input.")
-parser.add_argument('--image', help='Path to input image (cropped)', required=False, default='/home/adrian/Desktop/testCases/tests/chair81.JPEG')
+parser.add_argument('--image', help='Path to input image (cropped)', required=False, default='/home/adrian/Desktop/testCases/training/chair7.jpg')
 parser.add_argument('--iter_num', '-n', help='Use caffemodel trained after iter_num iterations', type=int, default=20000)
 # '/home/adrian/Desktop/03001627/image_embedding_03001627.caffemodel'
 # '/media/adrian/Datasets/datasets/image_embedding/image_embedding_testing_03001627_rcnn/snapshots_03001627_iter_40000.caffemodel'
@@ -38,7 +38,8 @@ part_id = 1
 print 'My training'
 # My training
 g_shape_embedding_space_file_txt = '/media/adrian/Datasets/datasets/shape_embedding/part_shape_embedding_space_03001627_part' + str(part_id) + '.txt'  # Is correct
-image_embedding_prototxt = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn.prototxt'  # Is correct
+#image_embedding_prototxt = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn.prototxt'  # Is correct
+image_embedding_prototxt = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold.prototxt'
 image_embedding_caffemodel = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_iter_40000.caffemodel'
 
 
@@ -52,6 +53,7 @@ image_embedding_array = extract_cnn_features( img_filelist=args.image,
                                               caffe_path=g_caffe_install_path,
                                               mean_file=g_mean_file)
 image_embedding = image_embedding_array[0]
+
 
 print 'Loading shape embedding space from %s...'%(g_shape_embedding_space_file_txt)
 shape_embedding_space = [np.array([float(value) for value in line.strip().split(' ')]) for line in open(g_shape_embedding_space_file_txt, 'r')]

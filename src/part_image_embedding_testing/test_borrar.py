@@ -34,10 +34,10 @@ print 'Loading shape embedding space from %s...'%(g_shape_embedding_space_file_t
 shape_embedding_space = [np.array([float(value) for value in line.strip().split(' ')]) for line in open(g_shape_embedding_space_file_txt, 'r')]
 
 image_test = []
-image_test.append('/home/adrian/Desktop/testCases/tests/chair01.JPEG')  # 35, 38, 42, 55, 72, 81, 35, 01-06
-image_test.append('/home/adrian/Desktop/testCases/tests/chair02.JPEG')  # 35, 38, 42, 55, 72, 81, 35, 01-06
-image_test.append('/home/adrian/Desktop/testCases/tests/chair03.JPEG')  # 35, 38, 42, 55, 72, 81, 35, 01-06
-image_test.append('/home/adrian/Desktop/testCases/tests/chair04.JPEG')  # 35, 38, 42, 55, 72, 81, 35, 01-06
+image_test.append('/home/adrian/Desktop/testCases/training/chair6.jpg')  # 35, 38, 42, 55, 72, 81, 35, 01-06
+image_test.append('/home/adrian/Desktop/testCases/training/chair7.jpg')  # 35, 38, 42, 55, 72, 81, 35, 01-06
+image_test.append('/home/adrian/Desktop/testCases/training/chair8.jpg')  # 35, 38, 42, 55, 72, 81, 35, 01-06
+image_test.append('/home/adrian/Desktop/testCases/training/chair9.jpg')  # 35, 38, 42, 55, 72, 81, 35, 01-06
 
 image_embedding = []
 for i in range(0, 4):
@@ -60,7 +60,37 @@ for i in range(0, 4):
     sorted_distances = sorted([(math.sqrt(sum((image_embedding[i]-shape_embedding)**2)), idx) for idx, shape_embedding in enumerate(shape_embedding_space)])
     print sorted_distances[0:5]
 
+
+
+caffe_dist_v = []
+euclidean_dist_v = []
+
+manifold_baricenter = np.zeros(128)
+counter = 0
+for idx, shape_embedding in enumerate(shape_embedding_space):
+    manifold_baricenter = manifold_baricenter + shape_embedding
+    counter += 1
+manifold_baricenter = manifold_baricenter/counter
+
+
+for idx, shape_embedding in enumerate(shape_embedding_space):
+    diff = manifold_baricenter - shape_embedding
+    caffe_dist = np.dot(diff, diff)/(1*2)  # N (batch_size) in our case is always 1 because we only use one sample
+    euclidean_dist = math.sqrt(sum((diff)**2))
+
+
+    aux2 = np.multiply(diff, diff)
+    aux3 = np.sum(aux2)
+    loss = aux3/(1*2)  # N (batch_size) in our case is always 1 because we only use one sample
+
+    caffe_dist_v.append(caffe_dist)
+    euclidean_dist_v.append(euclidean_dist)
+
+mean_caffe = np.mean(np.asarray(caffe_dist_v))
+mean_euclidean = np.mean(np.asarray(euclidean_dist_v))
+
 lolo = 1
+
 
 
 # Gt Training

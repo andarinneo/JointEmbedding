@@ -3,7 +3,6 @@ for f in $(ls -1 /home/adrian/Desktop/testCases/training/*.jpg); do
 	echo $f
 	
 	command="$(printf "python image_based_part_shape_retrieval.py --image %s" $f)"
-	#command="$(printf "python extract_image_embedding.py --image %s" $f)"
 
 	echo $command
 	$command

@@ -6,6 +6,7 @@ import datetime
 import numpy as np
 from multiprocessing import Pool
 from google.protobuf import text_format
+from copy import deepcopy
 
 #https://github.com/BVLC/caffe/issues/861#issuecomment-70124809
 import matplotlib 
@@ -88,8 +89,10 @@ def extract_cnn_features(img_filelist, img_root, prototxt, caffemodel, feat_name
             batch_count = end_idx - start_idx
             feat_array = compute_feat_array(batch_idx)
             for n in range(batch_count):
-                feat_list.append(feat_array[n, ...])
-            return feat_list
+                new_val = deepcopy(feat_array[n, ...])
+                feat_list.append(new_val)  # bug in original code, caused by "copy by reference"
+        # return the list after going through all elements
+        return feat_list
     elif output_type == 'txt':
         with open(output_path, 'w') as output_file:
             for batch_idx in range(batch_num):
@@ -104,15 +107,15 @@ def extract_cnn_features(img_filelist, img_root, prototxt, caffemodel, feat_name
         env = lmdb.open(output_path, map_size=int(1e12))
         pool = Pool(pool_size)
         for batch_idx in range(batch_num):
-            feat_array = compute_feat_array(batch_idx)        
+            feat_array = compute_feat_array(batch_idx)
             start_idx = batch_size * batch_idx
             end_idx = min(batch_size * (batch_idx+1), N)
             array4d_idx = [(feat_array, idx, idx+start_idx) for idx in range(end_idx-start_idx)]
             datum_strings = pool.map(_array4d_idx_to_datum_string, array4d_idx)
             with env.begin(write=True) as txn:
                 for idx in range(end_idx-start_idx):
-                    txn.put('{:0>10d}'.format(start_idx+idx), datum_strings[idx])        
-        env.close();
+                    txn.put('{:0>10d}'.format(start_idx+idx), datum_strings[idx])
+        env.close()
                 
                 
 def stack_caffe_models(prototxt, base_model, top_model, stacked_model, caffe_path=None):
