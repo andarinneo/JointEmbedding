@@ -10,4 +10,5 @@ semanticFCN/data/
 *~
 *.caffemodel
 *.solverstate
+*.idea/*
 
