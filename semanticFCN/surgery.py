@@ -72,8 +72,8 @@ def expand_score(new_net, new_layer, net, layer):
     new_net.params[new_layer][1].data[0,0,0,:old_cl][...] = net.params[layer][1].data
 
 
-# This Function concatenates the FCN-8s-atonce with the VGG classifier by merging and adjusting the weights
-def merge_caffe_models(base_prototxt, base_model, top_prototxt, top_model, stacked_prototxt, stacked_model):
+# This Function concatenates the FCN-8s-atonce with the AlexNet classifier by merging and adjusting the weights
+def merge_FCN_AlexNet_models(base_prototxt, base_model, top_prototxt, top_model, stacked_prototxt, stacked_model, layer_prefix=None):
 
     base_net = caffe.Net(base_prototxt, caffe.TRAIN)
     print 'Copying trained layers from %s...' % (base_model)
@@ -92,7 +92,9 @@ def merge_caffe_models(base_prototxt, base_model, top_prototxt, top_model, stack
     # COPY VALUES FROM TOP NETWORK
     # For each of the pretrained net sides, copy the params to the corresponding layer of the combined net:
     # (the other layers are initialised using "xavier" method)
-    layer_prefix = 'feat'
+    if layer_prefix is None:
+        layer_prefix = 'feat'
+
     top_params = top_net.params.keys()
     stacked_params = stacked_net.params.keys()
     for pr in top_params:
@@ -105,6 +107,13 @@ def merge_caffe_models(base_prototxt, base_model, top_prototxt, top_model, stack
             if 'conv' in pr:
                 stacked_net.params['{}_{}'.format(layer_prefix, pr)][0].data[:, 0:n_channels, :, :] = weights
                 stacked_net.params['{}_{}'.format(layer_prefix, pr)][1].data[...] = bias
+            elif 'fc' in pr:
+                stacked_net.params['{}_{}'.format(layer_prefix, pr)][0].data[:, 0:n_channels] = weights
+                stacked_net.params['{}_{}'.format(layer_prefix, pr)][1].data[...] = bias
+        elif 'image_embedding_part3' in stacked_params:
+            stacked_net.params['image_embedding_part3'][0].data[:, 0:n_channels] = weights
+            stacked_net.params['image_embedding_part3'][1].data[...] = bias
+
 
     # SAVE VALUES OF MERGED NETWORK
     print 'Saving stacked model to %s...' % stacked_model

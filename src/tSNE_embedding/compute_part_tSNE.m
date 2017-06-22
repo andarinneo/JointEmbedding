@@ -5,7 +5,8 @@ global_variables;
 
 %% Load data
 
-load '/home/adrian/JointEmbedding/datasets/shape_embedding/part_shape_embedding_space_03001627.mat'
+load '/home/adrian/JointEmbedding/datasets/shape_embedding/lfd_hog_part_features_03001627_(originalHoG).mat'
+% load(g_part_shape_embedding_space_file_mat);
 
 n_parts = size(part_shape_embedding_space, 2);
 n_shapes = size(part_shape_embedding_space{1}, 1);
@@ -34,16 +35,16 @@ end
 
 %% Run tSNE for every part and store the results
 
-for part_id=1:g_n_parts
+for part_id = 2 % 1:g_n_parts
     %% Create 2D embedding space
     
     % Set parameters
-    no_dims = 2;
+    n_dims = 2;
     initial_dims = size(part_shape_embedding_space{part_id}, 2);
     perplexity = 30;
     
     % Run t-SNE
-    mappedX = tsne(part_shape_embedding_space{part_id}, [], no_dims, initial_dims, perplexity);
+    mappedX = tsne(part_shape_embedding_space{part_id}, [], n_dims, initial_dims, perplexity);
     
     % Scale to a 1.0x1.0 square
     scaleX = max(mappedX(:,1)) - min(mappedX(:,1));
@@ -57,7 +58,7 @@ for part_id=1:g_n_parts
     
     S = 5000; % size of full embedding image
     G = zeros(S, S, 3, 'uint8');
-    s = 50; % size of every single image
+    s = 10; % size of every single image
     
     for shape=1:n_shapes
         
@@ -86,7 +87,7 @@ for part_id=1:g_n_parts
     
     %% Save image
     
-    imwrite(G, ['results/' 'part_id' int2str(part_id) '_manifold_view.jpg'], 'jpg');
+    imwrite(G, ['tSNE_embedding/results/' 'part_id' int2str(part_id) '_manifold_view.jpg'], 'jpg');
 end
 
 

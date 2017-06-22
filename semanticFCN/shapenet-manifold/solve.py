@@ -5,38 +5,28 @@ import os
 import json
 import matplotlib.pyplot as plt
 
-from scipy.signal import butter, filtfilt
-
-def butter_lowpass(cutoff, fs, order=5):
-    nyq = 0.5 * fs
-    normal_cutoff = cutoff / nyq
-    b, a = butter(order, normal_cutoff, btype='low', analog=False)
-    return b, a
-
-def butter_lowpass_filtfilt(data, cutoff, fs, order=5):
-    b, a = butter_lowpass(cutoff, fs, order=order)
-    y = filtfilt(b, a, data)
-    return y
 
 
+stacked_prototxt = 'train-manifold-alexnet.prototxt'
+# stacked_caffemodel = 'snapshot/initial_stacked.caffemodel'
+stacked_caffemodel = 'snapshot/train-manifold_iter_30000.caffemodel'
 
-stacked_prototxt = 'train-manifold.prototxt'
-stacked_caffemodel = 'snapshot/initial_stacked.caffemodel'
+sem_seg_prototxt = '/home/adrian/JointEmbedding/semanticFCN/shapenet-fcn/deploy-fcn8-atonce-5channels.prototxt'
+sem_seg_caffemodel = '/home/adrian/JointEmbedding/semanticFCN/shapenet-fcn/snapshot/train_iter_60000.caffemodel'
 
-base_prototxt = '/home/adrian/JointEmbedding/semanticFCN/shapenet-fcn/train-fcn8-atonce-5channels.prototxt'
-base_caffemodel = '/home/adrian/JointEmbedding/semanticFCN/shapenet-fcn/snapshot/train_iter_100.caffemodel'
+manifold_prototxt = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold_part3.prototxt'
+manifold_caffemodel = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_part1_iter_100000.caffemodel'
 
 
 if not os.path.isfile(stacked_caffemodel):
-    vgg_prototxt = '/home/adrian/JointEmbedding/semanticFCN/ilsvrc-nets/VGG_ILSVRC_16_layers.prototxt'
-    vgg_caffemodel = '/home/adrian/JointEmbedding/semanticFCN/ilsvrc-nets/VGG_ILSVRC_16_layers.caffemodel'
     # Load weights into the complete architecture
-    surgery.merge_caffe_models(base_prototxt = base_prototxt,
-                               base_model = base_caffemodel,
-                               top_prototxt = vgg_prototxt,
-                               top_model = vgg_caffemodel,
-                               stacked_prototxt = stacked_prototxt,
-                               stacked_model = stacked_caffemodel)
+    surgery.merge_FCN_AlexNet_models(base_prototxt=sem_seg_prototxt,
+                                     base_model=sem_seg_caffemodel,
+                                     top_prototxt=manifold_prototxt,
+                                     top_model=manifold_caffemodel,
+                                     stacked_prototxt=stacked_prototxt,
+                                     stacked_model=stacked_caffemodel,
+                                     layer_prefix='manifold')
 
 # init training
 caffe.set_device(0)
@@ -50,29 +40,39 @@ loss_file = 'train_loss.txt'
 train_loss = []
 train_step = []
 step_counter = 0  # 0
-
-
-with open(loss_file, 'r') as f:
-    [train_step, train_loss] = json.load(f)
-
-# cutoff = 1500
-# fs = 50000
-# train_loss_smooth = butter_lowpass_filtfilt(train_loss, cutoff, fs)
-
-
-plt.plot(train_step, train_loss)
-plt.show()
-
-
-
 # Run the training
 debug = True
 for _ in range(100000):
     step_counter += 1
-    solver.step(50)  # (4000)
+    solver.step(1)  # (4000)
     # score.seg_tests(solver, False, val, layer='score')
     train_loss.append(round(solver.net.blobs['embedding_loss_part3'].data.flatten()[0]))
     train_step.append(step_counter)
+
+    # DEBUG SCORES AS HEAT MAPS
+    if debug:
+        # in_ = in_[:, :, ::-1]
+        # in_ -= self.mean
+        # in_ = in_.transpose((2, 0, 1))
+
+        # FIX THE RECONVERSION TO NORMAL RGB VALUES!!!!
+        train_img = solver.net.blobs['data'].data[0, ...].transpose((1, 2, 0)) + (104.00699, 116.66877, 122.67892)
+
+        probability_maps = solver.net.blobs['score'].data
+        max_score = probability_maps.max()
+        min_score = probability_maps.min()
+
+        plt.subplot(2, 4, 1)
+        plt.imshow(train_img)
+        for i in range(0, 5):  # original maps are from 0:21
+            heat_map = probability_maps[0, i, ...]
+            plt.subplot(2, 4, (i+1)+1)  # the +2 is the offset for the image and the labels
+            plt.imshow(heat_map, vmin=min_score, vmax=max_score)
+        mng = plt.get_current_fig_manager()
+        mng.window.showMaximized()
+        # plt.show()
+        plt.pause(1)
+
 
     # Test the distances
     gt_coord1 = solver.net.blobs['manifold_coord3'].data[0]
@@ -91,6 +91,6 @@ for _ in range(100000):
     # END test the distances
 
     # Save training loss
-    # with open(loss_file, 'w+') as f:
-    #     json.dump([train_step, train_loss], f)
+    with open(loss_file, 'w+') as f:
+        json.dump([train_step, train_loss], f)
 

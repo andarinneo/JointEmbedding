@@ -142,7 +142,7 @@ for view = 1:g_lfd_view_num
     view_hog_part_feature = zeros(shape_count, part_hog_dimension);
     
 %     parfor shape = 1:shape_count
-    for shape = 1:2 % shape_count
+    for shape = 1:shape_count
         aux_hog_part_feature = extract_pyramid_hog(view_image_lists{view, shape}, g_lfd_hog_image_size);
         
         for part = 1:g_n_parts
@@ -172,12 +172,12 @@ fprintf('%f seconds spent on LFD HoG -PART- feature extraction!\n', etime(t_end,
 t_begin = clock;
 fprintf('Save HoG part features to \"%s\"...\n', g_lfd_hog_part_features_file);
 lfd_hog_part_features = cat(2, view_hog_part_features{:});
-% clearvars view_hog_part_features;
-% save(g_lfd_hog_part_features_file, 'lfd_hog_part_features', '-v7.3');
+clearvars view_hog_part_features;
+save(g_lfd_hog_part_features_file, 'lfd_hog_part_features', '-v7.3');
 t_end = clock;
 fprintf('done (%f seconds)!\n', etime(t_end, t_begin));
 
-% exit; % Close MATLAB
+exit; % Close MATLAB
 
 
 

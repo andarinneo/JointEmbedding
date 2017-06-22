@@ -21,7 +21,7 @@ options = statset('Display', 'iter', 'MaxIter', 128);
 % This is normal because the 3 cases are exactly the same 3D models
 
 % We fix the issue for all classes by adding a small epsilon to those values
-epsilon = 0.01; % 0.0001
+epsilon = 0.0001;  % 0.01; % 0.0001
 for part = 1:g_n_parts
     indexes = (part_shape_distance_matrix{part} == 0);
     n_empty_val = sum(indexes);
@@ -52,6 +52,6 @@ end
 t_end = clock;
 fprintf('done (%f seconds)!\n', etime(t_end, t_begin));
 
-exit;
+% exit;
 
 

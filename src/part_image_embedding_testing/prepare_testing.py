@@ -17,7 +17,7 @@ from global_variables import *
 from utilities_caffe import stack_caffe_models
 
 parser = argparse.ArgumentParser(description="Stitch pool5 extraction and image embedding caffemodels together.")
-parser.add_argument('--iter_num', '-n', help='Use image embedding model trained after iter_num iterations', type=int, default=40000)
+parser.add_argument('--iter_num', '-n', help='Use image embedding model trained after iter_num iterations', type=int, default=100000)
 args = parser.parse_args()
 
 image_embedding_testing_in = os.path.join(BASE_DIR, 'image_embedding_'+g_network_architecture_name+'.prototxt.in')
@@ -28,16 +28,17 @@ for line in fileinput.input(g_part_image_embedding_testing_prototxt, inplace=Tru
     sys.stdout.write(line) 
 
 
-args.iter_num = 300000
+part_id = 4
+args.iter_num = 100000
 
 # If no batch training
-part_image_embedding_caffemodel = os.path.join(g_part_image_embedding_training_folder, 'single_manifold_snapshots', 'snapshots%s_iter_%d.caffemodel'%(g_shapenet_synset_set_handle, args.iter_num))
+part_image_embedding_caffemodel = os.path.join(g_part_image_embedding_training_folder, 'single_manifold_snapshots', 'snapshots%s_part%d_iter_%d.caffemodel'%(g_shapenet_synset_set_handle, part_id, args.iter_num))
 
 # If batch training
 # solver = 3
 # part_image_embedding_caffemodel = os.path.join(g_part_image_embedding_training_folder, 'snapshots', 'solver%s_snapshots%s_iter_%d.caffemodel'%(solver, g_shapenet_synset_set_handle, args.iter_num))
 
-part_image_embedding_caffemodel_stacked = os.path.join(g_part_image_embedding_testing_folder, 'snapshots%s_iter_%d.caffemodel'%(g_shapenet_synset_set_handle, args.iter_num))
+part_image_embedding_caffemodel_stacked = os.path.join(g_part_image_embedding_testing_folder, 'snapshots%s_part%d_iter_%d.caffemodel'%(g_shapenet_synset_set_handle, part_id, args.iter_num))
 
 
 stack_caffe_models(prototxt=g_part_image_embedding_testing_prototxt,

@@ -53,13 +53,13 @@ fi
 #  cd ..;
 #fi
 
-## Step 03
-## Generate train/val lmdbs of shape embedding
-#if [ "$first" -le 3 ] && [ "$last" -ge 3 ]; then
-#  cd part_shape_embedding_training;
-#  python ./gen_part_shape_embedding_lmdbs.py
-#  cd ..;
-#fi
+# Step 03
+# Generate train/val lmdbs of shape embedding
+if [ "$first" -le 3 ] && [ "$last" -ge 3 ]; then
+  cd part_shape_embedding_training;
+  python ./gen_part_shape_embedding_lmdbs.py
+  cd ..;
+fi
 
 ## Step 04
 ## Generate caffe training scripts

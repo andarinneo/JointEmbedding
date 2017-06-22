@@ -1,14 +1,18 @@
-layer {
-  name: "data"
-  type: "Python"
-  top: "data"
-  top: "label"
-  python_param {
-    module: "shapenet_layers"
-    layer: "SHAPENETSegDataLayer"
-    param_str: "{\'shapenet_dir\': \'../../datasets/image_embedding\', \'label_list\': \'seg_file_list\', \'img_list\': \'image_list\', \'batch_size\': 10, \'seed\': 937, \'split\': \'train\', \'rescale_image\': 1, \'rescale_size\': (225, 350), \'mean\': (104.00699, 116.66877, 122.67892), \'manifold_net\': 1}"
-  }
-}
+#----------------------------------------------------------------------------------------------------------------------#
+#                                                Data layers
+#----------------------------------------------------------------------------------------------------------------------#
+name: "AlexNet"
+input: "data"
+input_dim: 1
+input_dim: 3
+input_dim: 227
+input_dim: 227
+
+#----------------------------------------------------------------------------------------------------------------------#
+#                                  FCN-8s Semantic segmentation layers for each part
+#----------------------------------------------------------------------------------------------------------------------#
+
+######  FIRST STAGE - FCN-8s Semantic Segmentation  #####
 layer {
   name: "conv1_1"
   type: "Convolution"
@@ -657,14 +661,231 @@ layer {
     offset: 31
   }
 }
+
+
+#----------------------------------------------------------------------------------------------------------------------#
+#                                                Reshaping layers
+#----------------------------------------------------------------------------------------------------------------------#
+
 layer {
-  name: "loss"
-  type: "SoftmaxWithLoss"
+  name: "slice"
+  type: "Slice"
   bottom: "score"
-  bottom: "label"
-  top: "loss"
-  loss_param {
-    ignore_label: 255
-    normalize: false
+  top: "channel_background"
+  top: "channel_part1"
+  top: "channel_part2"
+  top: "channel_part3"
+  top: "channel_part4"
+  slice_param {
+    axis: 1
+    slice_point: 1
+    slice_point: 2
+    slice_point: 3
+    slice_point: 4
   }
 }
+layer {
+  name: "concat_rgb_heat_maps"
+  type: "Concat"
+  bottom: "data"
+  bottom: "channel_background"
+  bottom: "channel_part1"
+  bottom: "channel_part2"
+  bottom: "channel_part3"
+  bottom: "channel_part4"
+  top: "concat_rgb_heat_maps"
+  concat_param {
+    axis: 1
+  }
+}
+
+
+#----------------------------------------------------------------------------------------------------------------------#
+#                                             AlexNet Feature extraction
+#----------------------------------------------------------------------------------------------------------------------#
+
+
+layer {
+  name: "manifold_conv1"
+  type: "Convolution"
+  bottom: "concat_rgb_heat_maps"
+  top: "manifold_conv1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 96
+    kernel_size: 11
+    stride: 4
+  }
+}
+layer {
+  name: "manifold_relu1"
+  type: "ReLU"
+  bottom: "manifold_conv1"
+  top: "manifold_conv1"
+}
+layer {
+  name: "manifold_pool1"
+  type: "Pooling"
+  bottom: "manifold_conv1"
+  top: "manifold_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "manifold_norm1"
+  type: "LRN"
+  bottom: "manifold_pool1"
+  top: "manifold_norm1"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+layer {
+  name: "manifold_conv2"
+  type: "Convolution"
+  bottom: "manifold_norm1"
+  top: "manifold_conv2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 2
+    kernel_size: 5
+    group: 2
+  }
+}
+layer {
+  name: "manifold_relu2"
+  type: "ReLU"
+  bottom: "manifold_conv2"
+  top: "manifold_conv2"
+}
+layer {
+  name: "manifold_pool2"
+  type: "Pooling"
+  bottom: "manifold_conv2"
+  top: "manifold_pool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "manifold_norm2"
+  type: "LRN"
+  bottom: "manifold_pool2"
+  top: "manifold_norm2"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+layer {
+  name: "manifold_conv3"
+  type: "Convolution"
+  bottom: "manifold_norm2"
+  top: "manifold_conv3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 384
+    pad: 1
+    kernel_size: 3
+  }
+}
+layer {
+  name: "manifold_relu3"
+  type: "ReLU"
+  bottom: "manifold_conv3"
+  top: "manifold_conv3"
+}
+layer {
+  name: "manifold_conv4"
+  type: "Convolution"
+  bottom: "manifold_conv3"
+  top: "manifold_conv4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 384
+    pad: 1
+    kernel_size: 3
+    group: 2
+  }
+}
+layer {
+  name: "manifold_relu4"
+  type: "ReLU"
+  bottom: "manifold_conv4"
+  top: "manifold_conv4"
+}
+layer {
+  name: "manifold_conv5"
+  type: "Convolution"
+  bottom: "manifold_conv4"
+  top: "manifold_conv5"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 256
+    pad: 1
+    kernel_size: 3
+    group: 2
+  }
+}
+layer {
+  name: "manifold_relu5"
+  type: "ReLU"
+  bottom: "manifold_conv5"
+  top: "manifold_conv5"
+}
+layer {
+  name: "manifold_pool5"
+  type: "Pooling"
+  bottom: "manifold_conv5"
+  top: "manifold_pool5"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+

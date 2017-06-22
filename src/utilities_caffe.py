@@ -43,11 +43,11 @@ def extract_cnn_features(img_filelist, img_root, prototxt, caffemodel, feat_name
     # INIT NETWORK
     caffe.set_mode_gpu()
     caffe.set_device(gpu_index)
-    net = caffe.Classifier( prototxt,
-                            caffemodel,
-                            mean=imagenet_mean,
-                            raw_scale=255,
-                            channel_swap=(2, 1, 0) )
+    net = caffe.Classifier(prototxt,
+                           caffemodel,
+                           mean=imagenet_mean,
+                           raw_scale=255,
+                           channel_swap=(2, 1, 0))
     
     img_filenames = [os.path.abspath(img_filelist)]
     if img_filelist.endswith('.txt'):

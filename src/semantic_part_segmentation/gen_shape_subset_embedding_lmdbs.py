@@ -38,24 +38,29 @@ for part in range(1, g_n_parts+1):
     embedding_space_arrays = [np.array(embedding).reshape(g_shape_embedding_space_dimension, 1, 1) for embedding in partX_embedding_space]
     embedding_space_strings = [caffe.io.array_to_datum(array, idx).SerializeToString() for idx, array in enumerate(embedding_space_arrays)]
 
-    partX_shape_embedding_lmdb_train = g_shape_embedding_lmdb_train + '_part' + str(part)
-    partX_shape_embedding_lmdb_val = g_shape_embedding_lmdb_val + '_part' + str(part)
+    partX_shape_subset_embedding_lmdb_train = g_shape_subset_embedding_lmdb_train + '_part' + str(part)
+    partX_shape_subset_embedding_lmdb_val = g_shape_subset_embedding_lmdb_val + '_part' + str(part)
 
-    if os.path.exists(partX_shape_embedding_lmdb_train):
-        shutil.rmtree(partX_shape_embedding_lmdb_train)
-    env_train = lmdb.open(partX_shape_embedding_lmdb_train, map_size=int(1e12))
-    if os.path.exists(partX_shape_embedding_lmdb_val):
-        shutil.rmtree(partX_shape_embedding_lmdb_val)
-    env_val = lmdb.open(partX_shape_embedding_lmdb_val, map_size=int(1e12))
+    if os.path.exists(partX_shape_subset_embedding_lmdb_train):
+        shutil.rmtree(partX_shape_subset_embedding_lmdb_train)
+    env_train = lmdb.open(partX_shape_subset_embedding_lmdb_train, map_size=int(1e12))
+    if os.path.exists(partX_shape_subset_embedding_lmdb_val):
+        shutil.rmtree(partX_shape_subset_embedding_lmdb_val)
+    env_val = lmdb.open(partX_shape_subset_embedding_lmdb_val, map_size=int(1e12))
 
     cache_train = dict()
     cache_val = dict()
     txn_commit_count = 512
 
     report_step = 10000
+    n_samples = 128*200  # len(shuffled_image_indexes)
+    subsample_counter = 0
     for counter in range(len(shuffled_image_indexes)):
         idx = shuffled_image_indexes[counter]
         train_val = train_val_split[counter]
+
+        if idx >= n_samples:
+            continue
 
         key = '{:0>10d}'.format(idx)
         value = embedding_space_strings[imageid2shapeid[idx]]
@@ -65,19 +70,20 @@ for part in range(1, g_n_parts+1):
         elif train_val == 0:
             cache_val[key] = value
 
-        if (len(cache_train) == txn_commit_count or counter == len(shuffled_image_indexes)-1):
+        if len(cache_train) == txn_commit_count or subsample_counter == (n_samples-1):
             with env_train.begin(write=True) as txn_train:
                 for k, v in sorted(cache_train.iteritems()):
                     txn_train.put(k, v)
             cache_train.clear()
-        if (len(cache_val) == txn_commit_count or counter == len(shuffled_image_indexes)-1):
+        if len(cache_val) == txn_commit_count or subsample_counter == (n_samples-1):
             with env_val.begin(write=True) as txn_val:
                 for k, v in sorted(cache_val.iteritems()):
                     txn_val.put(k, v)
             cache_val.clear()
 
-        if(counter%report_step == 0):
-            print datetime.datetime.now().time(), '-', counter, 'of', len(shuffled_image_indexes), 'processed!'
+        if (subsample_counter % report_step) == 0:
+            print datetime.datetime.now().time(), '-', subsample_counter, 'of', n_samples, 'processed!'
+        subsample_counter += 1
 
     env_train.close()
     env_val.close()

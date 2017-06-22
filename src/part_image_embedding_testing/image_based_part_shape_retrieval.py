@@ -4,6 +4,7 @@ import shutil
 import argparse
 import fileinput
 import numpy as np
+import caffe
 from google.protobuf import text_format
 
 #https://github.com/BVLC/caffe/issues/861#issuecomment-70124809
@@ -16,7 +17,7 @@ from global_variables import *
 from utilities_caffe import *
 
 parser = argparse.ArgumentParser(description="Extract image embedding features for IMAGE input.")
-parser.add_argument('--image', help='Path to input image (cropped)', required=False, default='/home/adrian/Desktop/testCases/training/chair7.jpg')
+parser.add_argument('--image', help='Path to input image (cropped)', required=False, default='/home/adrian/Desktop/qualitative_blending_results/ExactPartMatch/374e87fdee7711491e046801e2748f1a_2.jpg')
 parser.add_argument('--iter_num', '-n', help='Use caffemodel trained after iter_num iterations', type=int, default=20000)
 # '/home/adrian/Desktop/03001627/image_embedding_03001627.caffemodel'
 # '/media/adrian/Datasets/datasets/image_embedding/image_embedding_testing_03001627_rcnn/snapshots_03001627_iter_40000.caffemodel'
@@ -34,24 +35,36 @@ if args.prototxt:
     image_embedding_prototxt = args.prototxt
 
 
-part_id = 1
+part_id = 3
 print 'My training'
 # My training
+# g_shape_embedding_space_file_txt = '/media/adrian/Datasets/datasets/shape_embedding/part_shape_embedding_space_03001627_part' + str(part_id) + '.txt'  # Is correct
+# image_embedding_prototxt = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn.prototxt'  # Is correct
+# image_embedding_prototxt = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold.prototxt'
+# image_embedding_caffemodel = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_iter_40000.caffemodel'
+
+
+# My Single Part Manifold (Part X)
 g_shape_embedding_space_file_txt = '/media/adrian/Datasets/datasets/shape_embedding/part_shape_embedding_space_03001627_part' + str(part_id) + '.txt'  # Is correct
-#image_embedding_prototxt = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn.prototxt'  # Is correct
-image_embedding_prototxt = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold.prototxt'
-image_embedding_caffemodel = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_iter_40000.caffemodel'
+image_embedding_prototxt = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold_part' + str(part_id) + '.prototxt'  # Is correct
+image_embedding_caffemodel = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_part' + str(part_id) + '_iter_100000.caffemodel'
+
+
+
+image_embedding_prototxt = '/home/adrian/JointEmbedding/src/semantic_part_segmentation/test-manifold-alexnet.prototxt'
+image_embedding_caffemodel = '/home/adrian/JointEmbedding/semanticFCN/shapenet-manifold/snapshot/train-manifold_iter_30000.caffemodel'
+
 
 
 print 'Computing image embedding for %s...'%(args.image)
 
-image_embedding_array = extract_cnn_features( img_filelist=args.image,
-                                              img_root='/',
-                                              prototxt=image_embedding_prototxt,
-                                              caffemodel=image_embedding_caffemodel,
-                                              feat_name='image_embedding_part' + str(part_id),
-                                              caffe_path=g_caffe_install_path,
-                                              mean_file=g_mean_file)
+image_embedding_array = extract_cnn_features(img_filelist=args.image,
+                                             img_root='/',
+                                             prototxt=image_embedding_prototxt,
+                                             caffemodel=image_embedding_caffemodel,
+                                             feat_name='image_embedding_part' + str(part_id),
+                                             caffe_path=g_caffe_install_path,
+                                             mean_file=g_mean_file)
 image_embedding = image_embedding_array[0]
 
 
@@ -90,7 +103,7 @@ for i in range(args.top_k):
 	    </div>
 	</div>
  """%(synset, md5_id, synset, md5_id, synset, md5_id, md5_id)
- 
+
 
 for line in fileinput.input(visualization_filename, inplace=True):
     line = line.replace('RETRIEVAL_LIST', retrieval_list)

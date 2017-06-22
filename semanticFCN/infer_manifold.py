@@ -10,9 +10,12 @@ import matplotlib.pyplot as plt
 train_val_test = '/home/adrian/JointEmbedding/datasets/image_embedding/train_val_test.txt'
 
 
+image_embedding_prototxt = '/home/adrian/JointEmbedding/semanticFCN/shapenet-manifold/train-manifold-alexnet.prototxt'
+image_embedding_caffemodel = '/home/adrian/JointEmbedding/semanticFCN/shapenet-manifold/snapshot/initial_stacked.caffemodel'
+
+
 # LOAD NETWORK
-net = caffe.Net('/home/adrian/JointEmbedding/semanticFCN/shapenet-fcn/deploy-fcn8-atonce-5channels.prototxt',
-                '/home/adrian/JointEmbedding/semanticFCN/shapenet-fcn/snapshot/train_iter_60000.caffemodel', caffe.TEST)
+net = caffe.Net(image_embedding_prototxt, image_embedding_caffemodel, caffe.TEST)
 
 
 # MAIN LOOP

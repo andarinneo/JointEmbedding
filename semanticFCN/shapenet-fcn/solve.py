@@ -55,7 +55,7 @@ step_counter = 0  # 0
 debug = True
 for _ in range(300000):
     step_counter += 1
-    solver.step(50)  # (4000)
+    solver.step(1)  # (4000)
     # score.seg_tests(solver, False, val, layer='score')
     train_loss.append(round(solver.net.blobs['loss'].data.flatten()[0]))
 

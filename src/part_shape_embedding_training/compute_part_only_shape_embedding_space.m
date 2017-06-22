@@ -41,7 +41,6 @@ for part = 1:g_n_parts
 end
 
 
-
 %% Compute part shape embedding space
 
 t_begin = clock;
