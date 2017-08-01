@@ -1,0 +1,9 @@
+
+for f in $(ls -1 /home/adrian/Desktop/qualitative_blending_results/ExactPartMatch_semSeg/*.jpg); do
+	echo $f
+
+	command="$(printf "python image_semSeg_based_part_shape_retrieval.py --image %s" $f)"
+
+	echo $command
+	$command
+done

@@ -8,7 +8,7 @@ import numpy as np
 from global_variables import *
 from utilities_caffe import *
 
-from shape_interpolation.blending_ultilities import blend_2_inputs
+from shape_interpolation.blending_utilities import blend_2_inputs
 
 matplotlib.use('Agg')
 
@@ -16,23 +16,36 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(BASE_DIR))
 
 
-# --------------------------------               Predefined Parameters                 ---------------------------------
-image_embedding_caffemodel_part1 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_part1_iter_100000.caffemodel'
-image_embedding_prototxt_part1 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold_part1.prototxt'
-image_embedding_caffemodel_part2 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_part2_iter_100000.caffemodel'
-image_embedding_prototxt_part2 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold_part2.prototxt'
-image_embedding_caffemodel_part3 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_part3_iter_100000.caffemodel'
-image_embedding_prototxt_part3 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold_part3.prototxt'
-image_embedding_caffemodel_part4 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_part4_iter_100000.caffemodel'
-image_embedding_prototxt_part4 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold_part4.prototxt'
+# --------------------------               Predefined Parameters (No semSeg)                ----------------------------
+# image_embedding_caffemodel_part1 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_part1_iter_100000.caffemodel'
+# image_embedding_prototxt_part1 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold_part1.prototxt'
+# image_embedding_caffemodel_part2 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_part2_iter_100000.caffemodel'
+# image_embedding_prototxt_part2 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold_part2.prototxt'
+# image_embedding_caffemodel_part3 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_part3_iter_100000.caffemodel'
+# image_embedding_prototxt_part3 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold_part3.prototxt'
+# image_embedding_caffemodel_part4 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_part4_iter_100000.caffemodel'
+# image_embedding_prototxt_part4 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold_part4.prototxt'
+
+
+# --------------------------              Predefined Parameters (With semSeg)               ----------------------------
+image_embedding_caffemodel_part1 = '/media/adrian/Datasets/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/stacked_03001627_part1_iter_400000.caffemodel'
+image_embedding_prototxt_part1 = '/media/adrian/Datasets/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/image_embedding_manifoldNet_part1.prototxt'
+image_embedding_caffemodel_part2 = '/media/adrian/Datasets/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/stacked_03001627_part2_iter_400000.caffemodel'
+image_embedding_prototxt_part2 = '/media/adrian/Datasets/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/image_embedding_manifoldNet_part2.prototxt'
+image_embedding_caffemodel_part3 = '/media/adrian/Datasets/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/stacked_03001627_part3_iter_400000.caffemodel'
+image_embedding_prototxt_part3 = '/media/adrian/Datasets/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/image_embedding_manifoldNet_part3.prototxt'
+image_embedding_caffemodel_part4 = '/media/adrian/Datasets/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/stacked_03001627_part4_iter_400000.caffemodel'
+image_embedding_prototxt_part4 = '/media/adrian/Datasets/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/image_embedding_manifoldNet_part4.prototxt'
+
+
 
 
 codes_4_parts = {1: 'Armrests', 2: 'Back', 3: 'Legs', 4: 'Seat'}
 part1_id = 2
-part2_id = 3
+part2_id = 4
 
-for case_id in range(1, 81):
-    path = '/home/adrian/Desktop/qualitative blending results/part' + str(part1_id) + '+part' + str(part2_id) + '/case' + str(case_id) + '/'
+for case_id in range(1, 164+1):  # +1 because index goes from 1..(N-1)
+    path = '/home/adrian/Desktop/qualitative_blending_results/part' + str(part1_id) + '+part' + str(part2_id) + '/case' + str(case_id) + '/'
 
     if part1_id == 1:
         caffemodel1 = image_embedding_caffemodel_part1
@@ -40,6 +53,12 @@ for case_id in range(1, 81):
     elif part1_id == 2:
         caffemodel1 = image_embedding_caffemodel_part2
         prototxt1 = image_embedding_prototxt_part2
+    elif part1_id == 3:
+        caffemodel1 = image_embedding_caffemodel_part3
+        prototxt1 = image_embedding_prototxt_part3
+    elif part1_id == 4:
+        caffemodel1 = image_embedding_caffemodel_part4
+        prototxt1 = image_embedding_prototxt_part4
 
     if part2_id == 2:
         caffemodel2 = image_embedding_caffemodel_part2
@@ -47,6 +66,9 @@ for case_id in range(1, 81):
     elif part2_id == 3:
         caffemodel2 = image_embedding_caffemodel_part3
         prototxt2 = image_embedding_prototxt_part3
+    elif part2_id == 4:
+        caffemodel2 = image_embedding_caffemodel_part4
+        prototxt2 = image_embedding_prototxt_part4
 
 
     # ---------------------------------                Load Parameters                 ---------------------------------

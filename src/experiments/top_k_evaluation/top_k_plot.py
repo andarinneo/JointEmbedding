@@ -180,19 +180,14 @@ def run_top_k_blended_results(shape_embedding_space_file_txt_part1, image_embedd
     # blended_ranking_mat = ranking_mat_part1 + ranking_mat_part2 + ranking_mat_part3 + ranking_mat_part4
 
     if criteria == 1:
-        blended_mat = blended_dist_mat
-    elif criteria == 2:
         blended_dist_mat = dist_mat[1] + dist_mat[2]
         blended_mat = blended_dist_mat
-    elif criteria == 3:
+    elif criteria == 2:
         blended_dist_mat = dist_mat[0] + dist_mat[1] + dist_mat[2]
         blended_mat = blended_dist_mat
-    elif criteria == 4:
-        blended_ranking_mat = ranking_mat_part2 + ranking_mat_part3 + ranking_mat_part4
-        blended_mat = blended_ranking_mat
-    elif criteria == 5:
-        blended_ranking_mat = ranking_mat_part2 + ranking_mat_part3
-        blended_mat = blended_ranking_mat
+    elif criteria == 3:
+        blended_dist_mat = dist_mat[0] + dist_mat[1] + dist_mat[2] + dist_mat[3]
+        blended_mat = blended_dist_mat
 
 
     results_list = []
@@ -241,17 +236,56 @@ image_embedding_prototxt = '/media/adrian/Datasets/datasets/image_embedding/imag
 image_embedding_caffemodel = '/media/adrian/Datasets/datasets/image_embedding/image_embedding_testing_03001627_rcnn/snapshots_03001627_iter_40000.caffemodel'
 feat_name = 'image_embedding'
 
-# single_results = run_top_k_results(g_shape_embedding_space_file_txt, image_embedding_prototxt, image_embedding_caffemodel, feat_name, top_k_values)
+single_results = run_top_k_results(g_shape_embedding_space_file_txt, image_embedding_prototxt, image_embedding_caffemodel, feat_name, top_k_values)
 
 
 # My Single Part Manifold (part 1, including test shapes)
-g_shape_embedding_space_file_txt = '/media/adrian/Datasets/datasets/shape_embedding/backup/combined_part_shape_embedding_space_03001627_part1.txt'  # Is correct
-image_embedding_prototxt = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold_part1.prototxt'  # Is correct
-image_embedding_caffemodel = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_iter_100000_its.caffemodel'
-feat_name = 'image_embedding_part1'
+g_shape_embedding_space_file_txt_part1 = '/media/adrian/Datasets/datasets/shape_embedding/backup/combined_part_shape_embedding_space_03001627_part1.txt'  # Is correct
+image_embedding_prototxt_part1 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold_part1.prototxt'  # Is correct
+image_embedding_caffemodel_part1 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/old/snapshots_03001627_part1_iter_100000.caffemodel'
 
-# single_part_results_its = run_top_k_results(g_shape_embedding_space_file_txt, image_embedding_prototxt, image_embedding_caffemodel, feat_name, top_k_values)
 
+feat_name_part1 = 'image_embedding_part1'
+
+single_part1_results_its = run_top_k_results(g_shape_embedding_space_file_txt_part1, image_embedding_prototxt_part1, image_embedding_caffemodel_part1, feat_name_part1, top_k_values)
+
+
+# My Single Part Manifold (part 2, including test shapes)
+g_shape_embedding_space_file_txt_part2 = '/media/adrian/Datasets/datasets/shape_embedding/backup/combined_part_shape_embedding_space_03001627_part2.txt'  # Is correct
+image_embedding_prototxt_part2 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold_part2.prototxt'  # Is correct
+image_embedding_caffemodel_part2 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/old/snapshots_03001627_part2_iter_100000.caffemodel'
+feat_name_part2 = 'image_embedding_part2'
+
+single_part2_results_its = run_top_k_results(g_shape_embedding_space_file_txt_part2, image_embedding_prototxt_part2, image_embedding_caffemodel_part2, feat_name_part2, top_k_values)
+
+
+# My Single Part Manifold (part 3, including test shapes)
+g_shape_embedding_space_file_txt_part3 = '/media/adrian/Datasets/datasets/shape_embedding/backup/combined_part_shape_embedding_space_03001627_part3.txt'  # Is correct
+image_embedding_prototxt_part3 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold_part3.prototxt'  # Is correct
+image_embedding_caffemodel_part3 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/old/snapshots_03001627_part3_iter_100000.caffemodel'
+feat_name_part3 = 'image_embedding_part3'
+
+single_part3_results_its = run_top_k_results(g_shape_embedding_space_file_txt_part3, image_embedding_prototxt_part3, image_embedding_caffemodel_part3, feat_name_part3, top_k_values)
+
+
+# My Single Part Manifold (part 4, including test shapes)
+g_shape_embedding_space_file_txt_part4 = '/media/adrian/Datasets/datasets/shape_embedding/backup/combined_part_shape_embedding_space_03001627_part4.txt'  # Is correct
+image_embedding_prototxt_part4 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold_part4.prototxt'  # Is correct
+image_embedding_caffemodel_part4 = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/old/snapshots_03001627_part4_iter_100000.caffemodel'
+feat_name_part4 = 'image_embedding_part4'
+
+single_part4_results_its = run_top_k_results(g_shape_embedding_space_file_txt_part4, image_embedding_prototxt_part4, image_embedding_caffemodel_part4, feat_name_part4, top_k_values)
+
+criteria = 2
+blended_whole_and_part_results = run_top_k_blended_results(g_shape_embedding_space_file_txt_part1, image_embedding_prototxt_part1, image_embedding_caffemodel_part1, feat_name_part1,
+                                                 g_shape_embedding_space_file_txt_part2, image_embedding_prototxt_part2, image_embedding_caffemodel_part2, feat_name_part2,
+                                                 g_shape_embedding_space_file_txt_part3, image_embedding_prototxt_part3, image_embedding_caffemodel_part3, feat_name_part3,
+                                                 g_shape_embedding_space_file_txt_part4, image_embedding_prototxt_part4, image_embedding_caffemodel_part4, feat_name_part4,
+                                                 top_k_values, criteria)
+
+
+
+# ------  Without Semantic Segmentation  ------
 
 # My Single Part Manifold (Part 1)
 g_shape_embedding_space_file_txt_part1 = '/media/adrian/Datasets/datasets/shape_embedding/part_shape_embedding_space_03001627_part1.txt'  # Is correct
@@ -289,62 +323,89 @@ feat_name_part4 = 'image_embedding_part4'
 # single_part4_results = run_top_k_results(g_shape_embedding_space_file_txt_part4, image_embedding_prototxt_part4, image_embedding_caffemodel_part4, feat_name_part4, top_k_values)
 
 
-# # Compute the blended results from the 4 manifolds at the same time
-# blended_part_results_c1 = run_top_k_blended_results(g_shape_embedding_space_file_txt_part1, image_embedding_prototxt_part1, image_embedding_caffemodel_part1, feat_name_part1,
-#                                                  g_shape_embedding_space_file_txt_part2, image_embedding_prototxt_part2, image_embedding_caffemodel_part2, feat_name_part2,
-#                                                  g_shape_embedding_space_file_txt_part3, image_embedding_prototxt_part3, image_embedding_caffemodel_part3, feat_name_part3,
-#                                                  g_shape_embedding_space_file_txt_part4, image_embedding_prototxt_part4, image_embedding_caffemodel_part4, feat_name_part4,
-#                                                  top_k_values, 1)
+# ------  With Semantic Segmentation  ------
 
-blended_part_results_c2 = run_top_k_blended_results(g_shape_embedding_space_file_txt_part1, image_embedding_prototxt_part1, image_embedding_caffemodel_part1, feat_name_part1,
+# My Single Part Manifold (Part 1)
+g_shape_embedding_space_file_txt_part1 = '/media/adrian/Datasets/datasets/shape_embedding/part_shape_embedding_space_03001627_part1.txt'  # Is correct
+image_semSeg_embedding_prototxt_part1 = '/home/adrian/JointEmbedding/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/image_embedding_manifoldNet_part1.prototxt'  # Is correct
+image_semSeg_embedding_caffemodel_part1 = '/home/adrian/JointEmbedding/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/stacked_03001627_part1_iter_400000.caffemodel'
+feat_name_part1 = 'image_embedding_part1'
+
+# single_semSeg_part1_results = run_top_k_results(g_shape_embedding_space_file_txt_part1, image_semSeg_embedding_prototxt_part1, image_semSeg_embedding_caffemodel_part1, feat_name_part1, top_k_values)
+
+
+# My Single Part Manifold (Part 2)
+g_shape_embedding_space_file_txt_part2 = '/media/adrian/Datasets/datasets/shape_embedding/part_shape_embedding_space_03001627_part2.txt'  # Is correct
+image_semSeg_embedding_prototxt_part2 = '/home/adrian/JointEmbedding/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/image_embedding_manifoldNet_part2.prototxt'  # Is correct
+image_semSeg_embedding_caffemodel_part2 = '/home/adrian/JointEmbedding/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/stacked_03001627_part2_iter_400000.caffemodel'
+feat_name_part2 = 'image_embedding_part2'
+
+# single_semSeg_part2_results = run_top_k_results(g_shape_embedding_space_file_txt_part2, image_semSeg_embedding_prototxt_part2, image_semSeg_embedding_caffemodel_part2, feat_name_part2, top_k_values)
+
+
+# My Single Part Manifold (Part 3)
+g_shape_embedding_space_file_txt_part3 = '/media/adrian/Datasets/datasets/shape_embedding/part_shape_embedding_space_03001627_part3.txt'  # Is correct
+image_semSeg_embedding_prototxt_part3 = '/home/adrian/JointEmbedding/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/image_embedding_manifoldNet_part3.prototxt'  # Is correct
+image_semSeg_embedding_caffemodel_part3 = '/home/adrian/JointEmbedding/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/stacked_03001627_part3_iter_400000.caffemodel'
+feat_name_part3 = 'image_embedding_part3'
+
+# single_semSeg_part3_results = run_top_k_results(g_shape_embedding_space_file_txt_part3, image_semSeg_embedding_prototxt_part3, image_semSeg_embedding_caffemodel_part3, feat_name_part3, top_k_values)
+
+
+# My Single Part Manifold (Part 4)
+g_shape_embedding_space_file_txt_part4 = '/media/adrian/Datasets/datasets/shape_embedding/part_shape_embedding_space_03001627_part4.txt'  # Is correct
+image_semSeg_embedding_prototxt_part4 = '/home/adrian/JointEmbedding/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/image_embedding_manifoldNet_part4.prototxt'  # Is correct
+image_semSeg_embedding_caffemodel_part4 = '/home/adrian/JointEmbedding/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/stacked_03001627_part4_iter_400000.caffemodel'
+feat_name_part4 = 'image_embedding_part4'
+
+# single_semSeg_part4_results = run_top_k_results(g_shape_embedding_space_file_txt_part4, image_semSeg_embedding_prototxt_part4, image_semSeg_embedding_caffemodel_part4, feat_name_part4, top_k_values)
+
+
+
+# Compute the blended results from the 4 manifolds at the same time
+criteria = 2  # all parts except the seat
+blended_part_results = run_top_k_blended_results(g_shape_embedding_space_file_txt_part1, image_embedding_prototxt_part1, image_embedding_caffemodel_part1, feat_name_part1,
                                                  g_shape_embedding_space_file_txt_part2, image_embedding_prototxt_part2, image_embedding_caffemodel_part2, feat_name_part2,
                                                  g_shape_embedding_space_file_txt_part3, image_embedding_prototxt_part3, image_embedding_caffemodel_part3, feat_name_part3,
                                                  g_shape_embedding_space_file_txt_part4, image_embedding_prototxt_part4, image_embedding_caffemodel_part4, feat_name_part4,
-                                                 top_k_values, 2)
+                                                 top_k_values, criteria)
 
-# blended_part_results_c3 = run_top_k_blended_results(g_shape_embedding_space_file_txt_part1, image_embedding_prototxt_part1, image_embedding_caffemodel_part1, feat_name_part1,
-#                                                  g_shape_embedding_space_file_txt_part2, image_embedding_prototxt_part2, image_embedding_caffemodel_part2, feat_name_part2,
-#                                                  g_shape_embedding_space_file_txt_part3, image_embedding_prototxt_part3, image_embedding_caffemodel_part3, feat_name_part3,
-#                                                  g_shape_embedding_space_file_txt_part4, image_embedding_prototxt_part4, image_embedding_caffemodel_part4, feat_name_part4,
-#                                                  top_k_values, 3)
-#
-# blended_part_results_c4 = run_top_k_blended_results(g_shape_embedding_space_file_txt_part1, image_embedding_prototxt_part1, image_embedding_caffemodel_part1, feat_name_part1,
-#                                                  g_shape_embedding_space_file_txt_part2, image_embedding_prototxt_part2, image_embedding_caffemodel_part2, feat_name_part2,
-#                                                  g_shape_embedding_space_file_txt_part3, image_embedding_prototxt_part3, image_embedding_caffemodel_part3, feat_name_part3,
-#                                                  g_shape_embedding_space_file_txt_part4, image_embedding_prototxt_part4, image_embedding_caffemodel_part4, feat_name_part4,
-#                                                  top_k_values, 4)
-#
-# blended_part_results_c5 = run_top_k_blended_results(g_shape_embedding_space_file_txt_part1, image_embedding_prototxt_part1, image_embedding_caffemodel_part1, feat_name_part1,
-#                                                  g_shape_embedding_space_file_txt_part2, image_embedding_prototxt_part2, image_embedding_caffemodel_part2, feat_name_part2,
-#                                                  g_shape_embedding_space_file_txt_part3, image_embedding_prototxt_part3, image_embedding_caffemodel_part3, feat_name_part3,
-#                                                  g_shape_embedding_space_file_txt_part4, image_embedding_prototxt_part4, image_embedding_caffemodel_part4, feat_name_part4,
-#                                                  top_k_values, 5)
+blended_semSeg_part_results = run_top_k_blended_results(g_shape_embedding_space_file_txt_part1, image_semSeg_embedding_prototxt_part1, image_semSeg_embedding_caffemodel_part1, feat_name_part1,
+                                                        g_shape_embedding_space_file_txt_part2, image_semSeg_embedding_prototxt_part2, image_semSeg_embedding_caffemodel_part2, feat_name_part2,
+                                                        g_shape_embedding_space_file_txt_part3, image_semSeg_embedding_prototxt_part3, image_semSeg_embedding_caffemodel_part3, feat_name_part3,
+                                                        g_shape_embedding_space_file_txt_part4, image_semSeg_embedding_prototxt_part4, image_semSeg_embedding_caffemodel_part4, feat_name_part4,
+                                                        top_k_values, criteria)
 
 
 
-plt.xlabel('top k retrieval')
-plt.ylabel('Probability')
-plt.title('ExactMatch Dataset results')
-plt.plot(top_k_values, gt_results_its, 'k', label='GT Whole Chair (Includes test shapes)')
-plt.plot(top_k_values, single_results_its, 'b', label='My Whole Chair (Includes test shapes)')
-plt.plot(top_k_values, single_results, 'g', label='My Whole Chair')
-plt.plot(top_k_values, single_part_results_its, 'y', label='Single Part 1="armrest" (Includes test shapes)')
-plt.plot(top_k_values, single_part1_results, 'g--', label='Single Part 1="armrest"')
-plt.plot(top_k_values, single_part2_results, 'r--', label='Single Part 2="back"')
-plt.plot(top_k_values, single_part3_results, 'b--', label='Single Part 3="legs"')
-plt.plot(top_k_values, single_part4_results, 'k--', label='Single Part 4="seat"')
-# plt.plot(top_k_values, blended_part_results_c1, 'r-', label='Blended Parts, (Blended dist matrices 1.2.3.4)')
-plt.plot(top_k_values, blended_part_results_c2, 'r+-', label='Blended Parts, (Blended dist matrices 2.3)')
-# plt.plot(top_k_values, blended_part_results_c3, 'r*-', label='Blended Parts, (Blended dist matrices 1.2.3)')
-# plt.plot(top_k_values, blended_part_results_c4, 'r8-', label='Blended Parts, (blended rankings 2.3.4)')
-# plt.plot(top_k_values, blended_part_results_c5, 'r>-', label='Blended Parts, (blended rankings 2.3)')
+font = {'family': 'normal', 'weight': 'bold', 'size': 20}
+line_size = 3
+
+plt.xlabel('Top-k', fontdict=font)
+plt.ylabel('Accuracy', fontdict=font)
+plt.title('ExactMatch Dataset results', fontdict=font)
+# plt.plot(top_k_values, gt_results_its, 'g', label='GT Whole Chair (Includes test shapes)')
+# plt.plot(top_k_values, single_results_its, 'b', label='My Whole Chair (Includes test shapes)')
+plt.plot(top_k_values, single_results, '--', color='#0000ff', linewidth=line_size, label='Li, SiggAsia 2015')
+# plt.plot(top_k_values, [55, 70, 75, 80, 82, 82, 83, 85, 86, 86, 87, 91, 91, 93, 94, 94], '--', color='#ff0000', linewidth=line_size, label='HoG')
+# plt.plot(top_k_values, [38, 55, 68, 75, 80, 82, 85, 86, 89, 90, 92, 94, 94, 95, 95, 95], '--', color='#800080', linewidth=line_size, label='AlexNet (fine tune)')
+# plt.plot(top_k_values, [33, 53, 66, 70, 75, 76, 77, 80, 82, 84, 85, 86, 86, 86, 87, 87], '--', color='#ffa500', linewidth=line_size, label='Siamese (0 nbor)')
+# plt.plot(top_k_values, [27, 46, 52, 55, 60, 61, 63, 64, 66, 67, 72, 75, 78, 81, 82, 83], '--', color='#00bfbf', linewidth=line_size, label='Siamese (64 nbor)')
+plt.plot([10], [82], 'o', color='#000000', markersize=10, label='Girdhar, ECCV 2016')  # This is the only result provided in the supplemental material
+plt.plot(top_k_values, blended_part_results, '--', color='#9acd32', linewidth=line_size, label='Li SiggAsia 2015 Parts, (Blended Parts)')
+plt.plot(top_k_values, blended_semSeg_part_results, color='#20b2aa', linewidth=line_size, label='Ours, (Blended Parts)')
+plt.plot(top_k_values, single_part1_results_its, '--', color='#dAf7A6', linewidth=line_size, label='Part1, (Blended Whole+Parts)')
+plt.plot(top_k_values, single_part2_results_its, '--', color='#ffC300', linewidth=line_size, label='Part2, (Blended Whole+Parts)')
+plt.plot(top_k_values, single_part3_results_its, '--', color='#ff5733', linewidth=line_size, label='Part3, (Blended Whole+Parts)')
+plt.plot(top_k_values, single_part4_results_its, '--', color='#900c3f', linewidth=line_size, label='Part4, (Blended Whole+Parts)')
+plt.plot(top_k_values, blended_whole_and_part_results, color='#901266', linewidth=line_size, label='(Blended Whole+Parts)')
 plt.legend(loc=4)
 
 ax = plt.gca()
 ax.grid(which='major', linestyle='-', linewidth='0.5', color='black')  # Customize the major grid
 ax.minorticks_on()
 ax.grid(which='minor', linestyle=':', linewidth='0.4 ', color='red')  # Customize the minor grid
-plt.axis([0, 32, 0, 100])
+plt.axis([1, 31, 0, 100])
 plt.show()
 
 lolo = 1

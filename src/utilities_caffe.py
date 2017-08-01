@@ -116,8 +116,8 @@ def extract_cnn_features(img_filelist, img_root, prototxt, caffemodel, feat_name
                 for idx in range(end_idx-start_idx):
                     txn.put('{:0>10d}'.format(start_idx+idx), datum_strings[idx])
         env.close()
-                
-                
+
+
 def stack_caffe_models(prototxt, base_model, top_model, stacked_model, caffe_path=None):
     if caffe_path:
         sys.path.append(os.path.join(caffe_path, 'python'))
