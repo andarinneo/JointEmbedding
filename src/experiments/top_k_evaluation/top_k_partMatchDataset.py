@@ -52,7 +52,7 @@ def run_top_k_blended_results(shape_embedding_space_file_txt_part1, image_embedd
 
     top_k_mat = []
     n_cases_list = []
-    n_experiments = 1  # 5
+    n_experiments = 6  # 6
     for experiment in range(n_experiments):
         # ----------------          Load manifold and N model values          ----------------
         if experiment == 0:
@@ -62,19 +62,23 @@ def run_top_k_blended_results(shape_embedding_space_file_txt_part1, image_embedd
         elif experiment == 1:
             partA_id = 1
             partB_id = 3
-            n_cases = 40
+            n_cases = 112
         elif experiment == 2:
             partA_id = 2
             partB_id = 3
-            n_cases = 164
+            n_cases = 308
         elif experiment == 3:
             partA_id = 1
             partB_id = 4
-            n_cases = 30
+            n_cases = 111
         elif experiment == 4:
             partA_id = 2
             partB_id = 4
-            n_cases = 56
+            n_cases = 164
+        elif experiment == 5:
+            partA_id = 3
+            partB_id = 4
+            n_cases = 90
 
         subpath = path + '/' + 'part' + str(partA_id) + '+part' + str(partB_id)
 
@@ -142,8 +146,8 @@ def run_top_k_blended_results(shape_embedding_space_file_txt_part1, image_embedd
                 bool_vec.append(bool_val)
 
             n_correct = sum(bool_vec)
-            top_k_list.append((100 * n_correct / n_cases))
-            print 'RESULTS:', n_correct, 'correct matches using top k:', top_k, ', percentage:', (100 * n_correct / n_cases), '%'
+            top_k_list.append((100.0 * n_correct / n_cases))
+            print 'RESULTS:', n_correct, 'correct matches using top k:', top_k, ', percentage:', (100.0 * n_correct / n_cases), '%'
 
         top_k_mat.append(top_k_list)
 

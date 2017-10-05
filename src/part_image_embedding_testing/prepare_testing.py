@@ -28,8 +28,8 @@ for line in fileinput.input(g_part_image_embedding_testing_prototxt, inplace=Tru
     sys.stdout.write(line) 
 
 
-part_id = 4
-args.iter_num = 100000
+part_id = 1
+args.iter_num = 400000
 
 # If no batch training
 part_image_embedding_caffemodel = os.path.join(g_part_image_embedding_training_folder, 'single_manifold_snapshots', 'snapshots%s_part%d_iter_%d.caffemodel'%(g_shapenet_synset_set_handle, part_id, args.iter_num))
@@ -41,8 +41,8 @@ part_image_embedding_caffemodel = os.path.join(g_part_image_embedding_training_f
 part_image_embedding_caffemodel_stacked = os.path.join(g_part_image_embedding_testing_folder, 'snapshots%s_part%d_iter_%d.caffemodel'%(g_shapenet_synset_set_handle, part_id, args.iter_num))
 
 
-stack_caffe_models(prototxt=g_part_image_embedding_testing_prototxt,
-                   base_model=g_fine_tune_caffemodel,
-                   top_model=part_image_embedding_caffemodel,
-                   stacked_model=part_image_embedding_caffemodel_stacked,
-                   caffe_path=g_caffe_install_path)
+# stack_caffe_models(prototxt=g_part_image_embedding_testing_prototxt,
+#                    base_model=g_fine_tune_caffemodel,
+#                    top_model=part_image_embedding_caffemodel,
+#                    stacked_model=part_image_embedding_caffemodel_stacked,
+#                    caffe_path=g_caffe_install_path)

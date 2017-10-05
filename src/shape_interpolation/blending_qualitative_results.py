@@ -44,7 +44,7 @@ codes_4_parts = {1: 'Armrests', 2: 'Back', 3: 'Legs', 4: 'Seat'}
 part1_id = 2
 part2_id = 4
 
-for case_id in range(1, 164+1):  # +1 because index goes from 1..(N-1)
+for case_id in range(156, 164+1):  # +1 because index goes from 1..(N-1)
     path = '/home/adrian/Desktop/qualitative_blending_results/part' + str(part1_id) + '+part' + str(part2_id) + '/case' + str(case_id) + '/'
 
     if part1_id == 1:

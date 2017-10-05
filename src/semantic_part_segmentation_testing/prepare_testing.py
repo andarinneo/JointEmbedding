@@ -21,6 +21,12 @@ parser.add_argument('--iter_num', '-n', help='Use image embedding model trained 
 args = parser.parse_args()
 
 
+# BORRAR - solo para manifold combinado
+g_part_image_semSeg_embedding_training_folder = '/media/adrian/Datasets/datasets/image_embedding/combinedShape_part_image_semSeg_embedding_training_03001627_fc_layers'
+g_part_image_semSeg_embedding_testing_folder = '/media/adrian/Datasets/datasets/image_embedding/combinedShape_part_image_semSeg_embedding_testing_03001627_manifoldNet'
+# END BORRAR - solo para manifold combinado
+
+
 # Loop this for every part
 part_id = 4
 g_network_architecture_name = 'manifoldNet'
