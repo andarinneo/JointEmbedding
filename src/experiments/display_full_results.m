@@ -3,6 +3,8 @@ clear all; close all; clc;
 BASEDIR = fullfile(mfilename('fullpath'),'../');
 % addpath(fullfile(BASEDIR, 'results'));
 
+
+
 % Image to shape results
 sammon100_clutter_105models = importdata('sammon100_clutter_image2shape_topK_accuracy_105models.txt');
 hog_without_view_clutter_oracle_105models = importdata('hog_withoutview_clutter_image2shape_topK_accuracy_105models.txt');
