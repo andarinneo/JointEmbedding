@@ -18,7 +18,7 @@ def run_top_k_blended_results(shape_embedding_space_file_txt_part1, image_embedd
                               shape_embedding_space_file_txt_part2, image_embedding_prototxt_part2, image_embedding_caffemodel_part2, feature_name_part2,
                               shape_embedding_space_file_txt_part3, image_embedding_prototxt_part3, image_embedding_caffemodel_part3, feature_name_part3,
                               shape_embedding_space_file_txt_part4, image_embedding_prototxt_part4, image_embedding_caffemodel_part4, feature_name_part4,
-                              top_k_values):
+                              top_k_values, normalize):
 
     path = '/home/adrian/JointEmbedding/src/experiments/ExactPartMatchChairsDataset'
 
@@ -101,6 +101,11 @@ def run_top_k_blended_results(shape_embedding_space_file_txt_part1, image_embedd
         # ----------------          Obtain manifold coordinates for shapes part A         ----------------
         shape_embedding_array_A = shape_embedding_space_np[partA_id-1, shape_list_np, :]
 
+        if normalize:
+            mean_A = shape_embedding_array_A.mean()
+            std_A = shape_embedding_array_A.std()
+            norm_shape_embedding_array_A = (shape_embedding_array_A - mean_A) / std_A
+
         # Evaluate image in network for part A
         image_embedding_array_A = extract_cnn_features(img_filelist=imgname_filelist_partA,
                                                        img_root=subpath,
@@ -111,12 +116,23 @@ def run_top_k_blended_results(shape_embedding_space_file_txt_part1, image_embedd
                                                        mean_file=g_mean_file)
         image_embedding_array_A = np.asarray(image_embedding_array_A)
 
+        if normalize:
+            norm_image_embedding_array_A = (image_embedding_array_A - mean_A) / std_A
+
         # Compute distances between shape and estimation
-        dist_mat_A = distance_matrix(image_embedding_array_A, shape_embedding_array_A)
+        if not normalize:
+            dist_mat_A = distance_matrix(image_embedding_array_A, shape_embedding_array_A)
+        else:
+            dist_mat_A = distance_matrix(norm_image_embedding_array_A, norm_shape_embedding_array_A)
 
 
         # ----------------          Obtain manifold coordinates for shapes part B         ----------------
         shape_embedding_array_B = shape_embedding_space_np[partB_id-1, shape_list_np, :]
+
+        if normalize:
+            mean_B = shape_embedding_array_B.mean()
+            std_B = shape_embedding_array_B.std()
+            norm_shape_embedding_array_B = (shape_embedding_array_B - mean_B) / std_B
 
         # Evaluate image in network for part B
         image_embedding_array_B = extract_cnn_features(img_filelist=imgname_filelist_partB,
@@ -128,8 +144,14 @@ def run_top_k_blended_results(shape_embedding_space_file_txt_part1, image_embedd
                                                        mean_file=g_mean_file)
         image_embedding_array_B = np.asarray(image_embedding_array_B)
 
+        if normalize:
+            norm_image_embedding_array_B = (image_embedding_array_B - mean_B) / std_B
+
         # Compute distances between shape and estimation
-        dist_mat_B = distance_matrix(image_embedding_array_B, shape_embedding_array_B)
+        if not normalize:
+            dist_mat_B = distance_matrix(image_embedding_array_B, shape_embedding_array_B)
+        else:
+            dist_mat_B = distance_matrix(norm_image_embedding_array_B, norm_shape_embedding_array_B)
 
 
         # ----------------          blend parts by minimizing the combined distances         ----------------
@@ -172,10 +194,53 @@ def run_top_k_blended_results(shape_embedding_space_file_txt_part1, image_embedd
 
 # SERIES OF VALUES FOR TOP K
 
-max_top_k = 20
-
-# top_k_values = range(1, 32, 2)
+max_top_k = 185  # max 185
 top_k_values = range(1, max_top_k, 1)
+
+
+# ------  Li Yi Siggraph Asia 2015  ------
+
+# My Single Manifold
+g_shape_embedding_space_file_txt = '/home/adrian/Desktop/03001627/shape_embedding_space_03001627.txt'  # Is correct
+image_embedding_prototxt = '/media/adrian/Datasets/datasets/image_embedding/image_embedding_testing_03001627_rcnn/image_embedding_rcnn.prototxt'  # Is correct
+image_embedding_caffemodel = '/media/adrian/Datasets/datasets/image_embedding/image_embedding_testing_03001627_rcnn/snapshots_03001627_iter_40000.caffemodel'
+feat_name = 'image_embedding'
+
+
+# ------  With Semantic Segmentation, original HoG  ------
+
+
+# My Single Blended Part Manifold (Part 1)
+g_shape_embedding_space_file_txt_part1 = '/media/adrian/Datasets/datasets/shape_embedding/backup/combined_part_shape_embedding_space_03001627_part1.txt'  # Is correct
+image_semSeg_embedding_prototxt_part1 = '/home/adrian/JointEmbedding/datasets/image_embedding/combinedShape_part_image_semSeg_embedding_testing_03001627_manifoldNet/image_embedding_manifoldNet_part1.prototxt'  # Is correct
+image_semSeg_embedding_caffemodel_part1 = '/home/adrian/JointEmbedding/datasets/image_embedding/combinedShape_part_image_semSeg_embedding_testing_03001627_manifoldNet/stacked_03001627_part1_iter_400000.caffemodel'
+feat_name_part1 = 'image_embedding_part1'
+
+# My Single Blended Part Manifold (part 2, including test shapes)
+g_shape_embedding_space_file_txt_part2 = '/media/adrian/Datasets/datasets/shape_embedding/backup/combined_part_shape_embedding_space_03001627_part2.txt'  # Is correct
+image_semSeg_embedding_prototxt_part2 = '/home/adrian/JointEmbedding/datasets/image_embedding/combinedShape_part_image_semSeg_embedding_testing_03001627_manifoldNet/image_embedding_manifoldNet_part2.prototxt'  # Is correct
+image_semSeg_embedding_caffemodel_part2 = '/home/adrian/JointEmbedding/datasets/image_embedding/combinedShape_part_image_semSeg_embedding_testing_03001627_manifoldNet/stacked_03001627_part2_iter_400000.caffemodel'
+feat_name_part2 = 'image_embedding_part2'
+
+# My Single Blended Part Manifold (part 3, including test shapes)
+g_shape_embedding_space_file_txt_part3 = '/media/adrian/Datasets/datasets/shape_embedding/backup/combined_part_shape_embedding_space_03001627_part3.txt'  # Is correct
+image_semSeg_embedding_prototxt_part3 = '/home/adrian/JointEmbedding/datasets/image_embedding/combinedShape_part_image_semSeg_embedding_testing_03001627_manifoldNet/image_embedding_manifoldNet_part3.prototxt'  # Is correct
+image_semSeg_embedding_caffemodel_part3 = '/home/adrian/JointEmbedding/datasets/image_embedding/combinedShape_part_image_semSeg_embedding_testing_03001627_manifoldNet/stacked_03001627_part3_iter_400000.caffemodel'
+feat_name_part3 = 'image_embedding_part3'
+
+# My Single Blended Part Manifold (part 4, including test shapes)
+g_shape_embedding_space_file_txt_part4 = '/media/adrian/Datasets/datasets/shape_embedding/backup/combined_part_shape_embedding_space_03001627_part4.txt'  # Is correct
+image_semSeg_embedding_prototxt_part4 = '/home/adrian/JointEmbedding/datasets/image_embedding/combinedShape_part_image_semSeg_embedding_testing_03001627_manifoldNet/image_embedding_manifoldNet_part4.prototxt'  # Is correct
+image_semSeg_embedding_caffemodel_part4 = '/home/adrian/JointEmbedding/datasets/image_embedding/combinedShape_part_image_semSeg_embedding_testing_03001627_manifoldNet/stacked_03001627_part4_iter_400000.caffemodel'
+feat_name_part4 = 'image_embedding_part4'
+
+criteria = 4
+blended_whole_and_part_results = run_top_k_blended_results(g_shape_embedding_space_file_txt_part1, image_semSeg_embedding_prototxt_part1, image_semSeg_embedding_caffemodel_part1, feat_name_part1,
+                                                           g_shape_embedding_space_file_txt_part2, image_semSeg_embedding_prototxt_part2, image_semSeg_embedding_caffemodel_part2, feat_name_part2,
+                                                           g_shape_embedding_space_file_txt_part3, image_semSeg_embedding_prototxt_part3, image_semSeg_embedding_caffemodel_part3, feat_name_part3,
+                                                           g_shape_embedding_space_file_txt_part4, image_semSeg_embedding_prototxt_part4, image_semSeg_embedding_caffemodel_part4, feat_name_part4,
+                                                           top_k_values, criteria)
+
 
 
 # ------  Without Semantic Segmentation  ------
@@ -233,28 +298,48 @@ feat_name_part4 = 'image_embedding_part4'
 
 
 # Compute the blended results from the 4 manifolds at the same time
+
+blended_LiYi_results = run_top_k_blended_results(g_shape_embedding_space_file_txt, image_embedding_prototxt, image_embedding_caffemodel, feat_name,
+                                                 g_shape_embedding_space_file_txt, image_embedding_prototxt, image_embedding_caffemodel, feat_name,
+                                                 g_shape_embedding_space_file_txt, image_embedding_prototxt, image_embedding_caffemodel, feat_name,
+                                                 g_shape_embedding_space_file_txt, image_embedding_prototxt, image_embedding_caffemodel, feat_name,
+                                                 top_k_values, False)
+
+
 blended_part_results = run_top_k_blended_results(g_shape_embedding_space_file_txt_part1, image_embedding_prototxt_part1, image_embedding_caffemodel_part1, feat_name_part1,
                                                  g_shape_embedding_space_file_txt_part2, image_embedding_prototxt_part2, image_embedding_caffemodel_part2, feat_name_part2,
                                                  g_shape_embedding_space_file_txt_part3, image_embedding_prototxt_part3, image_embedding_caffemodel_part3, feat_name_part3,
                                                  g_shape_embedding_space_file_txt_part4, image_embedding_prototxt_part4, image_embedding_caffemodel_part4, feat_name_part4,
-                                                 top_k_values)
+                                                 top_k_values, False)
 
-blended_semSeg_part_results = run_top_k_blended_results(g_shape_embedding_space_file_txt_part1, image_semSeg_embedding_prototxt_part1, image_semSeg_embedding_caffemodel_part1, feat_name_part1,
-                                                        g_shape_embedding_space_file_txt_part2, image_semSeg_embedding_prototxt_part2, image_semSeg_embedding_caffemodel_part2, feat_name_part2,
-                                                        g_shape_embedding_space_file_txt_part3, image_semSeg_embedding_prototxt_part3, image_semSeg_embedding_caffemodel_part3, feat_name_part3,
-                                                        g_shape_embedding_space_file_txt_part4, image_semSeg_embedding_prototxt_part4, image_semSeg_embedding_caffemodel_part4, feat_name_part4,
-                                                        top_k_values)
+# blended_semSeg_part_results = run_top_k_blended_results(g_shape_embedding_space_file_txt_part1, image_semSeg_embedding_prototxt_part1, image_semSeg_embedding_caffemodel_part1, feat_name_part1,
+#                                                         g_shape_embedding_space_file_txt_part2, image_semSeg_embedding_prototxt_part2, image_semSeg_embedding_caffemodel_part2, feat_name_part2,
+#                                                         g_shape_embedding_space_file_txt_part3, image_semSeg_embedding_prototxt_part3, image_semSeg_embedding_caffemodel_part3, feat_name_part3,
+#                                                         g_shape_embedding_space_file_txt_part4, image_semSeg_embedding_prototxt_part4, image_semSeg_embedding_caffemodel_part4, feat_name_part4,
+#                                                         top_k_values, False)
+
+blended_norm_semSeg_part_results = run_top_k_blended_results(g_shape_embedding_space_file_txt_part1, image_semSeg_embedding_prototxt_part1, image_semSeg_embedding_caffemodel_part1, feat_name_part1,
+                                                             g_shape_embedding_space_file_txt_part2, image_semSeg_embedding_prototxt_part2, image_semSeg_embedding_caffemodel_part2, feat_name_part2,
+                                                             g_shape_embedding_space_file_txt_part3, image_semSeg_embedding_prototxt_part3, image_semSeg_embedding_caffemodel_part3, feat_name_part3,
+                                                             g_shape_embedding_space_file_txt_part4, image_semSeg_embedding_prototxt_part4, image_semSeg_embedding_caffemodel_part4, feat_name_part4,
+                                                             top_k_values, True)
 
 
 
 font = {'family': 'normal', 'weight': 'bold', 'size': 20}
 line_size = 3
 
+my_dpi = 96
+plt.figure(figsize=(1200/my_dpi, 1000/my_dpi), dpi=my_dpi)
+
 plt.xlabel('Top-k', fontdict=font)
 plt.ylabel('Accuracy', fontdict=font)
-plt.title('ExactPartMatch Dataset results', fontdict=font)
-plt.plot(top_k_values, blended_part_results, '--', color='#9acd32', linewidth=line_size, label='Li SiggAsia 2015 Parts, (Blended Parts)')
-plt.plot(top_k_values, blended_semSeg_part_results, color='#20b2aa', linewidth=line_size, label='Ours, (Blended Parts)')
+plt.title('ExactPartMatch Mean results', fontdict=font)
+plt.plot(top_k_values, blended_LiYi_results, '--', color='#0000ff', linewidth=line_size, label='Li, SiggAsia 15')
+plt.plot(top_k_values, blended_whole_and_part_results, '--', color='#d640a4', linewidth=line_size, label='Ours, (original HoG)')
+plt.plot(top_k_values, blended_part_results, '--', color='#9acd32', linewidth=line_size, label='Ours, (without SemSeg)')
+plt.plot(top_k_values, blended_norm_semSeg_part_results, color='#20b2aa', linewidth=line_size, label='Ours, (Blended Parts)')
+plt.plot(top_k_values, (np.asarray(top_k_values)/187.0)*100, '--', color='#000000', linewidth=line_size, label='Chance')
 plt.legend(loc=4)
 
 ax = plt.gca()

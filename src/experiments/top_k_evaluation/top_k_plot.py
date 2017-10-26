@@ -395,20 +395,21 @@ plt.plot(top_k_values, [38, 55, 68, 75, 80, 82, 85, 86, 89, 90, 92, 94, 94, 95, 
 plt.plot(top_k_values, [33, 53, 66, 70, 75, 76, 77, 80, 82, 84, 85, 86, 86, 86, 87, 87], '--', color='#ffa500', linewidth=line_size, label='Siamese (0 nbor)')
 plt.plot(top_k_values, [27, 46, 52, 55, 60, 61, 63, 64, 66, 67, 72, 75, 78, 81, 82, 83], '--', color='#00bfbf', linewidth=line_size, label='Siamese (64 nbor)')
 plt.plot([10], [82], 'o', color='#000000', markersize=10, label='Girdhar, ECCV 2016')  # This is the only result provided in the supplemental material
-plt.plot(top_k_values, blended_part_results, '--', color='#9acd32', linewidth=line_size, label='Li SiggAsia 2015 Parts, (Blended Parts)')
+# plt.plot(top_k_values, blended_part_results, '--', color='#9acd32', linewidth=line_size, label='Li SiggAsia 2015 Parts, (Blended Parts)')
 plt.plot(top_k_values, blended_semSeg_part_results, color='#20b2aa', linewidth=line_size, label='Ours, (Blended Parts)')
 # plt.plot(top_k_values, single_part1_results_its, '--', color='#dAf7A6', linewidth=line_size, label='Part1, (Blended Whole+Parts)')
 # plt.plot(top_k_values, single_part2_results_its, '--', color='#ffC300', linewidth=line_size, label='Part2, (Blended Whole+Parts)')
 # plt.plot(top_k_values, single_part3_results_its, '--', color='#ff5733', linewidth=line_size, label='Part3, (Blended Whole+Parts)')
 # plt.plot(top_k_values, single_part4_results_its, '--', color='#900c3f', linewidth=line_size, label='Part4, (Blended Whole+Parts)')
-plt.plot(top_k_values, blended_whole_and_part_results, color='#901266', linewidth=line_size, label='(Blended Whole+Parts)')
+plt.plot(top_k_values, blended_whole_and_part_results, color='#d640a4', linewidth=line_size, label='Ours, (Original HoG, Blended Parts)')
+plt.plot(top_k_values, (np.asarray(top_k_values)/105.0)*100, '--', color='#000000', linewidth=line_size, label='Chance')
 plt.legend(loc=4)
 
 ax = plt.gca()
 ax.grid(which='major', linestyle='-', linewidth='0.5', color='black')  # Customize the major grid
 ax.minorticks_on()
 ax.grid(which='minor', linestyle=':', linewidth='0.4 ', color='red')  # Customize the minor grid
-plt.axis([1, 31, 0, 100])
+plt.axis([1, 30, 0, 100])
 plt.show()
 
 lolo = 1

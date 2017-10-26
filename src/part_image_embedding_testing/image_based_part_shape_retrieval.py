@@ -35,7 +35,7 @@ if args.prototxt:
     image_embedding_prototxt = args.prototxt
 
 
-part_id = 3
+part_id = 4
 print 'My training'
 # My training
 # g_shape_embedding_space_file_txt = '/media/adrian/Datasets/datasets/shape_embedding/part_shape_embedding_space_03001627_part' + str(part_id) + '.txt'  # Is correct
@@ -43,18 +43,14 @@ print 'My training'
 # image_embedding_prototxt = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold.prototxt'
 # image_embedding_caffemodel = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_iter_40000.caffemodel'
 
-
 # My Single Part Manifold (Part X)
-g_shape_embedding_space_file_txt = '/media/adrian/Datasets/datasets/shape_embedding/part_shape_embedding_space_03001627_part' + str(part_id) + '.txt'  # Is correct
-image_embedding_prototxt = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/image_embedding_rcnn_single_manifold_part' + str(part_id) + '.prototxt'  # Is correct
-image_embedding_caffemodel = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_part' + str(part_id) + '_iter_100000.caffemodel'
+g_shape_embedding_space_file_txt_part4 = '/media/adrian/Datasets/datasets/shape_embedding/part_shape_embedding_space_03001627_part4.txt'  # Is correct
+image_embedding_prototxt = '/home/adrian/JointEmbedding/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/image_embedding_manifoldNet_part' + str(part_id) + '.prototxt'  # Is correct
+image_embedding_caffemodel = '/home/adrian/JointEmbedding/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/stacked_03001627_part' + str(part_id) + '_iter_400000.caffemodel'
 
 
-
-image_embedding_prototxt = '/home/adrian/JointEmbedding/src/semantic_part_segmentation/test-manifold-alexnet.prototxt'
-image_embedding_caffemodel = '/home/adrian/JointEmbedding/semanticFCN/shapenet-manifold/snapshot/train-manifold_iter_30000.caffemodel'
-
-
+# args.image = '/home/adrian/Desktop/image_embedding_images/img_filelist.txt'
+# img_root = '/home/adrian/Desktop/image_embedding_images/'
 
 print 'Computing image embedding for %s...'%(args.image)
 
@@ -67,6 +63,11 @@ image_embedding_array = extract_cnn_features(img_filelist=args.image,
                                              mean_file=g_mean_file)
 image_embedding = image_embedding_array[0]
 
+# file = open(img_root+'img_embeddings_part' + str(part_id) + '.txt', 'w')
+# for item in image_embedding_array:
+#     str_item = ','.join(str(e) for e in item)
+#     file.write(str_item + '\n')
+# file.close()
 
 print 'Loading shape embedding space from %s...'%(g_shape_embedding_space_file_txt)
 shape_embedding_space = [np.array([float(value) for value in line.strip().split(' ')]) for line in open(g_shape_embedding_space_file_txt, 'r')]
