@@ -42,29 +42,31 @@ random.shuffle(image_indexes)
 
 # Remove the samples included in the ExactMatchChair dataset
 # Load
-shape_names_file = '/home/adrian/JointEmbedding/src/experiments/ExactMatchChairsDataset/filelist_exactmatch_chair_105.txt'
-shape_names = [line.strip() for line in open(shape_names_file, 'r')]
+# shape_names_file = '/home/adrian/JointEmbedding/src/experiments/ExactMatchChairsDataset/filelist_exactmatch_chair_105.txt'
+# shape_names = [line.strip() for line in open(shape_names_file, 'r')]
 
-counter = 0
+# counter = 0
 # for idx, train_val in enumerate(train_val_split):
 for idx in image_indexes:
-    # ExactMatchChair dataset
-    filename = filelist[idx]
-    if any(x in filename for x in shape_names):
-        counter += 1
+    # # ExactMatchChair dataset
+    # filename = filelist[idx]
+    # if any(x in filename for x in shape_names):
+    #     counter += 1
+    # else:
+
+    # Not ExactMatchChair dataset, if you want to eliminate those samples indent the code again
+    train_val = train_val_split[idx]
+    if train_val:
+        filelist_train.write(filelist[idx]+'\n')
+        imageid2shapeid_train.write(imageid2shapeid[idx]+'\n')
+        labels_filelist_train.write(labels_filelist[idx]+'\n')
     else:
-    # ExactMatchChair dataset
-        train_val = train_val_split[idx]
-        if train_val:
-            filelist_train.write(filelist[idx]+'\n')
-            imageid2shapeid_train.write(imageid2shapeid[idx]+'\n')
-            labels_filelist_train.write(labels_filelist[idx]+'\n')
-        else:
-            filelist_val.write(filelist[idx]+'\n')
-            imageid2shapeid_val.write(imageid2shapeid[idx]+'\n')
-            labels_filelist_val.write(labels_filelist[idx]+'\n')
-        shuffled_image_indexes.write(str(idx)+'\n')
-        train_val_split_file.write(str(train_val)+'\n')
+        filelist_val.write(filelist[idx]+'\n')
+        imageid2shapeid_val.write(imageid2shapeid[idx]+'\n')
+        labels_filelist_val.write(labels_filelist[idx]+'\n')
+    shuffled_image_indexes.write(str(idx)+'\n')
+    train_val_split_file.write(str(train_val)+'\n')
+
 
 filelist_train.close()
 filelist_val.close()

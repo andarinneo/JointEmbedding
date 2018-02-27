@@ -10,6 +10,7 @@ from global_variables import *
 
 global_variables_m_file = open('./global_variables.m', 'w')
 global_variables_m_file.write('g_shapenet_synset_set = {%s};\n' %(''.join(['\''+synset+'\'' for synset in g_shapenet_synset_set])))
+global_variables_m_file.write('g_part_labels = {%s};\n' %(''.join(['\''+part+'\',' for key, part in g_part_labels.iteritems()])))
 global_variables_m_file.write('\n');
 global_variables_m_file.write('g_piotr_toolbox_path = \'%s\';\n' %(g_piotr_toolbox_path))
 global_variables_m_file.write('g_minfunc_2012_path = \'%s\';\n' %(g_minfunc_2012_path))

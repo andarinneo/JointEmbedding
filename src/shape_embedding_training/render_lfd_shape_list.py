@@ -37,6 +37,9 @@ if __name__ == '__main__':
         if len(shape_list) > 32:
             command = command + ' > /dev/null 2>&1'
         commands.append(command)
+
+        # break
+
     print('done(%d commands)'%(len(commands)))
 
 

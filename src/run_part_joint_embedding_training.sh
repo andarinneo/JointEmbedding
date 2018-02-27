@@ -45,13 +45,13 @@ fi
 #  cd ..;
 #fi
 
-## Step 02
-## Generate train/val lmdbs of synthetic images
-#if [ "$first" -le 2 ] && [ "$last" -ge 2 ]; then
-#  cd image_embedding_training;
-#  python ./gen_syn_images_lmdbs.py
-#  cd ..;
-#fi
+# Step 02
+# Generate train/val lmdbs of synthetic images
+if [ "$first" -le 2 ] && [ "$last" -ge 2 ]; then
+  cd image_embedding_training;
+  python ./gen_syn_images_lmdbs.py
+  cd ..;
+fi
 
 # Step 03
 # Generate train/val lmdbs of shape embedding

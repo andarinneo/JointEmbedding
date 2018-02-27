@@ -43,9 +43,11 @@ for part in range(1, g_n_parts+1):
 
     if os.path.exists(partX_shape_embedding_lmdb_train):
         shutil.rmtree(partX_shape_embedding_lmdb_train)
+        print 'purge the witch...'
     env_train = lmdb.open(partX_shape_embedding_lmdb_train, map_size=int(1e12))
     if os.path.exists(partX_shape_embedding_lmdb_val):
         shutil.rmtree(partX_shape_embedding_lmdb_val)
+        print 'purge the witch...'
     env_val = lmdb.open(partX_shape_embedding_lmdb_val, map_size=int(1e12))
 
     cache_train = dict()
@@ -53,6 +55,9 @@ for part in range(1, g_n_parts+1):
     txn_commit_count = 512
 
     report_step = 10000
+
+    # shuffled_image_indexes = shuffled_image_indexes[0:20]  # BORRAR
+
     for counter in range(len(shuffled_image_indexes)):
         idx = shuffled_image_indexes[counter]
         train_val = train_val_split[counter]
@@ -65,18 +70,18 @@ for part in range(1, g_n_parts+1):
         elif train_val == 0:
             cache_val[key] = value
 
-        if (len(cache_train) == txn_commit_count or counter == len(shuffled_image_indexes)-1):
+        if len(cache_train) == txn_commit_count or counter == len(shuffled_image_indexes)-1:
             with env_train.begin(write=True) as txn_train:
                 for k, v in sorted(cache_train.iteritems()):
                     txn_train.put(k, v)
             cache_train.clear()
-        if (len(cache_val) == txn_commit_count or counter == len(shuffled_image_indexes)-1):
+        if len(cache_val) == txn_commit_count or counter == len(shuffled_image_indexes)-1:
             with env_val.begin(write=True) as txn_val:
                 for k, v in sorted(cache_val.iteritems()):
                     txn_val.put(k, v)
             cache_val.clear()
 
-        if(counter%report_step == 0):
+        if (counter % report_step) == 0:
             print datetime.datetime.now().time(), '-', counter, 'of', len(shuffled_image_indexes), 'processed!'
 
     env_train.close()

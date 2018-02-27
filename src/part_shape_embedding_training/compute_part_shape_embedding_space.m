@@ -15,7 +15,7 @@ fprintf('done (%f seconds)!\n', etime(t_end, t_begin));
 
 t_begin = clock;
 fprintf('Computing part shape embedding space, it takes for a while...\n');
-options = statset('Display', 'iter', 'MaxIter', 128);
+options = statset('Display', 'iter', 'MaxIter', 128); % 128
 
 % This 3 values are wrong in part 1 distance matrix(vector form) for chair class: 3121619, 8140026, 9457494
 % This is normal because the 3 cases are exactly the same 3D models

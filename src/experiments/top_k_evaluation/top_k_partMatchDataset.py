@@ -52,8 +52,8 @@ def run_top_k_blended_results(shape_embedding_space_file_txt_part1, image_embedd
 
     top_k_mat = []
     n_cases_list = []
-    n_experiments = 6  # 6
-    for experiment in range(n_experiments):
+    n_experiments = 1  # 6
+    for experiment in [5]:  # range(n_experiments):
         # ----------------          Load manifold and N model values          ----------------
         if experiment == 0:
             partA_id = 1
@@ -194,7 +194,7 @@ def run_top_k_blended_results(shape_embedding_space_file_txt_part1, image_embedd
 
 # SERIES OF VALUES FOR TOP K
 
-max_top_k = 185  # max 185
+max_top_k = 30  # max 185
 top_k_values = range(1, max_top_k, 1)
 
 
@@ -234,12 +234,12 @@ image_semSeg_embedding_prototxt_part4 = '/home/adrian/JointEmbedding/datasets/im
 image_semSeg_embedding_caffemodel_part4 = '/home/adrian/JointEmbedding/datasets/image_embedding/combinedShape_part_image_semSeg_embedding_testing_03001627_manifoldNet/stacked_03001627_part4_iter_400000.caffemodel'
 feat_name_part4 = 'image_embedding_part4'
 
-criteria = 4
+
 blended_whole_and_part_results = run_top_k_blended_results(g_shape_embedding_space_file_txt_part1, image_semSeg_embedding_prototxt_part1, image_semSeg_embedding_caffemodel_part1, feat_name_part1,
                                                            g_shape_embedding_space_file_txt_part2, image_semSeg_embedding_prototxt_part2, image_semSeg_embedding_caffemodel_part2, feat_name_part2,
                                                            g_shape_embedding_space_file_txt_part3, image_semSeg_embedding_prototxt_part3, image_semSeg_embedding_caffemodel_part3, feat_name_part3,
                                                            g_shape_embedding_space_file_txt_part4, image_semSeg_embedding_prototxt_part4, image_semSeg_embedding_caffemodel_part4, feat_name_part4,
-                                                           top_k_values, criteria)
+                                                           top_k_values, True)
 
 
 
@@ -310,7 +310,7 @@ blended_part_results = run_top_k_blended_results(g_shape_embedding_space_file_tx
                                                  g_shape_embedding_space_file_txt_part2, image_embedding_prototxt_part2, image_embedding_caffemodel_part2, feat_name_part2,
                                                  g_shape_embedding_space_file_txt_part3, image_embedding_prototxt_part3, image_embedding_caffemodel_part3, feat_name_part3,
                                                  g_shape_embedding_space_file_txt_part4, image_embedding_prototxt_part4, image_embedding_caffemodel_part4, feat_name_part4,
-                                                 top_k_values, False)
+                                                 top_k_values, True)
 
 # blended_semSeg_part_results = run_top_k_blended_results(g_shape_embedding_space_file_txt_part1, image_semSeg_embedding_prototxt_part1, image_semSeg_embedding_caffemodel_part1, feat_name_part1,
 #                                                         g_shape_embedding_space_file_txt_part2, image_semSeg_embedding_prototxt_part2, image_semSeg_embedding_caffemodel_part2, feat_name_part2,
@@ -330,11 +330,11 @@ font = {'family': 'normal', 'weight': 'bold', 'size': 20}
 line_size = 3
 
 my_dpi = 96
-plt.figure(figsize=(1200/my_dpi, 1000/my_dpi), dpi=my_dpi)
+plt.figure(figsize=(800/my_dpi, 750/my_dpi), dpi=my_dpi)
 
 plt.xlabel('Top-k', fontdict=font)
 plt.ylabel('Accuracy', fontdict=font)
-plt.title('ExactPartMatch Mean results', fontdict=font)
+plt.title('Legs + Seat results', fontdict=font)
 plt.plot(top_k_values, blended_LiYi_results, '--', color='#0000ff', linewidth=line_size, label='Li, SiggAsia 15')
 plt.plot(top_k_values, blended_whole_and_part_results, '--', color='#d640a4', linewidth=line_size, label='Ours, (original HoG)')
 plt.plot(top_k_values, blended_part_results, '--', color='#9acd32', linewidth=line_size, label='Ours, (without SemSeg)')

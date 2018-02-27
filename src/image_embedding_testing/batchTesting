@@ -1,5 +1,7 @@
 
-for f in $(ls -1 /home/adrian/Desktop/testCases/training/*.jpg); do
+#for f in $(ls -1 /home/adrian/Desktop/image_embedding_images/*.jpg); do
+
+for f in $(ls -1 /home/adrian/Desktop/occluded_chairs_experiment/case5/*.jpg); do
 	echo $f
 	
 	command="$(printf "python image_based_shape_retrieval.py --image %s" $f)"

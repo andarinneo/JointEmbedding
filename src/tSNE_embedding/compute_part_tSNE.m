@@ -21,18 +21,20 @@ while ischar(line)
     shape_count = shape_count + 1;
     shape_property = strsplit(line, ' ');
     
-%     image_file = [shape_property{1} '_' shape_property{2} '_a054_e020_t000_d003.png'];  % lfd image
-%     image_file = ['parts_' shape_property{1} '_' shape_property{2} '_a054_e020_t000_d003.png'];  % part segmentation image
-%     shape_png_list{shape_count} = fullfile(g_data_folder, 'shape_embedding', 'lfd_images_cropped', shape_property{1}, shape_property{2}, image_file);
+%     image_file = [shape_property{1} '_' shape_property{2} '_a054_e020_t000_d003.png'];  % lfd image, CHAIRS
+%     image_file = ['parts_' shape_property{1} '_' shape_property{2} '_a054_e020_t000_d003.png'];  % part segmentation image, CHAIRS
+%     image_file = [shape_property{1} '_' shape_property{2} '_a090_e010_t000_d003.png'];  % lfd image, CARS
+    image_file = ['parts_' shape_property{1} '_' shape_property{2} '_a090_e010_t000_d003.png'];  % part segmentation image, CARS
+    shape_png_list{shape_count} = fullfile(g_data_folder, 'shape_embedding', 'lfd_images_cropped', shape_property{1}, shape_property{2}, image_file);
     
-    image_file = [shape_property{1} '_' shape_property{2} '_a054_e020_t000_d003.png'];  % rendered image
-    shape_png_list{shape_count} = fullfile('/home/adrian/Desktop/la_web_con_todos/image_based_Back+Legs_blending_case1_files', image_file);
+%     image_file = [shape_property{1} '_' shape_property{2} '_a054_e020_t000_d003.png'];  % rendered image
+%     shape_png_list{shape_count} = fullfile('/home/adrian/Desktop/la_web_con_todos/image_based_Back+Legs_blending_case1_files', image_file);
     
     line = fgetl(shape_list_fid);
 end
 
 if shape_count ~= n_shapes
-    frpintf('\nThere is a problem in the number of shapes in the manifold...\n\n');
+    fprintf('\nThere is a problem in the number of shapes in the manifold...\n\n');
 end
 
 
@@ -66,7 +68,9 @@ for part_id = 1:g_n_parts
     S = 2000; % size of full embedding image
     G = ones(S, S, 3, 'uint8')*255;
     s = 30; % size of every single image
-    s_aux = round(s*0.6);  % hardcoded ratio of row/cols of images
+    s_aux = round(s*1.5);  % hardcoded ratio of row/cols of images (0.6 chairs, 1.5 cars)
+    
+    s_max = max([s, s_aux]);
     
     for shape=1:n_shapes  %[502 6682 5397 2253 2403 3300]+1 %1:n_shapes
         
@@ -75,10 +79,10 @@ for part_id = 1:g_n_parts
         end
         
         % location
-        a = ceil(auxX(shape,1) * (S-s)+1);
-        b = ceil(auxX(shape,2) * (S-s)+1);
-        a = a-mod(a-1,s)+1;
-        b = b-mod(b-1,s)+1;
+        a = ceil(auxX(shape,1) * (S-s_max)+1);
+        b = ceil(auxX(shape,2) * (S-s_max)+1);
+        a = a-mod(a-1,s_max)+1;
+        b = b-mod(b-1,s_max)+1;
         if (uint32(G(a,b,1))+uint32(G(a,b,2))+uint32(G(a,b,3))) ~= (255*3)
             continue % spot already filled
         end

@@ -4,11 +4,18 @@ global_variables;
 addpath(genpath(g_piotr_toolbox_path));
 
 part_path = [g_data_folder '/PartAnnotation']; % This needs to go into the global variables definition
-part_list = {'arm', 'back', 'leg', 'seat'};
+
+% part_list = {'arm', 'back', 'leg', 'seat'};
+% part_colors = [0 255 0;
+%                255 0 0;
+%                0 0 255;
+%                0 0 0 ];  % ONLY for chairs
+           
+           
+part_list = {'hood', 'roof', 'wheel'};
 part_colors = [0 255 0;
                255 0 0;
-               0 0 255;
-               0 0 0 ];  % ONLY for chairs
+               0 0 255];  % ONLY for cars
 
 
 %% Collect LFD images according to shape list
@@ -51,71 +58,73 @@ fprintf('done (%d shapes, %f seconds)!\n', shape_count, etime(t_end, t_begin));
 
 %% Create part masks
 
-% local_cluster = parcluster('local');
-% poolobj = parpool('local', min(g_lfd_hog_extraction_thread_num, local_cluster.NumWorkers));
-% 
-% tolerance = 1; % color tolerance 
-% t_begin = clock;
-% 
-% % for shape = 1:shape_count
-% parfor shape = 1:shape_count
-% 
-%     for view = 1:g_lfd_view_num
-%         lfd_image = double(imread(view_image_lists{view, shape}, 'BackgroundColor', [1 1 1]));
-%         part_image = double(imread(view_parts_image_lists{view, shape}, 'BackgroundColor', [1 1 1]));
-% 
-%         aux = zeros(size(part_image));
-%         aux(:,:,1) = abs(255 - part_image(:,:,1)) < tolerance;
-%         aux(:,:,2) = abs(255 - part_image(:,:,2)) < tolerance;
-%         aux(:,:,3) = abs(255 - part_image(:,:,3)) < tolerance;
-%         background_mask = (aux(:,:,1) .* aux(:,:,2) .* aux(:,:,3));
-% 
-%         for part = 1:g_n_parts
-%             segmented_image = double(ones(size(part_image))*255);
-%             segmented_image(:,:,1) = segmented_image(:,:,1) + background_mask;
-%             segmented_image(:,:,2) = segmented_image(:,:,2) + background_mask;
-%             segmented_image(:,:,3) = segmented_image(:,:,3) + background_mask;
-% 
-%             aux = zeros(size(part_image));
-%             aux(:,:,1) = abs(part_colors(part,1) - part_image(:,:,1)) < tolerance;
-%             aux(:,:,2) = abs(part_colors(part,2) - part_image(:,:,2)) < tolerance;
-%             aux(:,:,3) = abs(part_colors(part,3) - part_image(:,:,3)) < tolerance;
-% 
-%             mask = aux(:,:,1) .* aux(:,:,2) .* aux(:,:,3);
-%             if (sum(mask(:)) > 0)
-%                 se = strel('sphere',2);
-%                 dilated_mask = imclose(mask,se);
-%                 dilated_mask = dilated_mask/max(dilated_mask(:));
-%             else
-%                 dilated_mask = mask;
-%             end
-%             
-% 
-%             inverse_lfd_image = (255 - lfd_image);
-% 
-%             segmented_image(:,:,1) = segmented_image(:,:,1) - (inverse_lfd_image(:,:,1) .* dilated_mask);
-%             segmented_image(:,:,2) = segmented_image(:,:,2) - (inverse_lfd_image(:,:,2) .* dilated_mask);
-%             segmented_image(:,:,3) = segmented_image(:,:,3) - (inverse_lfd_image(:,:,3) .* dilated_mask);
-%             segmented_image = segmented_image/255;
-% 
-%     %         close all;
-%     %         subplot(1,4,1); imshow(mask);
-%     %         subplot(1,4,2); imshow(dilated_mask);
-%     %         subplot(1,4,3); imshow(segmented_image);
-%     %         subplot(1,4,4); imshow(lfd_image/255);
-% 
-%             [dst_folder, filename, extension] = fileparts(view_image_lists{view, shape});
-%             mod_filename = ['part' num2str(part) '_' filename];
-%             full_name = fullfile(dst_folder, [mod_filename extension]);
-% 
-%             imwrite(segmented_image, full_name, 'Alpha', dilated_mask);
-%         end
-%     end
-% end
-% delete(poolobj);
-% 
-% t_end = clock;
-% fprintf('%f seconds spent on LFD -PART- segmentation!\n', etime(t_end, t_begin));
+local_cluster = parcluster('local');
+poolobj = parpool('local', min(g_lfd_hog_extraction_thread_num, local_cluster.NumWorkers));
+
+tolerance = 1; % color tolerance 
+t_begin = clock;
+
+% for shape = 1:shape_count
+parfor shape = 1:shape_count
+
+    for view = 1:g_lfd_view_num
+        lfd_image = double(imread(view_image_lists{view, shape}, 'BackgroundColor', [1 1 1]));
+        part_image = double(imread(view_parts_image_lists{view, shape}, 'BackgroundColor', [1 1 1]));
+
+        aux = zeros(size(part_image));
+        aux(:,:,1) = abs(255 - part_image(:,:,1)) < tolerance;
+        aux(:,:,2) = abs(255 - part_image(:,:,2)) < tolerance;
+        aux(:,:,3) = abs(255 - part_image(:,:,3)) < tolerance;
+        background_mask = (aux(:,:,1) .* aux(:,:,2) .* aux(:,:,3));
+
+        for part = 1:g_n_parts
+            segmented_image = double(ones(size(part_image))*255);
+            segmented_image(:,:,1) = segmented_image(:,:,1) + background_mask;
+            segmented_image(:,:,2) = segmented_image(:,:,2) + background_mask;
+            segmented_image(:,:,3) = segmented_image(:,:,3) + background_mask;
+
+            aux = zeros(size(part_image));
+            aux(:,:,1) = abs(part_colors(part,1) - part_image(:,:,1)) < tolerance;
+            aux(:,:,2) = abs(part_colors(part,2) - part_image(:,:,2)) < tolerance;
+            aux(:,:,3) = abs(part_colors(part,3) - part_image(:,:,3)) < tolerance;
+
+            mask = aux(:,:,1) .* aux(:,:,2) .* aux(:,:,3);
+            if (sum(mask(:)) > 0)
+                se = strel('sphere',2);
+                dilated_mask = imclose(mask,se);
+                dilated_mask = dilated_mask/max(dilated_mask(:));
+            else
+                dilated_mask = mask;
+            end
+            
+
+            inverse_lfd_image = (255 - lfd_image);
+            
+%             close all;
+%             subplot(1,4,1); imshow(mask);
+%             subplot(1,4,2); imshow(dilated_mask);
+%             subplot(1,4,3); imshow(segmented_image);
+%             subplot(1,4,4); imshow(lfd_image/255);
+
+
+            segmented_image(:,:,1) = segmented_image(:,:,1) - (inverse_lfd_image(:,:,1) .* dilated_mask);
+            segmented_image(:,:,2) = segmented_image(:,:,2) - (inverse_lfd_image(:,:,2) .* dilated_mask);
+            segmented_image(:,:,3) = segmented_image(:,:,3) - (inverse_lfd_image(:,:,3) .* dilated_mask);
+            segmented_image = segmented_image/255;
+
+
+            [dst_folder, filename, extension] = fileparts(view_image_lists{view, shape});
+            mod_filename = ['part' num2str(part) '_' filename];
+            full_name = fullfile(dst_folder, [mod_filename extension]);
+
+            imwrite(segmented_image, full_name, 'Alpha', dilated_mask);
+        end
+    end
+end
+delete(poolobj);
+
+t_end = clock;
+fprintf('%f seconds spent on LFD -PART- segmentation!\n', etime(t_end, t_begin));
 
 
 %% Try to get dimension of the HoG feature

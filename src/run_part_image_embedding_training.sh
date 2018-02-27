@@ -61,13 +61,13 @@ fi
 #  cd ..;
 #fi
 
-# Step 04
-# Generate synthetic images
-if [ "$first" -le 4 ] && [ "$last" -ge 4 ]; then
-  cd part_image_embedding_training;
-  python3 ./render_part_syn_shape_list.py;
-  cd ..;
-fi
+## Step 04
+## Generate synthetic images
+#if [ "$first" -le 4 ] && [ "$last" -ge 4 ]; then
+#  cd image_embedding_training;
+#  python3 ./render_syn_shape_list.py;
+#  cd ..;
+#fi
 
 ## Step 05
 ## Crop synthetic images
@@ -95,10 +95,10 @@ fi
 #  cd ..;
 #fi
 
-## Step 08
-## Convert images into pool5 lmdb
-#if [ "$first" -le 8 ] && [ "$last" -ge 8 ]; then
-#  cd image_embedding_training;
-#  python ./extract_pool5_feats.py
-#  cd ..;
-#fi
+# Step 08
+# Convert images into pool5 lmdb
+if [ "$first" -le 8 ] && [ "$last" -ge 8 ]; then
+  cd image_embedding_training;
+  python ./extract_pool5_feats.py
+  cd ..;
+fi

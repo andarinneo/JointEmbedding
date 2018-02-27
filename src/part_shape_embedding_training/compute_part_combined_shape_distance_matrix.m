@@ -25,7 +25,7 @@ for part = 1:g_n_parts
     offset = hog_dimension * ((part+1) - 1); % part + 1 because part 1 starts after the whole shape, the -1 goes just to note that accessing matrix positions in a vector requires a minus 1
     part_lfd = lfd_hog_part_features(:, (1:hog_dimension)+offset);
     
-    concat_lfd = part_lfd; % [whole_shape_lfd part_lfd];
+    concat_lfd = [whole_shape_lfd part_lfd];
     
     % We save a reduced version of the distance matrix (no zero diagonal or repeated values due to symmetry)
     part_shape_distance_matrix{part} = pdist(concat_lfd);
@@ -49,4 +49,4 @@ dlmwrite(g_part_shape_distance_matrix_file_txt, part_shape_distance_matrix_NxN, 
 t_end = clock;
 fprintf('done (%f seconds)!\n', etime(t_end, t_begin));
 
-exit;
+% exit;

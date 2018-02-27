@@ -11,8 +11,7 @@ t_begin = clock;
 
 fprintf('Collecting a list of 3D models that contains a specific part \"%s\"...\n', g_shape_list_file);
 
-part_list = {'arm', 'back', 'leg', 'seat'};
-n_parts = size(part_list, 2);
+n_parts = size(g_part_labels, 2);
 
 shape_list_fid = fopen(g_shape_list_file);
 line = fgetl(shape_list_fid);
@@ -32,7 +31,7 @@ while ischar(line)
     n_points3D = size(points3D, 2);
     
     for part = 1:n_parts
-        partPointFile = [part_path filesep class_id filesep 'points_label' filesep part_list{part} filesep model_id '.seg'];
+        partPointFile = [part_path filesep class_id filesep 'points_label' filesep g_part_labels{part} filesep model_id '.seg'];
         partPointFile_fid = fopen(partPointFile);
 
         if partPointFile_fid == -1

@@ -22,7 +22,9 @@ net = caffe.Net(image_embedding_prototxt, image_embedding_caffemodel, caffe.TEST
 for im_it in range(1, 210):  # 1-209
     # LOAD IMAGE, switch to BGR, subtract mean, and make dims C x H x W for Caffe
     # im_path = '/home/adrian/JointEmbedding/datasets/image_embedding/syn_images_bkg_overlaid/03001627/22b40d884de52ca3387379bbd607d69e/03001627_22b40d884de52ca3387379bbd607d69e_a110_e018_t-07_d003.jpg'
-    im_path = '/home/adrian/Desktop/embedding_partial_results/testCases/real/chair' + str(im_it) + '.JPEG'
+    # im_path = '/home/adrian/Desktop/embedding_partial_results/testCases/real/chair' + str(im_it) + '.JPEG'
+    path = '/home/adrian/Desktop/ExactPartMatchChairsDataset/part2+part3/case' + str(im_it) + '/'
+    im_path = path + 'part2.jpg'
 
     im = Image.open(im_path)
     im2 = im.convert('RGB')
@@ -61,7 +63,7 @@ for im_it in range(1, 210):  # 1-209
     plt.show()
     plt.pause(1)
     # plt.savefig('/home/adrian/Desktop/testCases/real/chair' + str(im_it) + '.png')
-    plt.savefig('/home/adrian/Desktop/embedding_partial_results/fcn_results/5_channels_fcn_moreTrain/chair' + str(im_it) + '.png')
+    plt.savefig(path + '/chair' + str(im_it) + '.png')
 
 
 lolo = 1

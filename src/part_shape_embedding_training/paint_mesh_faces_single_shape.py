@@ -7,7 +7,7 @@ def paint_mesh_faces(root_path, class_id, model_id, n_parts, part_labels):
 
     path = root_path + '/' + class_id + '/' + model_id + '/'
 
-    use_remeshed = False
+    use_remeshed = True
 
     # LOAD OBJECT
     if use_remeshed:

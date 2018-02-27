@@ -35,7 +35,7 @@ if args.prototxt:
     image_embedding_prototxt = args.prototxt
 
 
-part_id = 4
+part_id = 1
 print 'My training'
 # My training
 # g_shape_embedding_space_file_txt = '/media/adrian/Datasets/datasets/shape_embedding/part_shape_embedding_space_03001627_part' + str(part_id) + '.txt'  # Is correct
@@ -44,7 +44,7 @@ print 'My training'
 # image_embedding_caffemodel = '/media/adrian/Datasets/datasets/image_embedding/part_image_embedding_testing_03001627_rcnn/snapshots_03001627_iter_40000.caffemodel'
 
 # My Single Part Manifold (Part X)
-g_shape_embedding_space_file_txt_part4 = '/media/adrian/Datasets/datasets/shape_embedding/part_shape_embedding_space_03001627_part4.txt'  # Is correct
+g_shape_embedding_space_file_txt_part = '/media/adrian/Datasets/datasets/shape_embedding/part_shape_embedding_space_03001627_part' + str(part_id) + '.txt'  # Is correct
 image_embedding_prototxt = '/home/adrian/JointEmbedding/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/image_embedding_manifoldNet_part' + str(part_id) + '.prototxt'  # Is correct
 image_embedding_caffemodel = '/home/adrian/JointEmbedding/datasets/image_embedding/part_image_semSeg_embedding_testing_03001627_manifoldNet/stacked_03001627_part' + str(part_id) + '_iter_400000.caffemodel'
 
@@ -69,8 +69,10 @@ image_embedding = image_embedding_array[0]
 #     file.write(str_item + '\n')
 # file.close()
 
-print 'Loading shape embedding space from %s...'%(g_shape_embedding_space_file_txt)
-shape_embedding_space = [np.array([float(value) for value in line.strip().split(' ')]) for line in open(g_shape_embedding_space_file_txt, 'r')]
+g_shape_list_file = '/home/adrian/JointEmbedding/datasets/shape_list_03001627.txt'  # BORRAR
+
+print 'Loading shape embedding space from %s...'%(g_shape_embedding_space_file_txt_part)
+shape_embedding_space = [np.array([float(value) for value in line.strip().split(' ')]) for line in open(g_shape_embedding_space_file_txt_part, 'r')]
 assert(image_embedding.size == shape_embedding_space[0].size)
 
 print 'Computing distances and ranking...'

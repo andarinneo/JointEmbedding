@@ -39,13 +39,16 @@ image_embedding_prototxt_part4 = '/media/adrian/Datasets/datasets/image_embeddin
 
 
 
+g_shape_list_file = '/home/adrian/JointEmbedding/datasets/shape_list_03001627.txt'  # BORRAR
+
 
 codes_4_parts = {1: 'Armrests', 2: 'Back', 3: 'Legs', 4: 'Seat'}
-part1_id = 3
-part2_id = 4
+part1_id = 2
+part2_id = 3
 
-for case_id in range(1, 90+1):  # +1 because index goes from 1..(N-1)
-    path = '/home/adrian/Desktop/qualitative_blending_results/part' + str(part1_id) + '+part' + str(part2_id) + '/case' + str(case_id) + '/'
+for case_id in [5]:  # range(1, 90+1):  # +1 because index goes from 1..(N-1)
+    # path = '/home/adrian/Desktop/qualitative_blending_results/part' + str(part1_id) + '+part' + str(part2_id) + '/case' + str(case_id) + '/'
+    path = '/home/adrian/Desktop/occluded_chairs_experiment/selected/case' + str(case_id) + '/'
 
     if part1_id == 1:
         caffemodel1 = image_embedding_caffemodel_part1

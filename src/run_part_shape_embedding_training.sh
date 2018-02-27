@@ -44,7 +44,7 @@ fi
 #  python3 ./process_geometry_shape_list.py;
 #  cd ..;
 #fi
-#
+
 ## Step 02
 ## Reduce the meshes to N faces
 #if [ "$first" -le 2 ] && [ "$last" -ge 2 ]; then
@@ -63,6 +63,12 @@ fi
 
 ## Step 04
 ## Generate LFD images
+#if [ "$first" -le 4 ] && [ "$last" -ge 4 ]; then
+#  cd shape_embedding_training;
+#  python3 ./render_lfd_shape_list.py;
+#  cd ..;
+#fi
+## Generate Color labels for LFD images
 #if [ "$first" -le 4 ] && [ "$last" -ge 4 ]; then
 #  cd part_shape_embedding_training;
 #  python3 ./render_lfd_part_shape_list.py;
@@ -92,7 +98,7 @@ fi
 #if [ "$first" -le 7 ] && [ "$last" -ge 7 ]; then
 #  python ./convert_global_variables.py;
 #  cd part_shape_embedding_training;
-#  /usr/local/MATLAB/R2016a/bin/glnxa64/MATLAB -nodisplay -r compute_part_shape_distance_matrix;
+#  /usr/local/MATLAB/R2016a/bin/glnxa64/MATLAB -nodisplay -r compute_part_only_shape_distance_matrix;
 #  cd ..;
 #fi
 
@@ -101,6 +107,6 @@ fi
 #if [ "$first" -le 8 ] && [ "$last" -ge 8 ]; then
 #  python ./convert_global_variables.py;
 #  cd part_shape_embedding_training;
-#  /usr/local/MATLAB/R2016a/bin/glnxa64/MATLAB -nodisplay -r compute_part_shape_embedding_space;
+#  #/usr/local/MATLAB/R2016a/bin/glnxa64/MATLAB -nodisplay -r compute_part_only_shape_embedding_space;
 #  cd ..;
 #fi

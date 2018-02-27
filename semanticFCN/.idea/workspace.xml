@@ -20,78 +20,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="solve.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/shapenet-manifold/solve.py">
+      <file leaf-file-name="infer_manifold.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/infer_manifold.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="458">
-              <caret line="75" column="0" lean-forward="true" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
+            <state relative-caret-position="306">
+              <caret line="17" column="81" lean-forward="true" selection-start-line="17" selection-start-column="81" selection-end-line="17" selection-end-column="81" />
               <folding>
-                <element signature="e#0#12#0" expanded="true" />
+                <element signature="e#0#18#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="solve.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/shapenet-fcn/solve.py">
+      <file leaf-file-name="infer_shapenet.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/infer_shapenet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="36">
-              <caret line="49" column="23" lean-forward="false" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="23" />
+            <state relative-caret-position="144">
+              <caret line="12" column="14" lean-forward="true" selection-start-line="12" selection-start-column="14" selection-end-line="14" selection-end-column="120" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="surgery.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/surgery.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2088">
-              <caret line="118" column="0" lean-forward="false" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="solver.prototxt" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/shapenet-manifold/solver.prototxt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="9" column="15" lean-forward="true" selection-start-line="9" selection-start-column="15" selection-end-line="9" selection-end-column="15" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="train-manifold-rcnn.prototxt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/shapenet-manifold/train-manifold-rcnn.prototxt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="774">
-              <caret line="911" column="10" lean-forward="false" selection-start-line="911" selection-start-column="10" selection-end-line="911" selection-end-column="10" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="shapenet_layers.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/shapenet_layers.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="194" column="0" lean-forward="true" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
-              <folding>
-                <element signature="e#340#6789#0" expanded="false" />
-                <element signature="e#2951#3849#0" expanded="false" />
-                <element signature="e#3896#4435#0" expanded="false" />
-                <element signature="e#4499#4503#0" expanded="false" />
-                <element signature="e#4545#5050#0" expanded="false" />
-                <element signature="e#5092#6789#0" expanded="false" />
-                <element signature="e#7053#10201#0" expanded="false" />
-                <element signature="e#10248#12388#0" expanded="false" />
-                <element signature="e#12435#13468#0" expanded="false" />
-                <element signature="e#13532#13536#0" expanded="false" />
-                <element signature="e#13578#14083#0" expanded="false" />
-                <element signature="e#14125#15822#0" expanded="false" />
-                <element signature="e#15882#16208#0" expanded="false" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -177,12 +123,12 @@
         <option value="$PROJECT_DIR$/shapenet-fcn/train-fcn8-atonce-5channels.prototxt" />
         <option value="$PROJECT_DIR$/shapenet-fcn/solve.py" />
         <option value="$PROJECT_DIR$/infer_shapenet.py" />
-        <option value="$PROJECT_DIR$/infer_manifold.py" />
         <option value="$PROJECT_DIR$/shapenet_layers.py" />
         <option value="$PROJECT_DIR$/shapenet-manifold/train-manifold-alexnet.prototxt" />
         <option value="$PROJECT_DIR$/surgery.py" />
         <option value="$PROJECT_DIR$/shapenet-manifold/solve.py" />
         <option value="$PROJECT_DIR$/shapenet-manifold/solver.prototxt" />
+        <option value="$PROJECT_DIR$/infer_manifold.py" />
       </list>
     </option>
   </component>
@@ -229,8 +175,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -277,10 +221,12 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/infer_shapenet.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/infer_manifold.py" />
     <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Python" />
   </component>
   <component name="RecentsManager">
@@ -309,7 +255,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.train_manifold">
+  <component name="RunManager" selected="Python.infer_manifold">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -442,7 +388,7 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <method />
     </configuration>
-    <configuration default="false" name="infer_shapenet" type="PythonConfigurationType" factoryName="Python">
+    <configuration default="false" name="infer_manifold" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -454,7 +400,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="semanticFCN" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/infer_shapenet.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/infer_manifold.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -463,7 +409,7 @@
     <list size="3">
       <item index="0" class="java.lang.String" itemvalue="Python.train_manifold" />
       <item index="1" class="java.lang.String" itemvalue="Python.train_shapenet" />
-      <item index="2" class="java.lang.String" itemvalue="Python.infer_shapenet" />
+      <item index="2" class="java.lang.String" itemvalue="Python.infer_manifold" />
     </list>
     <configuration default="true" type="tests" factoryName="Attests">
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -503,8 +449,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="24" width="1922" height="1033" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2022412" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20437567" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32929516" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="WINDOWED" visible="false" show_stripe_button="true" weight="0.32975295" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" x="1920" y="28" width="1680" height="1022" />
@@ -910,23 +857,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/infer_shapenet.py">
+    <entry file="file://$PROJECT_DIR$/shapenet-manifold/solve.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="18" column="36" lean-forward="true" selection-start-line="18" selection-start-column="36" selection-end-line="18" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/infer_manifold.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" column="19" lean-forward="true" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
+        <state relative-caret-position="1350">
+          <caret line="75" column="0" lean-forward="false" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#12#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/surgery.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2088">
+        <state relative-caret-position="818">
           <caret line="118" column="0" lean-forward="false" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
           <folding />
         </state>
@@ -940,20 +883,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/shapenet-manifold/solve.py">
+    <entry file="file://$PROJECT_DIR$/shapenet-manifold/solver.prototxt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="458">
-          <caret line="75" column="0" lean-forward="true" selection-start-line="75" selection-start-column="0" selection-end-line="75" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="162">
+          <caret line="9" column="15" lean-forward="false" selection-start-line="9" selection-start-column="15" selection-end-line="9" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/shapenet-manifold/train-manifold-rcnn.prototxt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="774">
+          <caret line="911" column="10" lean-forward="false" selection-start-line="911" selection-start-column="10" selection-end-line="911" selection-end-column="10" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/shapenet_layers.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
-          <caret line="194" column="0" lean-forward="true" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
+          <caret line="194" column="0" lean-forward="false" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
           <folding>
             <element signature="e#340#6789#0" expanded="false" />
             <element signature="e#2951#3849#0" expanded="false" />
@@ -972,19 +921,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/shapenet-manifold/train-manifold-rcnn.prototxt">
+    <entry file="file://$PROJECT_DIR$/infer_shapenet.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="774">
-          <caret line="911" column="10" lean-forward="false" selection-start-line="911" selection-start-column="10" selection-end-line="911" selection-end-column="10" />
+        <state relative-caret-position="144">
+          <caret line="12" column="14" lean-forward="true" selection-start-line="12" selection-start-column="14" selection-end-line="14" selection-end-column="120" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/shapenet-manifold/solver.prototxt">
+    <entry file="file://$PROJECT_DIR$/infer_manifold.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="9" column="15" lean-forward="true" selection-start-line="9" selection-start-column="15" selection-end-line="9" selection-end-column="15" />
-          <folding />
+        <state relative-caret-position="306">
+          <caret line="17" column="81" lean-forward="true" selection-start-line="17" selection-start-column="81" selection-end-line="17" selection-end-column="81" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
